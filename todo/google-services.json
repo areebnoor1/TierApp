@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "248488614748",
+    "firebase_url": "https://prettylib-default-rtdb.firebaseio.com",
+    "project_id": "prettylib",
+    "storage_bucket": "prettylib.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:248488614748:android:f53cb151c2f1ecb356ff99",
+        "android_client_info": {
+          "package_name": "com.tiertodo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "248488614748-qj7corr2qet7tuvv1rvkqqr8vmmctmbm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tiertodo",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "248488614748-698jn115oljro87m61oo3btad1vu5fud.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAumf-wIdZaEy3M6v_xex3TH0fiegHZQMg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "248488614748-698jn115oljro87m61oo3btad1vu5fud.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "248488614748-nluheprsmq0kt501hoa8np8vb5mh1vm4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.todo"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
