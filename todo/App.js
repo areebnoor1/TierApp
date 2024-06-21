@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import { initializeApp } from 'firebase/app';
 import { getDatabase } from 'firebase/database';
-
+import { NavigationContainer } from '@react-navigation/native';
 import {
   ref,
   onValue,
@@ -26,7 +26,8 @@ import Icon from 'react-native-vector-icons/Feather';
 import TodoList from './components/TodoList';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import ToDoApp from './components/ToDoApp';
-
+import HomePage from './components/HomePage';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 /*function setupTodoListener(userID) {
   firebaseApp
     .database()
@@ -70,6 +71,8 @@ const GoogleLogin = async () => {
 };
 
 export default function App() {
+
+  const Tab = createBottomTabNavigator();
 
 
   const [token, setToken] = useState(null);
@@ -161,7 +164,12 @@ export default function App() {
     );
   } else {
     return (
-      <ToDoApp/>
+      <NavigationContainer>
+        <Tab.Navigator>
+        <Tab.Screen name='Home' component={HomePage} />
+        <Tab.Screen name='Minutes' component={ToDoApp} />
+        </Tab.Navigator>
+      </NavigationContainer>
     );
   }
 }
