@@ -10,13 +10,14 @@ import {
     Button
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
-
-import Stack from '../App';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Entypo from 'react-native-vector-icons/Entypo';
+import Stack from '../App';
 import ToDoApp from './ToDoApp';
+import HomeScreen from '../App';
 
 
-export default function HomePage() {
+export default function HomePage({ navigation }) {
     const [currentTask, setCurrentTask] = useState({});
 
     console.log(currentTask)
@@ -31,7 +32,7 @@ export default function HomePage() {
                         <Text style={styles.smallText}>start with an easier task to gain motivation.</Text>
                     </View>
                 </Pressable>
-                <Pressable style={styles.addButton} onPress={() => Stack.navigate('AddTask')}>
+                <Pressable style={styles.addButton} onPress={() => navigation.navigate ('HomeScreen', { screen: 'AddTask' })}>
                     <Image style={{
                         width: 90,
                         height: 90

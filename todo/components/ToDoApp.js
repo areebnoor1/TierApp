@@ -21,7 +21,6 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import TodoList from './TodoList';
-
 import { db } from "./firebase.js"
 
 export default function ToDoApp() {
@@ -59,8 +58,6 @@ export default function ToDoApp() {
   let deleteTodo = id => {
     remove(ref(db, '/todos/' + id));
   }
-
-  
   
   return (<View style={styles.container}>
     <Text style={styles.header}>Todo List</Text>
@@ -87,18 +84,7 @@ export default function ToDoApp() {
           setChecked={() => todos[key].key}
           deleteTodo={() => deleteTodo(key)}
         />
-      ))
-      
-      /*todos.map(item => (
-        <TodoList
-          text={item.text}
-          key={item.key}
-          checked={item.checked}
-          setChecked={() => checkTodo(item.key)}
-          deleteTodo={() => deleteTodo(item.key)}
-        />
-      ))*/
-      
+      ))      
       }
     </ScrollView>
 

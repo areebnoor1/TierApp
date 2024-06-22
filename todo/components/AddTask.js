@@ -7,33 +7,58 @@ import {
     ScrollView,
     Pressable,
     Image,
-    Button
+    Button,
+    Alert
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
-
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
 import ToDoApp from './ToDoApp';
+import {
+    ref,
+    onValue,
+    push,
+    update,
+    remove
+} from 'firebase/database';
+import { db } from "./firebase.js"
 
 export default function AddTask() {
+    const [taskType, setTaskType] = useState('');
     const [value, setValue] = useState('');
+
+    let addTodo = () => {
+        if (taskType == '') {
+            Alert.alert('', 'Please specify a task type (Minutes, Hours, Days).', [
+                { text: 'OK', onPress: () => console.log('OK Pressed') },
+            ]);
+        } else {
+            push(ref(db, '/todos'), {
+                text: value, key: Date.now(), checked: false, task_type: taskType
+            });
+            if (value.length > 0) {
+                setValue('');
+            }
+        }
+    };
     return (
         <View style={styles.screen}>
-
             <View style={{
                 flexDirection: 'row',
-                
-                
-                }}>
-                <Entypo name='calendar' />
-                <Ionicons name='hourglass-outline' />
-                <Entypo name='stopwatch' />
+                alignItems: 'flex-start',
+            }}>
+
+                <TouchableOpacity onPress={() => setTaskType('days')}>
+                    <Entypo name='calendar' style={styles.icon} size={60} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setTaskType('hours')}>
+                    <Ionicons name='hourglass-outline' style={styles.icon} size={60} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setTaskType('minutes')}>
+                    <Entypo name='stopwatch' style={styles.icon} size={60} />
+                </TouchableOpacity>
 
             </View>
-
-
-
             <View >
                 <TextInput
                     style={styles.textInput}
@@ -44,28 +69,30 @@ export default function AddTask() {
                     onChangeText={_value => setValue(_value)}
                 />
             </View>
-            <Pressable style={styles.addButton}>
+
+            <TouchableOpacity style={styles.addButton} onPress={() => addTodo()}>
                 <Image style={{
                     width: 90,
                     height: 90
                 }} source={require('../assets/checkButton.png')} />
-            </Pressable>
-
-
-
+            </TouchableOpacity>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     textInput: {
+
         borderColor: 'purple',
         borderWidth: 2,
         height: 180,
         borderRadius: 28,
         fontSize: 18,
     },
-
+    icon: {
+        padding: 10,
+        color: 'white',
+    },
 
     curTask: {
         display: 'flex',
