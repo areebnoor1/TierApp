@@ -11,46 +11,61 @@ import {
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
 
-import Stack from '../App';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Entypo from 'react-native-vector-icons/Entypo';
 import ToDoApp from './ToDoApp';
 
+export default function AddTask() {
+    const [value, setValue] = useState('');
+    return (
+        <View style={styles.screen}>
 
-export default function HomePage() {
-    const [currentTask, setCurrentTask] = useState({});
+            <View style={{
+                flexDirection: 'row',
+                
+                
+                }}>
+                <Entypo name='calendar' />
+                <Ionicons name='hourglass-outline' />
+                <Entypo name='stopwatch' />
 
-    console.log(currentTask)
-    if (Object.keys(currentTask).length === 0) {
-        return (
-            <View style={styles.screen}>
-                <Text style={styles.welcomText}>No tasks active. Let's get started!</Text>
-
-                <Pressable style={styles.pressableContainer}>
-                    <View >
-                        <Text style={styles.buttonText}>Select a Minutes task</Text>
-                        <Text style={styles.smallText}>start with an easier task to gain motivation.</Text>
-                    </View>
-                </Pressable>
-                <Pressable style={styles.addButton} onPress={() => Stack.navigate('AddTask')}>
-                    <Image style={{
-                        width: 90,
-                        height: 90
-                    }} source={require('../assets/addButton.png')} />
-                </Pressable>
             </View>
 
-        );
-    }
-    else {
-        return (
-            <View style={styles.curTask}>
-                <Text style={styles.welcomText}>THE ACTIVE TASK WHEE</Text>
+
+
+            <View >
+                <TextInput
+                    style={styles.textInput}
+                    multiline={true}
+                    placeholder="Enter task"
+                    placeholderTextColor="#abbabb"
+                    value={value}
+                    onChangeText={_value => setValue(_value)}
+                />
             </View>
-        );
-    }
+            <Pressable style={styles.addButton}>
+                <Image style={{
+                    width: 90,
+                    height: 90
+                }} source={require('../assets/checkButton.png')} />
+            </Pressable>
+
+
+
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
+    textInput: {
+        borderColor: 'purple',
+        borderWidth: 2,
+        height: 180,
+        borderRadius: 28,
+        fontSize: 18,
+    },
+
 
     curTask: {
         display: 'flex',
@@ -68,8 +83,8 @@ const styles = StyleSheet.create({
 
     addButton: {
         position: 'absolute',
-        bottom: 20,
-        right: 20,
+        top: 10,
+        right: 10,
 
     },
     screen: {
@@ -87,13 +102,11 @@ const styles = StyleSheet.create({
         color: 'white'
     },
     pressableContainer: {
-
         backgroundColor: "#48249c",
         textAlign: 'center',
         borderRadius: 20,
         marginBottom: 10,
         alignItems: 'center',
-
     },
     welcomText: {
         display: 'flex',

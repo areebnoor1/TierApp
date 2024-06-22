@@ -26,8 +26,10 @@ import Icon from 'react-native-vector-icons/Feather';
 import TodoList from './components/TodoList';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import ToDoApp from './components/ToDoApp';
+import AddTask from './components/AddTask';
 import HomePage from './components/HomePage';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 /*function setupTodoListener(userID) {
   firebaseApp
     .database()
@@ -69,6 +71,18 @@ const GoogleLogin = async () => {
   const userInfo = await GoogleSignin.signIn();
   return userInfo;
 };
+export const Stack = createStackNavigator();
+const HomeScreen = () => {
+  return(
+    <Stack.Navigator
+    initialRouteName="Home">
+    <Stack.Screen component={HomePage} name="Home" options={{ title: "Adtask" }} />
+    <Stack.Screen component={AddTask} name="Addtask" options={{ title: "Adtask" }} />
+  </Stack.Navigator>
+  
+  )
+  
+  }
 
 export default function App() {
 
@@ -147,15 +161,6 @@ export default function App() {
 
   */
 
-  /*let deleteTodo = id => {
-    setTodos(
-      todos.filter(todo => {
-        if (id !== todo.key)
-          return true;
-      })
-    );
-  }*/
-
   if (token === null) {
     return (
       <View style={styles.container}>
@@ -165,9 +170,38 @@ export default function App() {
   } else {
     return (
       <NavigationContainer>
-        <Tab.Navigator>
-        <Tab.Screen name='Home' component={HomePage} />
-        <Tab.Screen name='Minutes' component={ToDoApp} />
+       
+        <Tab.Navigator
+          screenOptions={{
+            headerStyle: {
+              backgroundColor: "#232138",
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+
+            tabBarActiveTintColor: 'tomato',
+            tabBarInactiveTintColor: 'gray',
+            tabBarStyle: {
+              backgroundColor:  "#232138",
+              borderTopWidth: 0,
+              height: 60,
+              paddingBottom: 10,
+            },
+            tabBarLabelStyle: {
+              fontSize: 12,
+              fontWeight: 'bold',
+            },
+
+          }}
+
+        >
+          <Tab.Screen name='Home' component={HomePage} />
+          <Tab.Screen name='Hours' component={ToDoApp} />
+          <Tab.Screen name='Minutes' component={ToDoApp} />
+          <Tab.Screen name='Days' component={ToDoApp} />
+          <Tab.Screen name='Add' component={AddTask} />
         </Tab.Navigator>
       </NavigationContainer>
     );
@@ -177,6 +211,7 @@ export default function App() {
 const styles = StyleSheet.create({
   scroll: {
     width: '100%',
+    height:'100%'
   },
   container: {
     flex: 1,

@@ -57,9 +57,10 @@ export default function ToDoApp() {
   };
 
   let deleteTodo = id => {
-
     remove(ref(db, '/todos/' + id));
   }
+
+  
   
   return (<View style={styles.container}>
     <Text style={styles.header}>Todo List</Text>
