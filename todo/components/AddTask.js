@@ -1,18 +1,15 @@
 import {
     StyleSheet,
-    Text,
     View,
     TouchableOpacity,
     TextInput,
-    ScrollView,
-    Pressable,
     Image,
-    Button,
     Alert
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import ToDoApp from './ToDoApp';
 import {
     ref,
@@ -23,7 +20,7 @@ import {
 } from 'firebase/database';
 import { db } from "./firebase.js"
 
-export default function AddTask() {
+export default function AddTask({setModalVisible}) {
     const [taskType, setTaskType] = useState('');
     const [value, setValue] = useState('');
 
@@ -39,15 +36,19 @@ export default function AddTask() {
             if (value.length > 0) {
                 setValue('');
             }
+            setModalVisible(false);
         }
     };
+    
     return (
         <View style={styles.screen}>
             <View style={{
                 flexDirection: 'row',
                 alignItems: 'flex-start',
             }}>
-
+                <TouchableOpacity onPress={() => setModalVisible(false)}>
+                    <FontAwesome name='close' style={styles.icon} size={60} />
+                </TouchableOpacity>
                 <TouchableOpacity onPress={() => setTaskType('days')}>
                     <Entypo name='calendar' style={styles.icon} size={60} />
                 </TouchableOpacity>
@@ -82,7 +83,6 @@ export default function AddTask() {
 
 const styles = StyleSheet.create({
     textInput: {
-
         borderColor: 'purple',
         borderWidth: 2,
         height: 180,
@@ -114,13 +114,14 @@ const styles = StyleSheet.create({
         right: 10,
 
     },
+
     screen: {
         flex: 1,
         backgroundColor: "#232138",
         padding: 10,
         justifyContent: "center",
-
     },
+    
     smallText: {
         fontStyle: 'italic',
         fontFamily: 'Avenir-Book',

@@ -44,15 +44,8 @@ export default function TabNavigator() {
      
        
         <Tab.Navigator
-          screenOptions={{
-            headerStyle: {
-              backgroundColor: "#232138",
-            },
-            headerTintColor: '#fff',
-            headerTitleStyle: {
-              fontWeight: 'bold',
-            },
-
+        screenOptions={{ 
+          headerShown: false,
             tabBarActiveTintColor: 'tomato',
             tabBarInactiveTintColor: 'gray',
             tabBarStyle: {
@@ -70,9 +63,8 @@ export default function TabNavigator() {
 
         >
           <Tab.Screen name='HomePage' component={HomePage} />
-          <Tab.Screen name='AddTask' component={AddTask} />
-          <Tab.Screen name='Hours' component={Hours} />
-          <Tab.Screen name='Minutes' component={Minutes} />
+          <Tab.Screen name='Minutes' component={Minutes} options={{ tabBarIcon: ()=>(<Entypo name='calendar' style={styles.icon} size={30} /> )}}/>
+          <Tab.Screen name='Hours' component={Hours} options={{ tabBarIcon: ()=>(<Entypo name='calendar' style={styles.icon} size={30} /> )}}/>
           <Tab.Screen name='Days' component={Days} options={{ tabBarIcon: ()=>(<Entypo name='calendar' style={styles.icon} size={30} /> )}}/>
           
         </Tab.Navigator>
@@ -86,6 +78,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height:'100%'
   },
+
   container: {
     flex: 1,
     justifyContent: 'flex-start',

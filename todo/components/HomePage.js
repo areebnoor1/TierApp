@@ -7,32 +7,55 @@ import {
     ScrollView,
     Pressable,
     Image,
-    Button
+    Button,
+    Modal
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Stack from '../App';
 import ToDoApp from './ToDoApp';
+import AddTask from './AddTask';
+import TaskSelectionView from './TaskSelectionView';
 import HomeScreen from '../App';
 
 
 export default function HomePage({ navigation }) {
     const [currentTask, setCurrentTask] = useState({});
+    const [modalVisible, setModalVisible] = useState(false);
+    const [taskSelectionVisible, setTaskSelectionVisible] = useState(false)
 
     console.log(currentTask)
     if (Object.keys(currentTask).length === 0) {
         return (
             <View style={styles.screen}>
-                <Text style={styles.welcomText}>No tasks active. Let's get started!</Text>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}>
+                    <View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                            <AddTask setModalVisible={setModalVisible} />
+                        </View>
+                    </View>
+                </Modal>
 
-                <Pressable style={styles.pressableContainer}>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={taskSelectionVisible}>
+                    <TaskSelectionView setCurrentTask={setCurrentTask} setTaskSelectionVisible={setTaskSelectionVisible} />
+                </Modal>
+
+                <Text style={styles.welcomText}>No tasks active. Let's get started!</Text>
+                <Pressable style={styles.pressableContainer} onPress={() => setTaskSelectionVisible(true)}>
                     <View >
-                        <Text style={styles.buttonText}>Select a Minutes task</Text>
+                        <Text style={styles.buttonText}>Select a task</Text>
                         <Text style={styles.smallText}>start with an easier task to gain motivation.</Text>
                     </View>
                 </Pressable>
-                <Pressable style={styles.addButton} onPress={() => navigation.navigate ('HomeScreen', { screen: 'AddTask' })}>
+                <Pressable style={styles.addButton} onPress={() => setModalVisible(true)}>
                     <Image style={{
                         width: 90,
                         height: 90
@@ -44,8 +67,10 @@ export default function HomePage({ navigation }) {
     }
     else {
         return (
-            <View style={styles.curTask}>
-                <Text style={styles.welcomText}>THE ACTIVE TASK WHEE</Text>
+            <View style={styles.screen}>
+                <View style={styles.curTask}>
+                    <Text style={styles.welcomText}> {currentTask.text} </Text>
+                </View>
             </View>
         );
     }
@@ -60,13 +85,19 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgb(182, 36, 255)',
         opacity: 1,
         color: 'rgb(240, 240, 240)',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
         borderLeft: 1,
         boxShadow: 'rgb(182, 36, 255)',
         padding: 16,
         borderRadius: 28,
         textShadow: 'rgba(240, 240, 240, 0.47)'
     },
-
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        // marginTop: 22,
+    },
     addButton: {
         position: 'absolute',
         bottom: 20,
@@ -78,8 +109,8 @@ const styles = StyleSheet.create({
         backgroundColor: "#232138",
         padding: 10,
         justifyContent: "center",
-
     },
+
     smallText: {
         fontStyle: 'italic',
         fontFamily: 'Avenir-Book',
@@ -87,14 +118,24 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: 'white'
     },
-    pressableContainer: {
 
+    pressableContainer: {
         backgroundColor: "#48249c",
         textAlign: 'center',
         borderRadius: 20,
         marginBottom: 10,
         alignItems: 'center',
-
+    },
+    modalView: {
+        //margin: 20,
+        //borderRadius: 20,
+        padding: 35,
+        // alignItems: 'center',
+        flex: 1,
+        //backgroundColor: 'transparent',
+        backgroundColor: 'rgba(0,0,0,0.7)',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     welcomText: {
         display: 'flex',
