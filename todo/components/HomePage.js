@@ -69,7 +69,14 @@ export default function HomePage({ navigation }) {
         return (
             <View style={styles.screen}>
                 <View style={styles.curTask}>
-                    <Text style={styles.welcomText}> {currentTask.text} </Text>
+                <TouchableOpacity onPress={() => setModalVisible(false)}>
+                    <FontAwesome name='close' style={styles.icon} size={40} />
+                </TouchableOpacity>
+                    <Text style={styles.welcomText}> Active task </Text>
+                    <Text style={{
+                        fontSize: 25,
+                        color: 'white'
+                    }}> {currentTask.text} </Text>
                 </View>
             </View>
         );

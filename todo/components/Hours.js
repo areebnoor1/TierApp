@@ -34,7 +34,6 @@ export default function Minutes() {
     useEffect(() => {
         const fetchTasks = async () => {
             try {
-
                 const tasksRef = 
                 query(ref(db, '/todos'), orderByChild('task_type'), equalTo('hours'));
                 return onValue(tasksRef, querySnapShot => {
