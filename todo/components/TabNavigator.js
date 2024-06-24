@@ -29,10 +29,16 @@ import ToDoApp from './ToDoApp';
 import AddTask from './AddTask';
 import HomePage from './HomePage';
 import Minutes from './Minutes';
+import Jars from './Jars';
 import Hours from './Hours';
+import Activity from './Activity';
 import Days from './Days';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Entypo from 'react-native-vector-icons/Entypo';
+import Feather from 'react-native-vector-icons/Feather';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+
+
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -41,30 +47,29 @@ export default function TabNavigator() {
   const Tab = createBottomTabNavigator();
 
     return(
-     
-       
         <Tab.Navigator
         screenOptions={{ 
           headerShown: false,
-            tabBarActiveTintColor: 'tomato',
+           // tabBarActiveTintColor: 'tomato',
             tabBarInactiveTintColor: 'gray',
             tabBarStyle: {
-              backgroundColor:  "#232138",
+              //backgroundColor:  "#232138",
               borderTopWidth: 0,
-              height: 60,
+              height: 80,
               paddingBottom: 10,
             },
             tabBarLabelStyle: {
-              fontSize: 12,
+              fontSize: 15,
               fontWeight: 'bold',
             },
 
           }}
 
         >
-          <Tab.Screen name='HomePage' component={HomePage} />
-          <Tab.Screen name='Completed' component={Minutes} options={{ tabBarIcon: ()=>(<Entypo name='calendar' style={styles.icon} size={30} /> )}}/>
-          <Tab.Screen name='Settings' component={Hours} options={{ tabBarIcon: ()=>(<Entypo name='calendar' style={styles.icon} size={30} /> )}}/>
+          <Tab.Screen name='Home' options={{ tabBarIcon: ()=>(<Ionicons name='home' style={styles.icon} size={30} /> )}} component={HomePage} />
+          <Tab.Screen name='Jars' component={Jars} options={{ tabBarIcon: ()=>(<FontAwesome6 name='jar' style={styles.icon} size={30} /> )}}/>
+          <Tab.Screen name='Activity' component={Activity} options={{ tabBarIcon: ()=>(<MaterialIcons name='playlist-add-check' style={styles.icon} size={30} /> )}}/>
+          <Tab.Screen name='Settings' component={Hours} options={{ tabBarIcon: ()=>(<Feather name='settings' style={styles.icon} size={30} /> )}}/>
           
           
         </Tab.Navigator>
@@ -83,7 +88,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
   },
   header: {
     marginTop: '15%',
