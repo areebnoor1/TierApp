@@ -9,6 +9,7 @@ import {
     Pressable
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import TodoList from './TodoList';
 import { db } from "./firebase.js"
 import React, { useState, useEffect } from 'react';
@@ -19,6 +20,7 @@ import {
     update,
     remove
 } from 'firebase/database';
+import TodoListButton from './TodoListButton.js';
 
 export default function TaskSelectionView({ setCurrentTask, setTaskSelectionVisible }) {
     const [value, setValue] = useState('');
@@ -36,30 +38,58 @@ export default function TaskSelectionView({ setCurrentTask, setTaskSelectionVisi
 
     return (
         <View style={styles.listContainer}>
-            <ScrollView style={styles.scroll}>
-                {
-                    todosKeys.map(key => (
-                        <Pressable style={styles.pressableContainer} onPress={() => {
-                            setCurrentTask(todos[key])
-                            setTaskSelectionVisible(false)
-                        }
-                        }>
-                            <TodoList
-                                text={todos[key].text}
-                                key={todos[key].key}
-                                todoItem={todos[key].checked}
-                                setChecked={() => todos[key].key}
-                                deleteTodo={() => deleteTodo(key)}
-                            />
-                        </Pressable>
-                    ))
-                }
-            </ScrollView>
+            <View style={styles.topBar}>
+                <TouchableOpacity onPress={() => {
+                    setTaskSelectionVisible(false)
+                }}
+                    style={{
+                        alignItems: 'center'
+                    }
+                    }
+                >
+                    <AntDesign name='close' size={20} />
+                </TouchableOpacity>
+                <Text>Select a task</Text>
+                <View></View>
+            </View>
+
+            <View style={styles.scroll}>
+                <ScrollView >
+                    {
+                        todosKeys.map(key => (
+                            <Pressable key={todos[key].key} onPress={() => {
+                                setCurrentTask(todos[key])
+                                setTaskSelectionVisible(false)
+                            }
+                            }>
+                                <TodoListButton
+                                    text={todos[key].text}
+                                    key={todos[key].key}
+                                    todoItem={todos[key].checked}
+                                    setChecked={() => todos[key].key}
+                                    deleteTodo={() => deleteTodo(key)}
+                                />
+                            </Pressable>
+                        ))
+                    }
+                </ScrollView>
+            </View>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
+    topBar: {
+        flex: 1,
+        flexDirection: 'row',
+        //alignItems: 'flex-end',
+        //justifyContent: 'space-around',
+        // padding: 16,
+        //backgroundColor: '#f8f8f8',
+        // borderBottomWidth: 1,
+        // borderBottomColor: '#ddd',
+    },
+
     pressableContainer: {
         backgroundColor: "#3d36a3",
         textAlign: 'center',
@@ -67,15 +97,19 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         alignItems: 'center',
     },
+    scroll: {
+
+        //alignItems: 'center'
+    },
 
     listContainer: {
-        marginTop: '5%',
-        flexDirection: 'row',
-        borderColor: '#aaaaaa',
-        borderBottomWidth: 1.5,
-        width: '100%',
-        alignItems: 'stretch',
-        minHeight: 40
+        // marginTop: '5%',
+        flexDirection: 'column',
+        flex: 1
+        // borderColor: '#aaaaaa',
+        // width: '100%',
+        //  alignItems: 'center',
+        //  minHeight: 40
     },
     listItem: {
         paddingBottom: 20,

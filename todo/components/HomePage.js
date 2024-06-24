@@ -14,41 +14,46 @@ import React, { useState, useEffect } from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Stack from '../App';
 import ToDoApp from './ToDoApp';
 import AddTask from './AddTask';
 import TaskSelectionView from './TaskSelectionView';
-import HomeScreen from '../App';
 
 
 export default function HomePage({ navigation }) {
     const [currentTask, setCurrentTask] = useState({});
     const [modalVisible, setModalVisible] = useState(false);
-    const [taskSelectionVisible, setTaskSelectionVisible] = useState(false)
+    const [completedTasks, setCompletedTasks] = useState(0)
 
+const [taskSelectionVisible, setTaskSelectionVisible] = useState(false)
     console.log(currentTask)
     if (Object.keys(currentTask).length === 0) {
         return (
             <View style={styles.screen}>
                 <Modal
-                    animationType="slide"
                     transparent={true}
-                    visible={modalVisible}>
-                    <View style={styles.centeredView}>
-                        <View style={styles.modalView}>
-                            <AddTask setModalVisible={setModalVisible} />
-                        </View>
+                    visible={modalVisible}
+                    style={styles.modalView} 
+                >
+                    <View  >
+                        <AddTask setModalVisible={setModalVisible} />
                     </View>
+
                 </Modal>
 
                 <Modal
                     animationType="slide"
-                    transparent={true}
+                    transparent={false}
                     visible={taskSelectionVisible}>
                     <TaskSelectionView setCurrentTask={setCurrentTask} setTaskSelectionVisible={setTaskSelectionVisible} />
                 </Modal>
 
-                <Text style={styles.welcomText}>No tasks active. Let's get started!</Text>
+
+
+{/* completed task view/stats */}
+
+
+
+                <Text style={styles.welcomText}>No tasks active.</Text>
                 <Pressable style={styles.pressableContainer} onPress={() => setTaskSelectionVisible(true)}>
                     <View >
                         <Text style={styles.buttonText}>Select a task</Text>
@@ -69,9 +74,15 @@ export default function HomePage({ navigation }) {
         return (
             <View style={styles.screen}>
                 <View style={styles.curTask}>
-                <TouchableOpacity onPress={() => setModalVisible(false)}>
-                    <FontAwesome name='close' style={styles.icon} size={40} />
-                </TouchableOpacity>
+                    <TouchableOpacity onPress={() => setCurrentTask({})}>
+                        <FontAwesome name='close' style={styles.icon} size={40} />
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Text style={styles.welcomText} onPress={() => {
+                            setCurrentTask({})
+
+                        }}> Done </Text>
+                    </TouchableOpacity>
                     <Text style={styles.welcomText}> Active task </Text>
                     <Text style={{
                         fontSize: 25,
@@ -99,12 +110,7 @@ const styles = StyleSheet.create({
         borderRadius: 28,
         textShadow: 'rgba(240, 240, 240, 0.47)'
     },
-    centeredView: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        // marginTop: 22,
-    },
+
     addButton: {
         position: 'absolute',
         bottom: 20,
@@ -113,8 +119,8 @@ const styles = StyleSheet.create({
     },
     screen: {
         flex: 1,
-        backgroundColor: "#232138",
-        padding: 10,
+       // backgroundColor: "#232138",
+        // padding: 10,
         justifyContent: "center",
     },
 
@@ -136,19 +142,21 @@ const styles = StyleSheet.create({
     modalView: {
         //margin: 20,
         //borderRadius: 20,
-        padding: 35,
+        //padding: 35,
         // alignItems: 'center',
         flex: 1,
         //backgroundColor: 'transparent',
         backgroundColor: 'rgba(0,0,0,0.7)',
         alignItems: 'center',
         justifyContent: 'center',
+
+
     },
     welcomText: {
         display: 'flex',
         alignItems: 'center',
         gap: 6,
-        fontSize: 70,
+        fontSize: 30,
         marginTop: 12,
         marginLeft: 30,
         marginRight: 30,
@@ -156,7 +164,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontFamily: "Poppins",
         textAlign: "center",
-        color: 'white'
+        //color: 'white'
     },
     buttonText: {
         display: 'flex',

@@ -27,56 +27,26 @@ import TodoList from './components/TodoList';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import ToDoApp from './components/ToDoApp';
 import AddTask from './components/AddTask';
-import HomePage from './components/HomePage';
 import TabNavigator from './components/TabNavigator';
+import LoadingScreen from './components/LoadingScreen';
 import Minutes from './components/Minutes';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-/*function setupTodoListener(userID) {
-  firebaseApp
-    .database()
-    .ref('users/' + userID)
-    .on('value', snapshot => {
-      if (snapshot.val() !== null) {
-        console.log(snapshot.val())
-        store.dispatch({
-          type: 'LOAD_TODO',
-          payload: { todos: snapshot.val().todos },
-        });
-      } else {
-        store.dispatch({
-          type: 'LOAD_TODO',
-          payload: { todos: [] },
-        });
-      }
-    });
-}
-function storeTodo(userID, todo) {
-  //Write this score to the database
-  firebaseApp
-    .database()
-    .ref('users/' + userID)
-    .set({
-      todos: todo,
-    });
-}
-*/
+
 GoogleSignin.configure({
   webClientId: '248488614748-698jn115oljro87m61oo3btad1vu5fud.apps.googleusercontent.com',
   iosClientId: '248488614748-nluheprsmq0kt501hoa8np8vb5mh1vm4.apps.googleusercontent.com',
   androidClientId: '248488614748-qj7corr2qet7tuvv1rvkqqr8vmmctmbm.apps.googleusercontent.com',
   scopes: ['profile', 'email'],
 });
-
 const GoogleLogin = async () => {
   await GoogleSignin.hasPlayServices();
   const userInfo = await GoogleSignin.signIn();
   return userInfo;
 };
 export const Stack = createStackNavigator();
-
 export const HomeScreen = () => {
   return (
     <Stack.Navigator
@@ -84,35 +54,32 @@ export const HomeScreen = () => {
       <Stack.Screen component={HomeScreen} name="HomeScreen" options={{ title: "HomeScreen" }} />
       <Stack.Screen component={AddTask} name="AddTask" options={{ title: "AddTask" }} />
     </Stack.Navigator>
-
   )
-
 }
 
 export default function App() {
 
   const Tab = createBottomTabNavigator();
-
-
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   var [uid, setuid] = useState(null);
 
 
-  /*function addNewTodo() {
-    push(ref(db, '/todos'), {
-      //fix object
-    });
-    setPresentTodo('');
-  }*/
+  useEffect(() => {
+    setTimeout (()=>{checkForToken()},2000)
+  }, []);
+
 
   const saveTokenToSecureStorage = async (token) => {
     SecureStore.setItemAsync("token", token)
   }
   const checkForToken = async () => {
+    console.log('loading', loading)
     let stored_token = await SecureStore.getItemAsync('token')
     setToken(stored_token)
+    console.log('loading', loading)
+    setLoading(false)
   }
   const handleGoogleLogin = async () => {
     //setLoading(true);
@@ -128,7 +95,7 @@ export default function App() {
         });*/
         //await handlePostLoginData(resp.data);
         setToken(idToken);
-        //saveTokenToSecureStorage(idToken);
+        saveTokenToSecureStorage(idToken);
       }
     } catch (apiError) {
       setError(
@@ -140,32 +107,9 @@ export default function App() {
     }
   };
 
-  /*
-    let checkTodo = id => {
-      setTodos(
-        todos.map(todo => {
-          if (todo.key === id) todo.checked = !todo.checked;
-          return todo;
-        })
-      );
-    };
-
-
-
-<ScrollView style={styles.scroll}>
-          {todos.map(item => (
-            <TodoList
-              text={item.text}
-              key={item.key}
-              checked={item.checked}
-              setChecked={() => checkTodo(item.key)}
-              deleteTodo={() => deleteTodo(item.key)}
-            />
-          ))}
-        </ScrollView>
-
-  */
-
+  if(loading === true){
+    return(<LoadingScreen/>);
+  }
   if (token === null) {
     return (
       <View style={styles.container}>
@@ -175,10 +119,7 @@ export default function App() {
   } else {
     return (
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Profile" component={TabNavigator} />
-          <Stack.Screen name="task" component={AddTask} />
-        </Stack.Navigator>
+        <TabNavigator/>
       </NavigationContainer>
     );
   }

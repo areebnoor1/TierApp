@@ -63,9 +63,9 @@ export default function TabNavigator() {
 
         >
           <Tab.Screen name='HomePage' component={HomePage} />
-          <Tab.Screen name='Minutes' component={Minutes} options={{ tabBarIcon: ()=>(<Entypo name='calendar' style={styles.icon} size={30} /> )}}/>
-          <Tab.Screen name='Hours' component={Hours} options={{ tabBarIcon: ()=>(<Entypo name='calendar' style={styles.icon} size={30} /> )}}/>
-          <Tab.Screen name='Days' component={Days} options={{ tabBarIcon: ()=>(<Entypo name='calendar' style={styles.icon} size={30} /> )}}/>
+          <Tab.Screen name='Completed' component={Minutes} options={{ tabBarIcon: ()=>(<Entypo name='calendar' style={styles.icon} size={30} /> )}}/>
+          <Tab.Screen name='Settings' component={Hours} options={{ tabBarIcon: ()=>(<Entypo name='calendar' style={styles.icon} size={30} /> )}}/>
+          
           
         </Tab.Navigator>
       

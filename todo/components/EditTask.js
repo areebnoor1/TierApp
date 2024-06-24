@@ -25,7 +25,7 @@ import {
 } from 'firebase/database';
 import { db } from "./firebase.js"
 
-export default function AddTask({ setModalVisible }) {
+export default function EditTask({ setModalVisible }) {
     const [taskType, setTaskType] = useState('');
     const [value, setValue] = useState('');
     const [date, setDate] = useState(new Date())
@@ -74,27 +74,26 @@ export default function AddTask({ setModalVisible }) {
             <View style={{
                 flexDirection: 'row',
                 alignItems: 'flex-start',
-                justifyContent: 'space-around'
             }}>
 
                 <TouchableOpacity onPress={() => setTaskType('days')}>
-                    <Entypo name='calendar' style={[styles.icon, taskType === 'days' && styles.activeText]} size={40} />
+                    <Entypo name='calendar' style={styles.icon} size={60} />
                     <Text>Days</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => setTaskType('hours')}>
-                    <Ionicons name='hourglass-outline' style={[styles.icon, taskType === 'hours' && styles.activeText]} size={40} />
+                    <Ionicons name='hourglass-outline' style={styles.icon} size={60} />
                     <Text>Hours</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => setTaskType('minutes')}>
-                    <Entypo name='stopwatch' style={[styles.icon, taskType === 'minutes' && styles.activeText]} size={40} />
+                    <Entypo name='stopwatch' style={styles.icon} size={60} />
                     <Text>Minutes</Text>
                 </TouchableOpacity>
 
             </View>
 
-            <Pressable onPress={()=>setShowDate(!showDate)} style={styles.smallText} ><Text>Select a date and time</Text></Pressable>
+            <Pressable onPress={()=>setShowDate(!showDate)}><Text>Select a date and time</Text></Pressable>
             {showDate &&
-                <DatePicker mode='datetime' date={date} onDateChange={setDate} />
+                <DatePicker mode='date' date={date} onDateChange={setDate} />
             }
 
             <View >
@@ -119,20 +118,14 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         padding: 16,
     },
-    activeText: {
-        color: 'blue',
-
-    },
 
     textInput: {
         borderColor: 'purple',
         borderWidth: 2,
-        //height: 250,
+        height: 250,
         //width: 200,
-        padding: 10,
-        borderRadius: 20,
+        borderRadius: 28,
         fontSize: 18,
-        margin: 10
     },
     icon: {
         //padding: 10,
@@ -167,7 +160,6 @@ const styles = StyleSheet.create({
         fontFamily: 'Avenir-Book',
         marginBottom: 20,
         fontSize: 18,
-        alignItems: 'center',
         //color: 'white'
     },
     pressableContainer: {
@@ -175,7 +167,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         borderRadius: 20,
         marginBottom: 10,
-        
+        alignItems: 'center',
     },
     welcomText: {
         display: 'flex',
