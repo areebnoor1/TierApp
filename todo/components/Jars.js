@@ -117,9 +117,24 @@ export default function AddTask({ setModalVisible }) {
         );
     } else if (taskType === 'days') {
         return (
+            <View>
+            <View style={styles.topBar}>
+                    <TouchableOpacity onPress={() => setTaskType("")}>
+                        <Entypo name='chevron-left' size={30} />
+                    </TouchableOpacity>
+
+                    <Text style={styles.buttonText}>Days Jar
+                    </Text>
+
+                   
+                        <Text style={styles.buttonText}></Text>
+                    
+                </View>
             <Days />
+            </View>
         );
     }
+    
 }
 
 const styles = StyleSheet.create({

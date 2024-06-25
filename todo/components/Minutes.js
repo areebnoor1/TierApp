@@ -54,7 +54,7 @@ export default function Minutes() {
      }, []);*/
 
     useFocusEffect(() => {
-        console.log('yay render')
+        //console.log('yay render')
         const fetchTodos = async () => {
             const todos = await readTodos();
             setTodos(todos.filter(todo => todo.task_type === 'minutes'));
