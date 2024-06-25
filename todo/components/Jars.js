@@ -11,6 +11,11 @@ import {
 import React, { useState, useEffect } from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
+
+import Minutes from './Minutes';
+import Days from './Days';
+import Hours from './Hours';
+
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import DatePicker from 'react-native-date-picker'
 
@@ -21,68 +26,109 @@ import {
     onValue,
     push,
     update,
-    remove
+    remove,
+    orderByChild,
+    equalTo,
+    query
 } from 'firebase/database';
 import { db } from "./firebase.js"
 
 export default function AddTask({ setModalVisible }) {
     const [taskType, setTaskType] = useState('');
+    //const [jar, setJar] = useState('');
+
     const [value, setValue] = useState('');
     const [date, setDate] = useState(new Date())
     const [time, setTime] = useState(new Date())
     const [showDate, setShowDate] = useState(false)
     const [showTime, setShowTime] = useState(false)
 
-    let addTodo = () => {
-        if (taskType == '') {
-            Alert.alert('', 'Please specify a task type (Minutes, Hours, Days).', [
-                { text: 'OK', onPress: () => console.log('OK Pressed') },
-            ]);
-        } else {
-
-            push(ref(db, '/todos'), {
-
-                text: value, key: Date.now(), checked: false, task_type: taskType, due_date: date, completed: false
-            });
-            if (value.length > 0) {
-                setValue('');
-            }
-            setModalVisible(false);
-        }
-    };
+    if (Object.keys(taskType).length === 0) {
+        return (
 
 
-
-
-
-    return (
-        <View style={styles.screen}>
-            <View style={styles.topBar}>
-                <Text style={styles.buttonText}>My Tasks</Text>
-            </View>   
-                <TouchableOpacity style = {styles.jarHeader} onPress={() => setTaskType('minutes')}>
+            <View style={styles.screen}>
+                <View style={styles.topBar}>
+                    <Text style={styles.buttonText}>My Tasks</Text>
+                </View>
+                <TouchableOpacity style={styles.jarHeader} onPress={() => setTaskType('minutes')}>
                     <Entypo name='stopwatch' style={[styles.icon, taskType === 'minutes' && styles.activeText]} size={40} />
-                    <Text>Minutes</Text>
+                    <Text style={styles.label}>Minutes</Text>
+                    <Entypo name='chevron-right' style={styles.icon} size={30} />
                 </TouchableOpacity>
-
-                <TouchableOpacity style = {styles.jarHeader} onPress={() => setTaskType('hours')}>
+                <View style={styles.taskTypeDisplay}>
+                    <Text>Interesting facts go here</Text>
+                </View>
+                <TouchableOpacity style={styles.jarHeader} onPress={() => setTaskType('hours')}>
                     <Ionicons name='hourglass-outline' style={[styles.icon, taskType === 'hours' && styles.activeText]} size={40} />
-                    <Text>Hours</Text>
+                    <Text style={styles.label} >Hours</Text>
+                    <Entypo name='chevron-right' style={styles.icon} size={30} />
                 </TouchableOpacity>
-
-                <TouchableOpacity style = {styles.jarHeader} onPress={() => setTaskType('days')}>
+                <View style={styles.taskTypeDisplay}>
+                    <Text>Interesting facts go here</Text>
+                </View>
+                <TouchableOpacity style={styles.jarHeader} onPress={() => setTaskType('days')}>
                     <Entypo name='calendar' style={[styles.icon, taskType === 'days' && styles.activeText]} size={40} />
-                    <Text>Days</Text>
+                    <Text style={styles.label}>Days</Text>
+                    <Entypo name='chevron-right' style={styles.icon} size={30} />
                 </TouchableOpacity>
-    
+                <View style={styles.taskTypeDisplay}>
+                    <Text>Interesting facts go here</Text>
+                </View>
+            </View>
+        );
+    } else if (taskType === 'minutes') {
+        return (
+            <View>
+                <View style={styles.topBar}>
+                    <TouchableOpacity onPress={() => setTaskType("")}>
+                        <Entypo name='chevron-left' size={30} />
+                    </TouchableOpacity>
 
-        </View>
-    );
+                    <Text style={styles.buttonText}>Minutes Jar
+                    </Text>
+
+                   
+                        <Text style={styles.buttonText}></Text>
+                    
+                </View>
+                <Minutes />
+            </View>
+        );
+
+    } else if (taskType === 'hours') {
+        return (
+            <Hours />
+        );
+    } else if (taskType === 'days') {
+        return (
+            <Days />
+        );
+    }
 }
 
 const styles = StyleSheet.create({
 
-    jarHeader:{
+    taskTypeDisplay: {
+        backgroundColor: "#48249c",
+        textAlign: 'center',
+        borderRadius: 20,
+        marginBottom: 10,
+        marginLeft: 20,
+        marginRight: 20,
+        padding: 20,
+        alignItems: 'center',
+    },
+
+    label: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        padding: 8,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+
+    jarHeader: {
         flexDirection: 'row',
     },
 
@@ -167,7 +213,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         alignItems: 'center',
         // gap: 6,
-        fontSize: 26,
+        fontSize: 30,
         // marginTop: 12,
         //  marginLeft: 8,
         //   marginBottom: 5,

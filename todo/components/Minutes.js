@@ -22,7 +22,7 @@ import {
     ScrollView,
     Pressable
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Feather';
+import Entypo from 'react-native-vector-icons/Entypo';
 import TodoList from './TodoList';
 
 import { db } from "./firebase.js"
@@ -34,13 +34,15 @@ export default function Minutes() {
     useEffect(() => {
         const fetchTasks = async () => {
             try {
-
-                const tasksRef = 
-                query(ref(db, '/todos'), orderByChild('task_type'), equalTo('minutes'));
+                
+                const tasksRef =
+                    query(ref(db, '/todos'), orderByChild('task_type'), equalTo('minutes'));
                 return onValue(tasksRef, querySnapShot => {
                     let data = querySnapShot.val() || {};
-                    let todoItems = {...data};
-                    setTodos(todoItems);});
+                    let todoItems = { ...data };
+                    console.log('minutesdata', todoItems)
+                    setTodos(todoItems);
+                });
 
 
             } catch (error) {
@@ -73,20 +75,6 @@ export default function Minutes() {
     }
 
     return (<View style={styles.container}>
-        <Text style={styles.header}>Todo List</Text>
-        <View style={styles.textInputContainer}>
-            <TextInput
-                style={styles.textInput}
-                multiline={true}
-                placeholder="What do you want to do today?"
-                placeholderTextColor="#abbabb"
-                value={value}
-                onChangeText={_value => setValue(_value)}
-            />
-            <TouchableOpacity onPress={() => addTodo()}>
-                <Icon name="plus" size={30} color="blue" style={{ marginLeft: 15 }} />
-            </TouchableOpacity>
-        </View>
         <ScrollView style={styles.scroll}>
             {
                 todosKeys.map(key => (
@@ -111,9 +99,9 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     container: {
-        flex: 1,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
+        //flex: 1,
+       // justifyContent: 'flex-start',
+        //alignItems: 'center',
         backgroundColor: '#F5FCFF',
     },
     header: {

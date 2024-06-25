@@ -79,7 +79,9 @@ const [taskSelectionVisible, setTaskSelectionVisible] = useState(false)
                     </TouchableOpacity>
                     <TouchableOpacity>
                         <Text style={styles.welcomText} onPress={() => {
-                            setCurrentTask({})
+                            setCurrentTask({}
+                                
+                                )
 
                         }}> Done </Text>
                     </TouchableOpacity>
