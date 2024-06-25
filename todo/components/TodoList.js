@@ -13,7 +13,7 @@ export default function TodoList(props){
   return(
     <View style = {styles.listContainer}>
       <Icon
-        name={props.checked? 'check':'square'}
+        name={props.completed? 'check':'square'}
         size={25}
         color='black'
         style={{marginLeft:15}}
@@ -33,6 +33,7 @@ export default function TodoList(props){
 				size={25}
 				//color="red"
 				style={{ marginLeft: 'auto' }}
+				marginRight={30}
 				onPress={props.deleteTodo}
 			/>
     </View>

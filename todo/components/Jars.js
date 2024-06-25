@@ -98,7 +98,22 @@ export default function AddTask({ setModalVisible }) {
 
     } else if (taskType === 'hours') {
         return (
+            <View>
+            <View style={styles.topBar}>
+                    <TouchableOpacity onPress={() => setTaskType("")}>
+                        <Entypo name='chevron-left' size={30} />
+                    </TouchableOpacity>
+
+                    <Text style={styles.buttonText}>Hours Jar
+                    </Text>
+
+                   
+                        <Text style={styles.buttonText}></Text>
+                    
+                </View>
+
             <Hours />
+            </View>
         );
     } else if (taskType === 'days') {
         return (

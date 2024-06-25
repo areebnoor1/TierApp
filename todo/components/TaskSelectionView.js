@@ -21,20 +21,31 @@ import {
     remove
 } from 'firebase/database';
 import TodoListButton from './TodoListButton.js';
+import { createTodo, readTodos, updateTodo, deleteTodo } from './TodosService';
 
 export default function TaskSelectionView({ setCurrentTask, setTaskSelectionVisible }) {
     const [value, setValue] = useState('');
-    const [todos, setTodos] = useState({});
+    const [todos, setTodos] = useState([]);
 
     const todosKeys = Object.keys(todos);
 
-    useEffect(() => {
+    /*useEffect(() => {
         return onValue(ref(db, '/todos'), querySnapShot => {
             let data = querySnapShot.val() || {};
             let todoItems = { ...data };
             setTodos(todoItems);
         });
+    }, []);*/
+
+
+    useEffect(() => {
+        const fetchTodos = async () => {
+            const todos = await readTodos();
+            setTodos(todos);
+        };
+        fetchTodos();
     }, []);
+
 
     return (
         <View style={styles.listContainer}>
@@ -56,7 +67,7 @@ export default function TaskSelectionView({ setCurrentTask, setTaskSelectionVisi
             <View style={styles.scroll}>
                 <ScrollView >
                     {
-                        todosKeys.map(key => (
+                       /* todosKeys.map(key => (
                             <Pressable key={todos[key].key} onPress={() => {
                                 setCurrentTask(todos[key])
                                 setTaskSelectionVisible(false)
@@ -69,6 +80,23 @@ export default function TaskSelectionView({ setCurrentTask, setTaskSelectionVisi
                                     setChecked={() => todos[key].key}
                                     deleteTodo={() => deleteTodo(key)}
                                 />
+                            </Pressable>
+                        ))*/
+
+                        todos.map(item => (
+                            <Pressable key={item.key} onPress={() => {
+                                setCurrentTask(item)
+                                setTaskSelectionVisible(false)
+                            }
+                            }>
+                               {!item.completed &&
+                                <TodoListButton
+                                    text={item.text}
+                                    key={item.key}
+                                    todoItem={item.completed}
+                                    setChecked={() => item.key}
+                                    deleteTodo={() => deleteTodo(key)}
+                                />}
                             </Pressable>
                         ))
                     }

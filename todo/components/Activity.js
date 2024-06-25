@@ -12,6 +12,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import TodoList from './TodoList';
 import { db } from "./firebase.js"
+import { useFocusEffect } from '@react-navigation/native';
 import React, { useState, useEffect } from 'react';
 import {
     ref,
@@ -24,13 +25,15 @@ import {
     remove
 } from 'firebase/database';
 import TodoListButton from './TodoListButton.js';
+import { createTodo, readTodos, updateTodo, deleteTodo } from './TodosService';
 
-export default function TaskSelectionView({ setCurrentTask, setTaskSelectionVisible }) {
+
+export default function Activity() {
     const [value, setValue] = useState('');
-    const [todos, setTodos] = useState({});
+    const [todos, setTodos] = useState([]);
 
-    const todosKeys = Object.keys(todos);
-    useEffect(() => {
+    //const todosKeys = Object.keys(todos);
+    /*useEffect(() => {
         const fetchTasks = async () => {
             try {
                 const tasksRef =
@@ -45,7 +48,17 @@ export default function TaskSelectionView({ setCurrentTask, setTaskSelectionVisi
             }
         };
         fetchTasks();
-    }, []);
+    }, []);*/
+
+
+    useFocusEffect(() => {
+        const fetchTodos = async () => {
+          const todos = await readTodos();
+          setTodos(todos);
+        };
+        fetchTodos();
+        console.log('activity', todos)
+      });
 
 
     return (
@@ -53,14 +66,15 @@ export default function TaskSelectionView({ setCurrentTask, setTaskSelectionVisi
             <View >
                 <ScrollView style={styles.scroll}>
                     { 
-                        todosKeys.map(key => (
+                        todos.map(item => (
+                            item.completed && 
                             <TodoList
-                            text={todos[key].text}
-                            key={todos[key].key}
-                            todoItem={todos[key].checked}
-                            setChecked={() => todos[key].key}
-                            deleteTodo={() => deleteTodo(key)}
-                        />
+                                text={item.text}
+                                key={item.key}
+                                todoItem={item.completed}
+                               // setChecked={() => checkTodo(item.key)}
+                                //deleteTodo={() => deleteTodo(item.key)}
+                            />
                         ))
                     }
                 </ScrollView>

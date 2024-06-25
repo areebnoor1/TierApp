@@ -25,6 +25,8 @@ import {
 } from 'firebase/database';
 import { db } from "./firebase.js"
 
+import { createTodo, readTodos, updateTodo, deleteTodo } from './TodosService';
+
 export default function AddTask({ setModalVisible }) {
     const [taskType, setTaskType] = useState('');
     const [value, setValue] = useState('');
@@ -33,6 +35,7 @@ export default function AddTask({ setModalVisible }) {
     const [showDate, setShowDate] = useState(false)
     const [showTime, setShowTime] = useState(false)
 
+    /*
     let addTodo = () => {
         if (taskType == '') {
             Alert.alert('', 'Please specify a task type (Minutes, Hours, Days).', [
@@ -50,7 +53,26 @@ export default function AddTask({ setModalVisible }) {
             setModalVisible(false);
         }
     };
+*/
 
+let addTodo = async () => {
+    if (taskType == '') {
+        Alert.alert('', 'Please specify a task type (Minutes, Hours, Days).', [
+            { text: 'OK', onPress: () => console.log('OK Pressed') },
+        ]);
+    } else {
+        todo_result = await createTodo( {
+            text: value, key: Date.now(), completed: false, task_type: taskType, due_date: date
+        });
+         
+   
+        //console.log('todos', todo_result)
+        if (value.length > 0) {
+            setValue('');
+        }
+        setModalVisible(false);
+    }
+};
     return (
         <View style={styles.screen}>
             <View style={styles.topBar}>

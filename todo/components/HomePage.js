@@ -17,14 +17,15 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import ToDoApp from './ToDoApp';
 import AddTask from './AddTask';
 import TaskSelectionView from './TaskSelectionView';
-
+import { createTodo, readTodos, updateTodo, deleteTodo } from './TodosService';
 
 export default function HomePage({ navigation }) {
     const [currentTask, setCurrentTask] = useState({});
+    const [currentTaskKey, setCurrentTaskKey] = useState({});
     const [modalVisible, setModalVisible] = useState(false);
     const [completedTasks, setCompletedTasks] = useState(0)
 
-const [taskSelectionVisible, setTaskSelectionVisible] = useState(false)
+    const [taskSelectionVisible, setTaskSelectionVisible] = useState(false)
     console.log(currentTask)
     if (Object.keys(currentTask).length === 0) {
         return (
@@ -32,7 +33,7 @@ const [taskSelectionVisible, setTaskSelectionVisible] = useState(false)
                 <Modal
                     transparent={true}
                     visible={modalVisible}
-                    style={styles.modalView} 
+                    style={styles.modalView}
                 >
                     <View  >
                         <AddTask setModalVisible={setModalVisible} />
@@ -49,7 +50,7 @@ const [taskSelectionVisible, setTaskSelectionVisible] = useState(false)
 
 
 
-{/* completed task view/stats */}
+                {/* completed task view/stats */}
 
 
 
@@ -79,10 +80,11 @@ const [taskSelectionVisible, setTaskSelectionVisible] = useState(false)
                     </TouchableOpacity>
                     <TouchableOpacity>
                         <Text style={styles.welcomText} onPress={() => {
-                            setCurrentTask({}
-                                
-                                )
+                            currentTask.completed = true
+                            updateTodo(currentTask.key, currentTask)
+                            setCurrentTask({})
 
+                            
                         }}> Done </Text>
                     </TouchableOpacity>
                     <Text style={styles.welcomText}> Active task </Text>
@@ -121,7 +123,7 @@ const styles = StyleSheet.create({
     },
     screen: {
         flex: 1,
-       // backgroundColor: "#232138",
+        // backgroundColor: "#232138",
         // padding: 10,
         justifyContent: "center",
     },

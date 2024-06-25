@@ -42,7 +42,7 @@ export default function EditTask({ setModalVisible }) {
         
             push(ref(db, '/todos'), {
                 
-                text: value, key: Date.now(), checked: false, task_type: taskType, due_date: date, completed: false
+                text: value, key: Date.now(), completed: false, task_type: taskType, due_date: date, completed: false
             });
             if (value.length > 0) {
                 setValue('');
