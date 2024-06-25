@@ -75,10 +75,8 @@ export default function NoTask({ setTaskSelectionVisible, setModalVisible }) {
           </View>
         </View>
       </View>
-
       {/* Modal */}
       <Modal
-        // animationType="slide"
         transparent={true}
         visible={jarModalVisible}
         onRequestClose={closeModal}
@@ -89,6 +87,11 @@ export default function NoTask({ setTaskSelectionVisible, setModalVisible }) {
             <Pressable style={styles.pressableContainer} onPress={closeModal}>
               <Text style={styles.buttonText}>X</Text>
             </Pressable>
+
+            {/* Display selected jar */}
+            <Text style={styles.selectedJarText}>
+              Selected Jar: {selectedJar}
+            </Text>
 
             {/* Choose Random Task Button */}
             <Pressable
@@ -114,6 +117,7 @@ export default function NoTask({ setTaskSelectionVisible, setModalVisible }) {
           </View>
         </View>
       </Modal>
+
       {/* Add Button */}
       <Pressable
         style={styles.addTaskButton}
@@ -208,5 +212,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: "center",
     position: "absolute",
+  },
+  selectedJarText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    fontFamily: "Poppins",
+    color: "#48249c",
+    marginBottom: 20,
   },
 });

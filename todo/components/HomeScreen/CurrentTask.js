@@ -35,45 +35,6 @@ const styles = StyleSheet.create({
     borderRadius: 28,
     textShadow: "rgba(240, 240, 240, 0.47)",
   },
-
-  addButton: {
-    position: "absolute",
-    bottom: 20,
-    right: 20,
-  },
-  screen: {
-    flex: 1,
-    // backgroundColor: "#232138",
-    // padding: 10,
-    justifyContent: "center",
-  },
-
-  smallText: {
-    fontStyle: "italic",
-    fontFamily: "Avenir-Book",
-    marginBottom: 20,
-    fontSize: 18,
-    color: "white",
-  },
-
-  pressableContainer: {
-    backgroundColor: "#48249c",
-    textAlign: "center",
-    borderRadius: 20,
-    marginBottom: 10,
-    alignItems: "center",
-  },
-  modalView: {
-    //margin: 20,
-    //borderRadius: 20,
-    //padding: 35,
-    // alignItems: 'center',
-    flex: 1,
-    //backgroundColor: 'transparent',
-    backgroundColor: "rgba(0,0,0,0.7)",
-    alignItems: "center",
-    justifyContent: "center",
-  },
   welcomText: {
     display: "flex",
     alignItems: "center",
@@ -87,18 +48,5 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins",
     textAlign: "center",
     //color: 'white'
-  },
-  buttonText: {
-    display: "flex",
-    alignItems: "center",
-    gap: 6,
-    fontSize: 26,
-    marginTop: 12,
-    marginLeft: 8,
-    marginBottom: 5,
-    fontWeight: "bold",
-    fontFamily: "Poppins",
-    textAlign: "center",
-    color: "white",
   },
 });
