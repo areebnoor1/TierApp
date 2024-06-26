@@ -113,6 +113,7 @@ export default function Minutes() {
                         text={item.text}
                         key={item.key}
                         completed={item.completed}
+                        due_date={item.due_date}
                         setChecked={() => {
 
                             checkTodo(item.key)

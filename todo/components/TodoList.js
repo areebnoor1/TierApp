@@ -4,31 +4,40 @@ import {
 	StyleSheet,
 	Text,
 	View,
-	TextInput, 
-  TouchableOpacity,
+	TextInput,
+	TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
+import { format } from "date-fns";
 
-export default function TodoList(props){
-  return(
-    <View style = {styles.listContainer}>
-      <Icon
-        name={props.completed? 'check':'square'}
-        size={25}
-        color='black'
-        style={{marginLeft:15}}
-        onPress={props.setChecked}
-      />
-	  <Icon
-        name={'edit'}
-        size={25}
-        color='black'
-        style={{marginLeft:15}}
-        onPress={props.setChecked}
-      />
-      <Text style={styles.listItem}>{props.text}</Text>
-	  <Text>{props.due_date}</Text>
-      <Icon
+export default function TodoList(props) {
+	return (
+		<View style={styles.listContainer}>
+			<Icon
+				name={props.completed ? 'check' : 'square'}
+				size={25}
+				color='black'
+				style={{ marginLeft: 15 }}
+				onPress={props.setChecked}
+			/>
+			<Icon
+				name={'edit'}
+				size={25}
+				color='black'
+				style={{ marginLeft: 15 }}
+				onPress={props.setChecked}
+			/>
+			<View style={{
+
+
+
+			}}>
+				<Text style={styles.listItem}>{props.text}</Text>
+				{typeof props.due_date !== 'undefined' &&
+					<Text style={styles.dateText}>{format(props.due_date, "eeee, MMMM do, HH:mm")}</Text>
+				}
+			</View>
+			<Icon
 				name="trash-2"
 				size={25}
 				//color="red"
@@ -36,13 +45,15 @@ export default function TodoList(props){
 				marginRight={30}
 				onPress={props.deleteTodo}
 			/>
-    </View>
-  )
+
+
+		</View>
+	)
 
 }
 
 const styles = StyleSheet.create({
-  	listContainer: {
+	listContainer: {
 		marginTop: '5%',
 		flexDirection: 'row',
 		width: '100%',
@@ -50,11 +61,15 @@ const styles = StyleSheet.create({
 		minHeight: 40
 	},
 	listItem: {
-		paddingBottom: 20,
+		paddingBottom: 10,
 		paddingLeft: 10,
 		marginTop: 6,
 		fontSize: 17,
 		fontWeight: 'bold',
 		color: 'black'
+	},
+	dateText: {
+		marginBottom: 10,
+		fontStyle: 'italic',
 	}
 })
