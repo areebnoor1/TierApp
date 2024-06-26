@@ -63,7 +63,7 @@ export default function TaskSelectionModal({
       transparent={false}
       visible={taskSelectionVisible}
     >
-      {console.log('tasktype', taskType)}
+    
       <View style={styles.listContainer}>
         <View style={styles.topBar}>
           <TouchableOpacity

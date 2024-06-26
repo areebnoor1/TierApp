@@ -137,7 +137,10 @@ let addTodo = async () => {
       </View>
 
       <Pressable
-        onPress={() => setShowDate(!showDate)}
+        onPress={() => {setShowDate(!showDate)
+          setDate(new Date())
+        }
+        }
         style={styles.smallText}
       >
         <Text>{getMessage()}</Text>

@@ -77,10 +77,7 @@ export default function Minutes() {
         const todo = todos.find(todo => todo.key === key);
        //if (todo) {
             // todo.completed = true
-            
-
            updateTodo(key, { completed: !todo.completed });
-
            const index = todos.findIndex(todo => todo.key === key);
            todos[index] = { ...todos[index], ...{ completed: !todo.completed } };
            setTodos(todos.filter(todo => todo.key !== key));

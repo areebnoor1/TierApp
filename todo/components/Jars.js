@@ -43,6 +43,25 @@ export default function AddTask({ setModalVisible }) {
     const [showDate, setShowDate] = useState(false)
     const [showTime, setShowTime] = useState(false)
 
+
+
+
+
+const tasksDueToday = async (taskType) => {
+    const todo = todos.find(todo => todo.key === key);
+   //if (todo) {
+        // todo.completed = true
+       updateTodo(key, { completed: !todo.completed });
+       const index = todos.findIndex(todo => todo.key === key);
+       todos[index] = { ...todos[index], ...{ completed: !todo.completed } };
+       setTodos(todos.filter(todo => todo.key !== key));
+   // }
+};
+
+//cons tasksInJar = async ()
+
+
+
     if (Object.keys(taskType).length === 0) {
         return (
 
@@ -65,6 +84,25 @@ export default function AddTask({ setModalVisible }) {
                     <Entypo name='chevron-right' style={styles.icon} size={30} />
                 </TouchableOpacity>
                 <View style={styles.taskTypeDisplay}>
+
+                 {/*   <View>
+                        <Text>
+Tasks due today
+                        </Text>
+
+                        <Text>
+Completed tasks
+                        </Text>
+                        <Text>
+Tasks in jar
+                        </Text>
+                       
+                    </View>
+
+                    <View>
+
+        </View>*/}
+
                     <Text>Interesting facts go here</Text>
                 </View>
                 <TouchableOpacity style={styles.jarHeader} onPress={() => setTaskType('days')}>
