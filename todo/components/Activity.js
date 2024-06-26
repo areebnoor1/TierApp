@@ -25,44 +25,27 @@ import {
     remove
 } from 'firebase/database';
 import TodoListButton from './TodoListButton.js';
-import { createTodo, readTodos, updateTodo, deleteTodo } from './TodosService';
+import { createTodo, readTodos, updateTodo, deleteTodo, deleteCompletedTodos } from './TodosService';
 
 
 export default function Activity() {
     const [value, setValue] = useState('');
     const [todos, setTodos] = useState([]);
 
-    //const todosKeys = Object.keys(todos);
-    /*useEffect(() => {
-        const fetchTasks = async () => {
-            try {
-                const tasksRef =
-                    query(ref(db, '/todos'), orderByChild('completed'), equalTo('true'));
-                return onValue(tasksRef, querySnapShot => {
-                    let data = querySnapShot.val() || {};
-                    let todoItems = { ...data };
-                    setTodos(todoItems);
-                });
-            } catch (error) {
-                console.error('Error getting documents: ', error);
-            }
-        };
-        fetchTasks();
-    }, []);*/
-
-
     useFocusEffect(() => {
         const fetchTodos = async () => {
           const todos = await readTodos();
+          deleteCompletedTodos();
           setTodos(todos);
         };
         fetchTodos();
-        console.log('activity', todos)
-      });
+        //also delete all the tasks that are from a previous day
+      })
 
 
     return (
         <View>
+            <Text style={styles.buttonText}>Completed Tasks</Text>
             <View >
                 <ScrollView style={styles.scroll}>
                     { 
@@ -71,9 +54,8 @@ export default function Activity() {
                             <TodoList
                                 text={item.text}
                                 key={item.key}
+                                not_editable = {true}
                                 todoItem={item.completed}
-                               // setChecked={() => checkTodo(item.key)}
-                                //deleteTodo={() => deleteTodo(item.key)}
                             />
                         ))
                     }
@@ -94,7 +76,19 @@ const styles = StyleSheet.create({
         // borderBottomWidth: 1,
         // borderBottomColor: '#ddd',
     },
-
+    buttonText: {
+        display: 'flex',
+        alignItems: 'center',
+        // gap: 6,
+        fontSize: 26,
+        // marginTop: 12,
+        //  marginLeft: 8,
+        //   marginBottom: 5,
+        fontWeight: 'bold',
+        fontFamily: "Poppins",
+        textAlign: "center",
+        //color: 'white'
+    },
     pressableContainer: {
         backgroundColor: "#3d36a3",
         textAlign: 'center',

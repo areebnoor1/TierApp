@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import dayjs from 'dayjs';
 // Key for the todos array in local storage
 const TODOS_KEY = 'todos';
 
@@ -29,6 +29,18 @@ export const createTodo = async (todo) => {
 // Read all todos
 export const readTodos = async () => {
   return await getTodos();
+};
+
+export const deleteCompletedTodos = async () => {
+  try {
+    const todos = await getTodos();
+    const today = dayjs().format('YYYY-MM-DD');
+    const newTodos = todos.filter(todo => !todo.completed || dayjs(todo.key).format('YYYY-MM-DD') === today);
+    const jsonValue = JSON.stringify(newTodos);
+    await AsyncStorage.setItem(TODOS_KEY, jsonValue);
+  } catch (e) {
+    console.error('Failed to delete completed todos from storage', e);
+  }
 };
 
 // Update an existing todo

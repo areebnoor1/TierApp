@@ -33,7 +33,7 @@ export default function TodoList(props) {
 
 			}}>
 				<Text style={styles.listItem}>{props.text}</Text>
-				{typeof props.due_date !== 'undefined' &&
+				{Object.keys(props.due_date).length !== 0 &&
 					<Text style={styles.dateText}>{format(props.due_date, "eeee, MMMM do, HH:mm")}</Text>
 				}
 			</View>

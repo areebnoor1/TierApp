@@ -30,7 +30,7 @@ import { createTodo, readTodos, updateTodo, deleteTodo } from './TodosService';
 export default function AddTask({ setModalVisible }) {
     const [taskType, setTaskType] = useState('');
     const [value, setValue] = useState('');
-    const [date, setDate] = useState(new Date())
+    const [date, setDate] = useState({})
     const [time, setTime] = useState(new Date())
     const [showDate, setShowDate] = useState(false)
     const [showTime, setShowTime] = useState(false)
@@ -116,7 +116,7 @@ let addTodo = async () => {
 
             <Pressable onPress={()=>setShowDate(!showDate)} style={styles.smallText} ><Text>Select a date and time</Text></Pressable>
             {showDate &&
-                <DatePicker mode='datetime' date={date} onDateChange={setDate} />
+                <DatePicker mode='datetime' date={new Date()} onDateChange={setDate} />
             }
 
             <View >
