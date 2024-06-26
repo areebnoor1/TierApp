@@ -10,8 +10,10 @@ import {
 } from "react-native";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import TodoListButton from "../TodoListButton";
-import { db } from "../firebase";
-import { ref, onValue, query, orderByChild, equalTo } from "firebase/database";
+import { createTodo, readTodos, updateTodo, deleteTodo } from '../TodosService';
+import { useFocusEffect } from '@react-navigation/native';
+//import { db } from "../firebase";
+//import { ref, onValue, query, orderByChild, equalTo } from "firebase/database";
 
 export default function TaskSelectionModal({
   taskSelectionVisible,
@@ -19,10 +21,10 @@ export default function TaskSelectionModal({
   setCurrentTask,
   taskType,
 }) {
-  const [todos, setTodos] = useState({});
+  const [todos, setTodos] = useState([]);
   const todosKeys = Object.keys(todos);
 
-  useEffect(() => {
+ /*useEffect(() => {
     const fetchTasks = async () => {
       if (!taskType) return;
 
@@ -42,14 +44,26 @@ export default function TaskSelectionModal({
       }
     };
     fetchTasks();
-  }, [taskType]);
+  }, [taskType]);*/
+
+  useFocusEffect(() => {
+    const fetchTodos = async () => {
+        const todos = await readTodos();
+        setTodos(todos.filter(todo => todo.task_type === taskType && todo.completed === false));
+        
+        //setTodos(todos);
+    };
+    fetchTodos();
+});
 
   return (
+    
     <Modal
       animationType="slide"
       transparent={false}
       visible={taskSelectionVisible}
     >
+      {console.log('tasktype', taskType)}
       <View style={styles.listContainer}>
         <View style={styles.topBar}>
           <TouchableOpacity
@@ -60,29 +74,46 @@ export default function TaskSelectionModal({
           >
             <AntDesign name="close" size={20} />
           </TouchableOpacity>
-          <Text style={styles.topBarText}>Select a task</Text>
+          <Text style={styles.topBarText}>Select a {taskType} task </Text>
           <View style={styles.placeholder} />
         </View>
 
-        <ScrollView style={styles.scrollView}>
-          {todosKeys.map((key) => (
-            <Pressable
-              key={todos[key].key}
-              onPress={() => {
-                setCurrentTask(todos[key]);
-                setTaskSelectionVisible(false);
-              }}
-              style={styles.pressableContainer}
-            >
-              <TodoListButton
-                text={todos[key].text}
-                todoItem={todos[key].checked}
-                setChecked={() => todos[key].key}
-                deleteTodo={() => deleteTodo(key)}
-              />
-            </Pressable>
-          ))}
-        </ScrollView>
+        <ScrollView >
+                    {
+                       /* todosKeys.map(key => (
+                            <Pressable key={todos[key].key} onPress={() => {
+                                setCurrentTask(todos[key])
+                                setTaskSelectionVisible(false)
+                            }
+                            }>
+                                <TodoListButton
+                                    text={todos[key].text}
+                                    key={todos[key].key}
+                                    todoItem={todos[key].checked}
+                                    setChecked={() => todos[key].key}
+                                    deleteTodo={() => deleteTodo(key)}
+                                />
+                            </Pressable>
+                        ))*/
+
+                        todos.map(item => (
+                            <Pressable key={item.key} onPress={() => {
+                                setCurrentTask(item)
+                                setTaskSelectionVisible(false)
+                            }
+                            }>
+                               {!item.completed &&
+                                <TodoListButton
+                                    text={item.text}
+                                    key={item.key}
+                                    todoItem={item.completed}
+                                    setChecked={() => item.key}
+                                    deleteTodo={() => deleteTodo(key)}
+                                />}
+                            </Pressable>
+                        ))
+                    }
+                </ScrollView>
       </View>
     </Modal>
   );

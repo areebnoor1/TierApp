@@ -55,6 +55,7 @@ export default function Activity() {
                                 text={item.text}
                                 key={item.key}
                                 not_editable = {true}
+                                due_date = {item.due_date}
                                 todoItem={item.completed}
                             />
                         ))

@@ -126,6 +126,7 @@ export default function HomePage({ navigation }) {
         <NoTask
           setTaskSelectionVisible={setTaskSelectionVisible}
           setModalVisible={setModalVisible}
+          setCurrentTask={setCurrentTask}
         />
       ) : (
         <CurrentTask

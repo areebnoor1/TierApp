@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, Pressable, Image, Modal } from "react-native";
 import JarIcon from "../../components/SVGicons/JarIcon";
 import TaskSelectionModal from "./TaskSelectionModal";
 
-export default function NoTask({ setModalVisible }) {
+export default function NoTask({ setModalVisible, setCurrentTask }) {
   const [jarModalVisible, setJarModalVisible] = useState(false);
   const [taskSelectionVisible, setTaskSelectionVisible] = useState(false);
   const [selectedJar, setSelectedJar] = useState(null);
@@ -27,7 +27,10 @@ export default function NoTask({ setModalVisible }) {
         <View style={styles.jarContainer}>
           <View style={styles.iconTextContainer}>
             <Pressable
-              onPress={() => openJarModal("minutes")}
+              onPress={() => {openJarModal("minutes")
+              setSelectedJar('minutes');
+    setJarModalVisible(true);}
+            }
               style={({ pressed }) => [
                 { opacity: pressed || selectedJar === "minutes" ? 0.6 : 1 },
               ]}
@@ -100,7 +103,7 @@ export default function NoTask({ setModalVisible }) {
             <Pressable
               style={styles.pressableContainer}
               onPress={() => {
-                closeModal();
+              //  closeModal();
                 setTaskSelectionVisible(true);
               }}
             >
@@ -111,7 +114,7 @@ export default function NoTask({ setModalVisible }) {
             <Pressable
               style={styles.pressableContainer}
               onPress={() => {
-                closeModal();
+               // closeModal();
                 setTaskSelectionVisible(true);
               }}
             >
@@ -126,6 +129,7 @@ export default function NoTask({ setModalVisible }) {
         taskSelectionVisible={taskSelectionVisible}
         setTaskSelectionVisible={setTaskSelectionVisible}
         taskType={selectedJar}
+        setCurrentTask={setCurrentTask}
       />
 
       {/* Add Button */}

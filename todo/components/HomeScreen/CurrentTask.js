@@ -9,13 +9,16 @@ import {
   TouchableOpacity,
 } from "react-native";
 import AntDesign from "react-native-vector-icons/AntDesign";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 import TodoListButton from "../TodoListButton";
 import { db } from "../firebase";
 import { ref, onValue, query, orderByChild, equalTo } from "firebase/database";
+import { createTodo, readTodos, updateTodo, deleteTodo } from '../TodosService';
 
-export default function TaskSelectionModal({
+export default function CurrentTask({
   taskSelectionVisible,
   setTaskSelectionVisible,
+currentTask,
   setCurrentTask, // Ensure setCurrentTask is passed down as a prop
   taskType,
 }) {
@@ -53,49 +56,27 @@ export default function TaskSelectionModal({
   };
 
   return (
-    <Modal
-      animationType="slide"
-      transparent={false}
-      visible={taskSelectionVisible}
-    >
-      <View style={styles.listContainer}>
-        <View style={styles.topBar}>
-          <TouchableOpacity
-            onPress={() => {
-              setTaskSelectionVisible(false);
-            }}
-            style={styles.closeButton}
-          >
-            <AntDesign name="close" size={20} />
-          </TouchableOpacity>
-          <Text style={styles.topBarText}>Select a task</Text>
-          <View style={styles.placeholder} />
-        </View>
+    <View style={styles.screen}>
+                <View style={styles.curTask}>
+                    <TouchableOpacity onPress={() => setCurrentTask({})}>
+                        <FontAwesome name='close' style={styles.icon} size={40} />
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Text style={styles.welcomText} onPress={() => {
+                            currentTask.completed = true
+                            updateTodo(currentTask.key, currentTask)
+                            setCurrentTask({})
 
-        <ScrollView
-          style={styles.scrollView}
-          contentContainerStyle={styles.scrollContent}
-        >
-          {todosKeys.map((key) => (
-            <Pressable
-              key={todos[key].key}
-              onPress={() => {
-                setCurrentTask(todos[key]); // Ensure setCurrentTask is called with the selected task
-                setTaskSelectionVisible(false);
-              }}
-            >
-              <TodoListButton
-                text={todos[key].text}
-                key={todos[key].key}
-                todoItem={todos[key].checked}
-                setChecked={() => todos[key].key}
-                deleteTodo={() => deleteTodo(key)}
-              />
-            </Pressable>
-          ))}
-        </ScrollView>
-      </View>
-    </Modal>
+                            
+                        }}> Done </Text>
+                    </TouchableOpacity>
+                    <Text style={styles.welcomText}> Active task </Text>
+                    <Text style={{
+                        fontSize: 25,
+                        color: 'white'
+                    }}> {currentTask.text} </Text>
+                </View>
+            </View>
   );
 }
 
