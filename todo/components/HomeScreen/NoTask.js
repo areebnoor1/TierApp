@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { StyleSheet, View, Text, Pressable, Image, Modal } from "react-native";
 import JarIcon from "../../components/SVGicons/JarIcon";
+import TaskSelectionModal from "./TaskSelectionModal";
 
-export default function NoTask({ setTaskSelectionVisible, setModalVisible }) {
+export default function NoTask({ setModalVisible }) {
   const [jarModalVisible, setJarModalVisible] = useState(false);
+  const [taskSelectionVisible, setTaskSelectionVisible] = useState(false);
   const [selectedJar, setSelectedJar] = useState(null);
 
   const openJarModal = (jar) => {
@@ -25,14 +27,14 @@ export default function NoTask({ setTaskSelectionVisible, setModalVisible }) {
         <View style={styles.jarContainer}>
           <View style={styles.iconTextContainer}>
             <Pressable
-              onPress={() => openJarModal("Minutes")}
+              onPress={() => openJarModal("minutes")}
               style={({ pressed }) => [
-                { opacity: pressed || selectedJar === "Minutes" ? 0.6 : 1 },
+                { opacity: pressed || selectedJar === "minutes" ? 0.6 : 1 },
               ]}
             >
               <JarIcon
                 style={styles.jarIcon}
-                isActive={selectedJar === "Minutes"}
+                isActive={selectedJar === "minutes"}
               />
             </Pressable>
             <Text style={styles.jarText}>Minutes</Text>
@@ -43,14 +45,14 @@ export default function NoTask({ setTaskSelectionVisible, setModalVisible }) {
         <View style={styles.jarContainer}>
           <View style={styles.iconTextContainer}>
             <Pressable
-              onPress={() => openJarModal("Hours")}
+              onPress={() => openJarModal("hours")}
               style={({ pressed }) => [
-                { opacity: pressed || selectedJar === "Hours" ? 0.6 : 1 },
+                { opacity: pressed || selectedJar === "hours" ? 0.6 : 1 },
               ]}
             >
               <JarIcon
                 style={styles.jarIcon}
-                isActive={selectedJar === "Hours"}
+                isActive={selectedJar === "hours"}
               />
             </Pressable>
             <Text style={styles.jarText}>Hours</Text>
@@ -61,21 +63,22 @@ export default function NoTask({ setTaskSelectionVisible, setModalVisible }) {
         <View style={styles.jarContainer}>
           <View style={styles.iconTextContainer}>
             <Pressable
-              onPress={() => openJarModal("Days")}
+              onPress={() => openJarModal("days")}
               style={({ pressed }) => [
-                { opacity: pressed || selectedJar === "Days" ? 0.6 : 1 },
+                { opacity: pressed || selectedJar === "days" ? 0.6 : 1 },
               ]}
             >
               <JarIcon
                 style={styles.jarIcon}
-                isActive={selectedJar === "Days"}
+                isActive={selectedJar === "days"}
               />
             </Pressable>
             <Text style={styles.jarText}>Days</Text>
           </View>
         </View>
       </View>
-      {/* Modal */}
+
+      {/* Jar Selection Modal */}
       <Modal
         transparent={true}
         visible={jarModalVisible}
@@ -117,6 +120,13 @@ export default function NoTask({ setTaskSelectionVisible, setModalVisible }) {
           </View>
         </View>
       </Modal>
+
+      {/* Task Selection Modal */}
+      <TaskSelectionModal
+        taskSelectionVisible={taskSelectionVisible}
+        setTaskSelectionVisible={setTaskSelectionVisible}
+        taskType={selectedJar}
+      />
 
       {/* Add Button */}
       <Pressable
