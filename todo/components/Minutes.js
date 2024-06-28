@@ -21,37 +21,21 @@ import {
     TouchableOpacity,
     TextInput,
     ScrollView,
-    Pressable
+    Pressable,
+    Modal
 } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import TodoList from './TodoList';
+import EditTask from './EditTask';
 import { createTodo, readTodos, updateTodo, deleteTodo } from './TodosService';
 import { db } from "./firebase.js"
 
 export default function Minutes() {
     const [value, setValue] = useState('');
     const [todos, setTodos] = useState([]);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [editingTask, setEditingTask] = useState({});
     //const todosKeys = Object.keys(todos);
-    /* useEffect(() => {
-         const fetchTasks = async () => {
-             try {
-                 
-                 const tasksRef =
-                     query(ref(db, '/todos'), orderByChild('task_type'), equalTo('minutes'));
-                 return onValue(tasksRef, querySnapShot => {
-                     let data = querySnapShot.val() || {};
-                     let todoItems = { ...data };
-                     console.log('minutesdata', todoItems)
-                     setTodos(todoItems);
-                 });
- 
- 
-             } catch (error) {
-                 console.error('Error getting documents: ', error);
-             }
-         };
-         fetchTasks();
-     }, []);*/
 
     useFocusEffect(() => {
         //console.log('yay render')
@@ -62,67 +46,66 @@ export default function Minutes() {
 
         fetchTodos();
     });
-    /*let addTodo = () => {
-        push(ref(db, '/todos'), {
-            text: value, key: Date.now(), checked: false
-        });
-        if (value.length > 0) {
-            //  setTodos([...todos, { text: value, key: Date.now(), checked: false }]);
-            setValue('');
-        }
-    };*/
 
 
     const checkTodo = async (key) => {
         const todo = todos.find(todo => todo.key === key);
-       //if (todo) {
-            // todo.completed = true
-           updateTodo(key, { completed: !todo.completed });
-           const index = todos.findIndex(todo => todo.key === key);
-           todos[index] = { ...todos[index], ...{ completed: !todo.completed } };
-           setTodos(todos.filter(todo => todo.key !== key));
-       // }
+        //if (todo) {
+        // todo.completed = true
+        updateTodo(key, { completed: !todo.completed });
+        const index = todos.findIndex(todo => todo.key === key);
+        todos[index] = { ...todos[index], ...{ completed: !todo.completed } };
+        setTodos(todos.filter(todo => todo.key !== key));
+        // }
     };
+
+  
 
 
     const handleDeleteTodo = async (key) => {
         deleteTodo(key);
         setTodos(todos.filter(todo => todo.key !== key));
-       
     };
-
 
     return (<View style={styles.container}>
         <ScrollView style={styles.scroll}>
             {
-                /*todosKeys.map(key => (
-                    <TodoList
-                        text={todos[key].text}
-                        key={todos[key].key}
-                        todoItem={todos[key].checked}
-                        setChecked={() => todos[key].key}
-                        deleteTodo={() => deleteTodo(key)}
-                    />
-                ))*/
                 todos.map(item => (
-                    !item.completed && 
+                    !item.completed &&
                     <TodoList
                         text={item.text}
                         key={item.key}
                         completed={item.completed}
                         due_date={item.due_date}
-                        setChecked={() => {
+                        editMe={() => {
+                            //console.log('date', item.due_date)
+                            setModalVisible(true)
+                            setEditingTask(item)
+                            handleDeleteTodo(item.key)
+                            
 
+                        }}
+                        setChecked={() => {
                             checkTodo(item.key)
-                          
-                            console.log('checkec', todos)
                         }
                         }
-                        deleteTodo={() => handleDeleteTodo(item.key)}
+                        deleteTodo={() => handleDeleteTodo(item.key)
+                        }
+                        //updateTodo = {()=> handleUpdateTodo(item.key)}
                     />
                 ))
             }
         </ScrollView>
+
+
+        <Modal transparent={true} visible={modalVisible} style={styles.modalView}>
+            <View>
+                <EditTask todos = {todos} setTodos={setTodos} setModalVisible={setModalVisible} task={editingTask} 
+               // deleteOldTodo={handleDeleteTodo(editingTask)}
+                
+                />
+            </View>
+        </Modal>
 
     </View>
     );
@@ -165,5 +148,16 @@ const styles = StyleSheet.create({
         color: 'black',
         paddingLeft: 10,
         minHeight: '3%',
+    },
+    modalView: {
+        //margin: 20,
+        //borderRadius: 20,
+        //padding: 35,
+        // alignItems: 'center',
+        flex: 1,
+        //backgroundColor: 'transparent',
+        backgroundColor: "rgba(0,0,0,0.7)",
+        alignItems: "center",
+        justifyContent: "center",
     },
 });

@@ -1,12 +1,35 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, Pressable, Image, Modal } from "react-native";
+import { StyleSheet, View, Text, Pressable, Image, Modal, Alert } from "react-native";
 import JarIcon from "../../components/SVGicons/JarIcon";
 import TaskSelectionModal from "./TaskSelectionModal";
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function NoTask({ setModalVisible, setCurrentTask }) {
   const [jarModalVisible, setJarModalVisible] = useState(false);
   const [taskSelectionVisible, setTaskSelectionVisible] = useState(false);
   const [selectedJar, setSelectedJar] = useState(null);
+
+  const [todos, setTodos] = useState([]);
+
+  useFocusEffect(() => {
+    const fetchTodos = async () => {
+      const todos = await readTodos();
+      setTodos(todos.filter(todo => todo.completed === false));
+    };
+    fetchTodos();
+  });
+
+
+  const checkTodosExist = (taskType) => {
+    //setTodos();
+    filteredTodos = todos.filter(todo => todo.task_type === taskType)
+    console.log('filteredtodos', filteredTodos)
+    if (filteredTodos.length === 0) {
+      return null;
+    }
+  }
+
+
 
   const openJarModal = (jar) => {
     setSelectedJar(jar);
@@ -27,10 +50,18 @@ export default function NoTask({ setModalVisible, setCurrentTask }) {
         <View style={styles.jarContainer}>
           <View style={styles.iconTextContainer}>
             <Pressable
-              onPress={() => {openJarModal("minutes")
-              setSelectedJar('minutes');
-    setJarModalVisible(true);}
-            }
+              onPress={() => {
+                if (checkTodosExist("minutes") === null) {
+                  Alert.alert('', 'No todos in this category', [
+                    { text: 'OK', onPress: () => console.log('OK Pressed') },
+                  ]);
+                } else {
+                  openJarModal("minutes")
+                  setSelectedJar('minutes');
+                  setJarModalVisible(true);
+                }
+              }
+              }
               style={({ pressed }) => [
                 { opacity: pressed || selectedJar === "minutes" ? 0.6 : 1 },
               ]}
@@ -48,7 +79,15 @@ export default function NoTask({ setModalVisible, setCurrentTask }) {
         <View style={styles.jarContainer}>
           <View style={styles.iconTextContainer}>
             <Pressable
-              onPress={() => openJarModal("hours")}
+              onPress={() => {
+                if (checkTodosExist("hours") === null) {
+                Alert.alert('', 'No todos in this category', [
+                  { text: 'OK', onPress: () => console.log('OK Pressed') },
+                ]);
+              } else {
+                openJarModal("hours")
+              }
+              }}
               style={({ pressed }) => [
                 { opacity: pressed || selectedJar === "hours" ? 0.6 : 1 },
               ]}
@@ -66,7 +105,13 @@ export default function NoTask({ setModalVisible, setCurrentTask }) {
         <View style={styles.jarContainer}>
           <View style={styles.iconTextContainer}>
             <Pressable
-              onPress={() => openJarModal("days")}
+              onPress={() => {
+                if (checkTodosExist("days") === null) {
+                  Alert.alert('', 'No todos in this category', [
+                    { text: 'OK', onPress: () => console.log('OK Pressed') },
+                  ]);}else{
+                
+                openJarModal("days")}}}
               style={({ pressed }) => [
                 { opacity: pressed || selectedJar === "days" ? 0.6 : 1 },
               ]}
@@ -103,7 +148,7 @@ export default function NoTask({ setModalVisible, setCurrentTask }) {
             <Pressable
               style={styles.pressableContainer}
               onPress={() => {
-              //  closeModal();
+                //  closeModal();
                 setTaskSelectionVisible(true);
               }}
             >
@@ -114,7 +159,7 @@ export default function NoTask({ setModalVisible, setCurrentTask }) {
             <Pressable
               style={styles.pressableContainer}
               onPress={() => {
-               // closeModal();
+                // closeModal();
                 setTaskSelectionVisible(true);
               }}
             >

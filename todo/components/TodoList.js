@@ -25,7 +25,7 @@ export default function TodoList(props) {
 				size={25}
 				color='black'
 				style={{ marginLeft: 15 }}
-				onPress={props.setChecked}
+				onPress={props.editMe}
 			/>
 			<View style={{
 

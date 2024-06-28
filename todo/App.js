@@ -3,6 +3,7 @@ import * as SecureStore from 'expo-secure-store';
 import { initializeApp } from 'firebase/app';
 import { getDatabase } from 'firebase/database';
 import { NavigationContainer } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   ref,
   onValue,
@@ -24,7 +25,7 @@ import {
 
 import Icon from 'react-native-vector-icons/Feather';
 import TodoList from './components/TodoList';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
+//import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import ToDoApp from './components/ToDoApp';
 import AddTask from './components/AddTask';
 import TabNavigator from './components/TabNavigator';
@@ -35,12 +36,12 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 
-GoogleSignin.configure({
+/*GoogleSignin.configure({
   webClientId: '248488614748-698jn115oljro87m61oo3btad1vu5fud.apps.googleusercontent.com',
   iosClientId: '248488614748-nluheprsmq0kt501hoa8np8vb5mh1vm4.apps.googleusercontent.com',
   androidClientId: '248488614748-qj7corr2qet7tuvv1rvkqqr8vmmctmbm.apps.googleusercontent.com',
   scopes: ['profile', 'email'],
-});
+});*/
 const GoogleLogin = async () => {
   await GoogleSignin.hasPlayServices();
   const userInfo = await GoogleSignin.signIn();
@@ -67,8 +68,20 @@ export default function App() {
 
 
   useEffect(() => {
+    //clearAsyncStorage();
     setTimeout (()=>{checkForToken()},2000)
   }, []);
+
+  const clearAsyncStorage = async () => {
+    try {
+      await AsyncStorage.clear();
+      console.log('AsyncStorage cleared successfully.');
+    } catch (e) {
+      console.error('Failed to clear AsyncStorage.');
+    }
+  };
+  
+  // Call the function wherever you need to clear AsyncStorage
 
 
   const saveTokenToSecureStorage = async (token) => {
@@ -82,18 +95,12 @@ export default function App() {
     setLoading(false)
   }
   const handleGoogleLogin = async () => {
-    //setLoading(true);
     try {
       const response = await GoogleLogin();
       const { idToken, user } = response;
       console.log('token', idToken);
 
       if (idToken) {
-        /*const resp = await authAPI.validateToken({
-          token: idToken,
-          email: user.email,
-        });*/
-        //await handlePostLoginData(resp.data);
         setToken(idToken);
         saveTokenToSecureStorage(idToken);
       }
@@ -111,10 +118,11 @@ export default function App() {
     return(<LoadingScreen/>);
   }
   if (token === null) {
+    //<Pressable onPress={handleGoogleLogin}><Text style={styles.text}>Continue with Google</Text></Pressable>
+     
     return (
       <View style={styles.container}>
-        <Pressable onPress={handleGoogleLogin}><Text style={styles.text}>Continue with Google</Text></Pressable>
-      </View>
+         </View>
     );
   } else {
     return (

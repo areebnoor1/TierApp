@@ -7,6 +7,7 @@ import {
   Alert,
   Text,
   Pressable,
+  Switch
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -17,11 +18,11 @@ import DatePicker from "react-native-date-picker";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import ToDoApp from './ToDoApp';
 import {
-    ref,
-    onValue,
-    push,
-    update,
-    remove
+  ref,
+  onValue,
+  push,
+  update,
+  remove
 } from 'firebase/database';
 import { db } from "./firebase.js"
 
@@ -44,55 +45,33 @@ export default function AddTask({ setModalVisible }) {
       case "days":
         return '(Something like, "Task takes an hour or more to complete broken up over several days")';
       default:
-        return "Select a date and time";
+        return "";
     }
   };
 
-    /*
-    let addTodo = () => {
-        if (taskType == '') {
-            Alert.alert('', 'Please specify a task type (Minutes, Hours, Days).', [
-                { text: 'OK', onPress: () => console.log('OK Pressed') },
-            ]);
-        } else {
-        
-            push(ref(db, '/todos'), {
-                
-                text: value, key: Date.now(), checked: false, task_type: taskType, due_date: date, completed: false
-            });
-            if (value.length > 0) {
-                setValue('');
-            }
-            setModalVisible(false);
-        }
-    };
-*/
-
-let addTodo = async () => {
+  let addTodo = async () => {
     if (taskType == '') {
-        Alert.alert('', 'Please specify a task type (Minutes, Hours, Days).', [
-            { text: 'OK', onPress: () => console.log('OK Pressed') },
-        ]);
+      Alert.alert('', 'Please specify a task type (Minutes, Hours, Days).', [
+        { text: 'OK', onPress: () => console.log('OK Pressed') },
+      ]);
     } else {
-        todo_result = await createTodo( {
-            text: value, key: Date.now(), completed: false, task_type: taskType, due_date: date
-        });
-         
-   
-        //console.log('todos', todo_result)
-        if (value.length > 0) {
-            setValue('');
-        }
-        setModalVisible(false);
+      todo_result = await createTodo({
+        text: value, key: Date.now(), completed: false, task_type: taskType, due_date: date
+      });
+      if (value.length > 0) {
+        setValue('');
+      }
+      setModalVisible(false);
     }
-};
-    return (
-        <View style={styles.screen}>
-            <View style={styles.topBar}>
-                <TouchableOpacity onPress={() => setModalVisible(false)}
-                >
-                    <AntDesign name='close' size={30} />
-                </TouchableOpacity>
+  };
+  
+  return (
+    <View style={styles.screen}>
+      <View style={styles.topBar}>
+        <TouchableOpacity onPress={() => setModalVisible(false)}
+        >
+          <AntDesign name='close' size={30} />
+        </TouchableOpacity>
 
         <Text style={styles.buttonText}>Add task</Text>
 
@@ -110,6 +89,24 @@ let addTodo = async () => {
           justifyContent: "space-around",
         }}
       >
+         <TouchableOpacity onPress={() => setTaskType("minutes")}>
+          <Entypo
+            name="stopwatch"
+            style={[styles.icon, taskType === "minutes" && styles.activeText]}
+            size={40}
+          />
+          <Text>Minutes</Text>
+        </TouchableOpacity>
+        
+        <TouchableOpacity onPress={() => setTaskType("hours")}>
+          <Ionicons
+            name="hourglass-outline"
+            style={[styles.icon, taskType === "hours" && styles.activeText]}
+            size={40}
+          />
+          <Text>Hours</Text>
+          
+        </TouchableOpacity>
         <TouchableOpacity onPress={() => setTaskType("days")}>
           <Entypo
             name="calendar"
@@ -118,33 +115,32 @@ let addTodo = async () => {
           />
           <Text>Days</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setTaskType("hours")}>
-          <Ionicons
-            name="hourglass-outline"
-            style={[styles.icon, taskType === "hours" && styles.activeText]}
-            size={40}
-          />
-          <Text>Hours</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setTaskType("minutes")}>
-          <Entypo
-            name="stopwatch"
-            style={[styles.icon, taskType === "minutes" && styles.activeText]}
-            size={40}
-          />
-          <Text>Minutes</Text>
-        </TouchableOpacity>
+       
       </View>
 
-      <Pressable
-        onPress={() => {setShowDate(!showDate)
-          setDate(new Date())
-        }
-        }
-        style={styles.smallText}
-      >
-        <Text>{getMessage()}</Text>
-      </Pressable>
+      <Text>{getMessage()}</Text>
+
+      <Text
+      style={{
+        fontSize:20,
+      }}
+      >Due date</Text>
+
+      <Switch
+        // trackColor={{ false: '#767577', true: '#81b0ff' }}
+        //thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
+        onValueChange={() => {
+          setShowDate(!showDate)
+          if(!showDate){
+            setDate(new Date())
+          }else{
+            setDate({})
+          }
+        }}
+        value={showDate}
+      />
+
+
       {showDate && (
         <DatePicker mode="datetime" date={date} onDateChange={setDate} />
       )}
