@@ -112,13 +112,14 @@ export default function HomePage({ navigation }) {
   const [todos, setTodos] = useState([]);
 
   useEffect(() => {
-    //console.log('yay render')
+    console.log('yay render')
     const fetchTodos = async () => {
         const todos = await readTodos();
         setTodos(todos.filter(todo => todo.completed===false))
     };
     fetchTodos();
-},[todos]);
+    console.log(todos)
+},[]);
 
   return (
     <View style={styles.screen}>

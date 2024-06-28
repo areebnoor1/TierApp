@@ -173,6 +173,7 @@ export default function NoTask({ setModalVisible, setCurrentTask, todos, setTodo
         setTaskSelectionVisible={setTaskSelectionVisible}
         taskType={selectedJar}
         setCurrentTask={setCurrentTask}
+        todos = {todos}
       />
 
       <RandomTask

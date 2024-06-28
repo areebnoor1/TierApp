@@ -32,7 +32,7 @@ export default function Activity() {
     const [value, setValue] = useState('');
     const [todos, setTodos] = useState([]);
 
-    useFocusEffect(() => {
+   /* useFocusEffect(() => {
         const fetchTodos = async () => {
           const todos = await readTodos();
           deleteCompletedTodos();
@@ -40,7 +40,7 @@ export default function Activity() {
         };
         fetchTodos();
         //also delete all the tasks that are from a previous day
-      })
+      })*/
 
 
     return (

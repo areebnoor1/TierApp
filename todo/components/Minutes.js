@@ -30,20 +30,19 @@ import EditTask from './EditTask';
 import { createTodo, readTodos, updateTodo, deleteTodo } from './TodosService';
 import { db } from "./firebase.js"
 
-export default function Minutes() {
+export default function Minutes({minutesTodos, todos, setTodos}) {
     const [value, setValue] = useState('');
-    const [todos, setTodos] = useState([]);
+   // const [todos, setTodos] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [editingTask, setEditingTask] = useState({});
+
     //const todosKeys = Object.keys(todos);
 
     useFocusEffect(() => {
-        //console.log('yay render')
         const fetchTodos = async () => {
             const todos = await readTodos();
             setTodos(todos.filter(todo => todo.task_type === 'minutes'));
         };
-
         fetchTodos();
     });
 

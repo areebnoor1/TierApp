@@ -22,11 +22,10 @@ export default function RandomTask({
 }) {
   const [item, setItem] = useState({});
 
-  const getRandomTodo = () => { 
-      filteredTodos = filteredTodos.filter(todo => todo.task_type === taskType)
-      const randomIndex = Math.floor(Math.random() * filteredTodos.length);
-      console.log(filteredTodos[randomIndex])
-      return filteredTodos[randomIndex];
+  const getRandomTodo = () => {
+    filteredTodos = filteredTodos.filter(todo => todo.task_type === taskType)
+    const randomIndex = Math.floor(Math.random() * filteredTodos.length);
+    return filteredTodos[randomIndex];
   };
 
   useEffect(() => {
@@ -63,11 +62,18 @@ export default function RandomTask({
           {item.text}
         </Text>
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => {
+          setItem(getRandomTodo())
+        }}>
           <Ionicons name="refresh-outline" size={20} />
           <Text>Pick again</Text>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            setCurrentTask(item)
+            setRandomTaskSelectionVisible(false)
+          }}
+        >
           <Ionicons name="checkmark-circle-sharp" size={20} />
 
           <Text>Begin</Text>

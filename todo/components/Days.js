@@ -32,26 +32,7 @@ export default function Minutes() {
     const [value, setValue] = useState('');
     const [todos, setTodos] = useState([]);
     //const todosKeys = Object.keys(todos);
-    /* useEffect(() => {
-         const fetchTasks = async () => {
-             try {
-                 
-                 const tasksRef =
-                     query(ref(db, '/todos'), orderByChild('task_type'), equalTo('minutes'));
-                 return onValue(tasksRef, querySnapShot => {
-                     let data = querySnapShot.val() || {};
-                     let todoItems = { ...data };
-                     console.log('minutesdata', todoItems)
-                     setTodos(todoItems);
-                 });
- 
- 
-             } catch (error) {
-                 console.error('Error getting documents: ', error);
-             }
-         };
-         fetchTasks();
-     }, []);*/
+
 
     useFocusEffect(() => {
         //console.log('yay render')
@@ -62,15 +43,7 @@ export default function Minutes() {
 
         fetchTodos();
     });
-    /*let addTodo = () => {
-        push(ref(db, '/todos'), {
-            text: value, key: Date.now(), checked: false
-        });
-        if (value.length > 0) {
-            //  setTodos([...todos, { text: value, key: Date.now(), checked: false }]);
-            setValue('');
-        }
-    };*/
+
 
 
     const checkTodo = async (key) => {

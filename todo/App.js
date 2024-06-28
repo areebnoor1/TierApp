@@ -119,7 +119,6 @@ export default function App() {
   }
   if (token === null) {
     //<Pressable onPress={handleGoogleLogin}><Text style={styles.text}>Continue with Google</Text></Pressable>
-     
     return (
       <View style={styles.container}>
          </View>

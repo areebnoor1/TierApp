@@ -59,9 +59,12 @@ export default function AddTask({ setModalVisible, todos, setTodos}) {
         text: value, key: Date.now(), completed: false, task_type: taskType, due_date: date
       })
 
-      setTodos(todos.push({
+      new_todos = todos.push({
         text: value, key: Date.now(), completed: false, task_type: taskType, due_date: date
-      }))
+      })
+      console.log('new todo', todos)
+      setTodos(todos)
+      
 
       if (value.length > 0) {
         setValue('');
