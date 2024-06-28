@@ -68,7 +68,7 @@ export default function App() {
 
 
   useEffect(() => {
-    //clearAsyncStorage();
+    clearAsyncStorage();
     setTimeout (()=>{checkForToken()},2000)
   }, []);
 

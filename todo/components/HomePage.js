@@ -17,7 +17,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import ToDoApp from "./ToDoApp";
 import AddTask from "./AddTask";
 import TaskSelectionView from "./TaskSelectionView";
-
+import { createTodo, readTodos, updateTodo, deleteTodo } from './TodosService';
 import AddTaskModal from "./HomeScreen/AddTaskModal";
 import TaskSelectionModal from "./HomeScreen/TaskSelectionModal";
 import CurrentTask from "./HomeScreen/CurrentTask";
@@ -89,7 +89,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontFamily: "Poppins",
     textAlign: "center",
-    //color: 'white'
   },
   buttonText: {
     display: "flex",
@@ -110,23 +109,37 @@ export default function HomePage({ navigation }) {
   const [currentTask, setCurrentTask] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
   const [taskSelectionVisible, setTaskSelectionVisible] = useState(false);
+  const [todos, setTodos] = useState([]);
+
+  useEffect(() => {
+    //console.log('yay render')
+    const fetchTodos = async () => {
+        const todos = await readTodos();
+        setTodos(todos.filter(todo => todo.completed===false))
+    };
+    fetchTodos();
+},[todos]);
 
   return (
     <View style={styles.screen}>
       <AddTaskModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
+        todos = {todos}
+        setTodos = {setTodos}
       />
       <TaskSelectionModal
         taskSelectionVisible={taskSelectionVisible}
         setTaskSelectionVisible={setTaskSelectionVisible}
         setCurrentTask={setCurrentTask}
+        todos = {todos}
       />
       {Object.keys(currentTask).length === 0 ? (
         <NoTask
           setTaskSelectionVisible={setTaskSelectionVisible}
           setModalVisible={setModalVisible}
           setCurrentTask={setCurrentTask}
+          todos = {todos}
         />
       ) : (
         <CurrentTask

@@ -28,7 +28,7 @@ import { db } from "./firebase.js"
 
 import { createTodo, readTodos, updateTodo, deleteTodo } from './TodosService';
 
-export default function AddTask({ setModalVisible }) {
+export default function AddTask({ setModalVisible, todos, setTodos}) {
   const [taskType, setTaskType] = useState("");
   const [value, setValue] = useState("");
   const [date, setDate] = useState({});
@@ -57,7 +57,12 @@ export default function AddTask({ setModalVisible }) {
     } else {
       todo_result = await createTodo({
         text: value, key: Date.now(), completed: false, task_type: taskType, due_date: date
-      });
+      })
+
+      setTodos(todos.push({
+        text: value, key: Date.now(), completed: false, task_type: taskType, due_date: date
+      }))
+
       if (value.length > 0) {
         setValue('');
       }

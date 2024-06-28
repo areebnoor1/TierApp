@@ -1,35 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, Pressable, Image, Modal, Alert } from "react-native";
 import JarIcon from "../../components/SVGicons/JarIcon";
 import TaskSelectionModal from "./TaskSelectionModal";
-import { useFocusEffect } from '@react-navigation/native';
+import RandomTask from './RandomTask';
+import { createTodo, readTodos, updateTodo, deleteTodo } from '../TodosService';
 
-export default function NoTask({ setModalVisible, setCurrentTask }) {
+export default function NoTask({ setModalVisible, setCurrentTask, todos, setTodos }) {
   const [jarModalVisible, setJarModalVisible] = useState(false);
   const [taskSelectionVisible, setTaskSelectionVisible] = useState(false);
+  const [randomTaskSelectionVisible, setRandomTaskSelectionVisible] = useState(false);
   const [selectedJar, setSelectedJar] = useState(null);
 
-  const [todos, setTodos] = useState([]);
-
-  useFocusEffect(() => {
+  /*useEffect(() => {
     const fetchTodos = async () => {
       const todos = await readTodos();
       setTodos(todos.filter(todo => todo.completed === false));
     };
     fetchTodos();
-  });
-
+  }, [todos]);*/
 
   const checkTodosExist = (taskType) => {
-    //setTodos();
+    console.log(todos)
     filteredTodos = todos.filter(todo => todo.task_type === taskType)
     console.log('filteredtodos', filteredTodos)
     if (filteredTodos.length === 0) {
       return null;
     }
   }
-
-
 
   const openJarModal = (jar) => {
     setSelectedJar(jar);
@@ -46,7 +43,6 @@ export default function NoTask({ setModalVisible, setCurrentTask }) {
       <Text style={styles.welcomeText}>No tasks active.</Text>
 
       <View style={styles.jarsContainer}>
-        {/* Container for Minutes */}
         <View style={styles.jarContainer}>
           <View style={styles.iconTextContainer}>
             <Pressable
@@ -75,18 +71,17 @@ export default function NoTask({ setModalVisible, setCurrentTask }) {
           </View>
         </View>
 
-        {/* Container for Hours */}
         <View style={styles.jarContainer}>
           <View style={styles.iconTextContainer}>
             <Pressable
               onPress={() => {
                 if (checkTodosExist("hours") === null) {
-                Alert.alert('', 'No todos in this category', [
-                  { text: 'OK', onPress: () => console.log('OK Pressed') },
-                ]);
-              } else {
-                openJarModal("hours")
-              }
+                  Alert.alert('', 'No todos in this category', [
+                    { text: 'OK', onPress: () => console.log('OK Pressed') },
+                  ]);
+                } else {
+                  openJarModal("hours")
+                }
               }}
               style={({ pressed }) => [
                 { opacity: pressed || selectedJar === "hours" ? 0.6 : 1 },
@@ -109,9 +104,12 @@ export default function NoTask({ setModalVisible, setCurrentTask }) {
                 if (checkTodosExist("days") === null) {
                   Alert.alert('', 'No todos in this category', [
                     { text: 'OK', onPress: () => console.log('OK Pressed') },
-                  ]);}else{
-                
-                openJarModal("days")}}}
+                  ]);
+                } else {
+
+                  openJarModal("days")
+                }
+              }}
               style={({ pressed }) => [
                 { opacity: pressed || selectedJar === "days" ? 0.6 : 1 },
               ]}
@@ -149,7 +147,7 @@ export default function NoTask({ setModalVisible, setCurrentTask }) {
               style={styles.pressableContainer}
               onPress={() => {
                 //  closeModal();
-                setTaskSelectionVisible(true);
+                setRandomTaskSelectionVisible(true);
               }}
             >
               <Text style={styles.buttonText}>Choose random task</Text>
@@ -177,7 +175,13 @@ export default function NoTask({ setModalVisible, setCurrentTask }) {
         setCurrentTask={setCurrentTask}
       />
 
-      {/* Add Button */}
+      <RandomTask
+        randomTaskSelectionVisible={randomTaskSelectionVisible}
+        setRandomTaskSelectionVisible={setRandomTaskSelectionVisible}
+        filteredTodos={todos}
+        taskType={selectedJar}
+        setCurrentTask={setCurrentTask}
+      />
       <Pressable
         style={styles.addTaskButton}
         onPress={() => setModalVisible(true)}
