@@ -11,7 +11,7 @@ export default function RemainingTasks() {
   const hasRemainingTasks = minutesTasksLeft > 0 || hoursTasksLeft > 0 || daysTasksLeft > 0;
 
   return (
-    <View style={styles.container}>
+
       <View style={styles.remainingTasksContainer}>
         {hasRemainingTasks ? (
           <>
@@ -54,7 +54,7 @@ export default function RemainingTasks() {
           <Text style={styles.finishedText}>Finished all daily tasks, great job!</Text>
         )}
       </View>
-    </View>
+
   );
 }
 const styles = StyleSheet.create({
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     justifyContent: "center",
-    alignItems: "center",
+  //  alignItems: "center",
   },
   remainingTasksContainer: {
     width: "100%",

@@ -6,11 +6,14 @@ import { readTodos, deleteCompletedTodos } from "./TodosService";
 //import streakIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import RemainingTasks from "./ActivityScreen/RemainingTasks";
+import GoalModal from "./ActivityScreen/GoalModal";
 
 export default function Activity() {
   const [value, setValue] = useState("");
   const [todos, setTodos] = useState([]);
   const [currentDate, setCurrentDate] = useState("");
+    const [modalVisible, setModalVisible] = useState(false);
+    const [modalMode, setModalMode] = useState('set');
   //placeholder
   let streak = 3;
     let completedToday = 3;
@@ -36,50 +39,69 @@ export default function Activity() {
     setCurrentDate(`Today, ${month} ${day.replace(",", "")}, ${year}`);
   }, []);
 
+    const openGoalModal = (mode) => {
+      setModalMode(mode);
+      setModalVisible(true);
+    };
+
+    const closeGoalModal = () => {
+      setModalVisible(false);
+    };
+
+    const saveGoals = (goals) => {
+      // Save the goals here
+      setDailyGoal(true);
+      console.log('Saved goals:', goals);
+    };
+
+
   return (
     <View style={styles.container}>
       <Text style={styles.dateText}>{currentDate}</Text>
       <View style={styles.streakContainer}>
-        {/* if streak is null or 0,  display,  set task or complete daily goal to begin streak   */}
+        {/* If streak is null or 0, display "Set task or complete daily goal to begin streak" */}
         <Text style={styles.streakHeader}>Streak: </Text>
         <Text style={styles.streakNumber}>{streak}</Text>
         <MaterialCommunityIcons name="fire" size={30} color="black" />
       </View>
-      {/* if none, display reached daily goal... if daily goal not set, just don't have...*/}
-       <Text style={styles.summary}>Daily Goal</Text>
+      {/* If none, display "reached daily goal"... If daily goal not set, just don't have... */}
+      <Text style={styles.summary}>Daily Goal</Text>
 
+      <View style={styles.container}>
+        {!hasDailyGoal ? (
+          <View style={styles.remainingTasksContainer}>
+            <Text>Have not set a daily goal</Text>
+            <Button
+              onPress={() => openGoalModal("set")}
+              title="Set daily goal"
+            />
+          </View>
+        ) : (
         <View>
-          <Text>
-            You have set a daily Goal? {hasDailyGoal ? 'Yes' : 'No'}!
-          </Text>
-          <Button
-            onPress={() => {
-              setDailyGoal(true);
-            }}
-            disabled={hasDailyGoal}
-            title={hasDailyGoal ? 'Set daily goal' : 'edit daily goal'}
-          />
+            <Button
+              onPress={() => openGoalModal("edit")}
+              title="Edit daily goal"
+            />
+          <RemainingTasks />
+          </View>
+        )}
+      </View>
+      {/* Summary Section */}
+      <Text style={styles.summary}>Summary</Text>
+      <View style={styles.summaryContainer}>
+        <View style={styles.summaryBoxBlack}>
+          <Text style={styles.summaryBlackBoxText}>Completed Today: </Text>
+          <Text style={styles.summaryBlackBoxNum}>{completedToday}</Text>
         </View>
-
-
-      <RemainingTasks />
-
-            {/* Summary Section */}
-            <Text style={styles.summary}>Summary</Text>
-            <View style={styles.summaryContainer}>
-              <View style={styles.summaryBoxBlack}>
-                <Text style={styles.summaryBlackBoxText}>Completed Today: </Text>
-                <Text style={styles.summaryBlackBoxNum}>{completedToday}</Text>
-              </View>
-              <View style={styles.summaryBoxWhite}>
-                <Text style={styles.summaryWhiteBoxText}>Due Today: </Text>
-                <Text style={styles.summaryWhiteBoxNum}>{dueToday}</Text>
-              </View>
-              <View style={styles.summaryBoxWhite}>
-                <Text style={styles.summaryWhiteBoxText}>Due this week: </Text>
-                <Text style={styles.summaryWhiteBoxNum}>{dueThisWeek}</Text>
-              </View>
-            </View>
+        <View style={styles.summaryBoxWhite}>
+          <Text style={styles.summaryWhiteBoxText}>Due Today: </Text>
+          <Text style={styles.summaryWhiteBoxNum}>{dueToday}</Text>
+        </View>
+        <View style={styles.summaryBoxWhite}>
+          <Text style={styles.summaryWhiteBoxText}>Due this week: </Text>
+          <Text style={styles.summaryWhiteBoxNum}>{dueThisWeek}</Text>
+        </View>
+      </View>
 
       {/* if streak is null or 0,  display,  set task or complete daily goal to begin streak   */}
       <Text style={styles.buttonText}>Completed Tasks</Text>
@@ -99,6 +121,12 @@ export default function Activity() {
           )}
         </ScrollView>
       </View>
+            <GoalModal
+              visible={modalVisible}
+              onClose={closeGoalModal}
+              onSave={saveGoals}
+              initialMode={modalMode}
+            />
     </View>
   );
 }
@@ -109,6 +137,13 @@ const styles = StyleSheet.create({
     padding: 16,
     justifyContent: "space-between",
   },
+    remainingTasksContainer: {
+      width: "100%",
+      padding: 16,
+      borderColor: "black",
+      borderWidth: 1,
+      borderRadius: 10,
+    },
   dateText: {
     fontSize: 18,
     fontWeight: "bold",
