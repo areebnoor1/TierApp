@@ -9,7 +9,7 @@ import {
   Pressable,
   Switch
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Entypo from "react-native-vector-icons/Entypo";
 import AntDesign from "react-native-vector-icons/AntDesign";
@@ -25,14 +25,16 @@ import {
   remove
 } from 'firebase/database';
 import { db } from "./firebase.js"
-
+import  {TodoContext}  from './TodoContext';
 import { createTodo, readTodos, updateTodo, deleteTodo } from './TodosService';
 
-export default function EditTask({ todos, setTodos, setModalVisible, task, deleteOldTodo }) {
+export default function EditTask({ setModalVisible, task, deleteOldTodo }) {
   const [taskType, setTaskType] = useState(task.task_type);
   const [value, setValue] = useState(task.text);
   const [date, setDate] = useState(Object.keys(task.due_date).length === 0? {}:new Date(task.due_date));
   const [showDate, setShowDate] = useState(Object.keys(task.due_date).length === 0? false: true);
+
+  const { todos, addTodo, removeTodo, toggleTodoCompleted } = useContext(TodoContext);
 
   const getMessage = () => {
     switch (taskType) {
@@ -47,6 +49,7 @@ export default function EditTask({ todos, setTodos, setModalVisible, task, delet
     }
   };
 
+  /*
   let addTodo = async () => {
 
     //delete old, add new
@@ -65,7 +68,7 @@ export default function EditTask({ todos, setTodos, setModalVisible, task, delet
       }
       
     }
-  };
+  };*/
 
   const handleDeleteTodo = async (key) => {
     deleteTodo(key);
@@ -78,7 +81,7 @@ export default function EditTask({ todos, setTodos, setModalVisible, task, delet
       <View style={styles.topBar}>
         <Text style={styles.buttonText}>Edit task</Text>
         <TouchableOpacity onPress={() => {
-          addTodo()
+          //addTodo()
           //setTodos(readTodos)
           setModalVisible(false);
         }}>

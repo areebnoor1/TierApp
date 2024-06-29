@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
 	StyleSheet,
 	Text,
@@ -8,24 +8,33 @@ import {
 	TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
+import  {TodoContext}  from './TodoContext';
 import { format } from "date-fns";
 
 export default function TodoList(props) {
+	const { todos, addTodo, removeTodo, toggleTodoCompleted } = useContext(TodoContext);
+	const[completed, setCompleted] = useState(false)
+
 	return (
 		<View style={styles.listContainer}>
 			<Icon
-				name={props.completed ? 'check' : 'square'}
+				name={completed ? 'check' : 'square'}
 				size={25}
 				color='black'
 				style={{ marginLeft: 15 }}
-				onPress={props.setChecked}
+				onPress={()=>{
+					setCompleted(!completed)
+					toggleTodoCompleted(props.the_key)}}
 			/>
 			<Icon
 				name={'edit'}
 				size={25}
 				color='black'
 				style={{ marginLeft: 15 }}
-				onPress={props.editMe}
+				onPress={()=>{
+					props.editMe()
+					console.log('yay')
+				}}
 			/>
 			<View style={{
 

@@ -29,12 +29,15 @@ import TodoList from './components/TodoList';
 import ToDoApp from './components/ToDoApp';
 import AddTask from './components/AddTask';
 import TabNavigator from './components/TabNavigator';
+import  {TodoProvider}  from './components/TodoContext';
 import LoadingScreen from './components/LoadingScreen';
 import Minutes from './components/Minutes';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
+
+
 
 /*GoogleSignin.configure({
   webClientId: '248488614748-698jn115oljro87m61oo3btad1vu5fud.apps.googleusercontent.com',
@@ -51,7 +54,7 @@ export const Stack = createStackNavigator();
 export const HomeScreen = () => {
   return (
     <Stack.Navigator
-      >
+    >
       <Stack.Screen component={HomeScreen} name="HomeScreen" options={{ title: "HomeScreen" }} />
       <Stack.Screen component={AddTask} name="AddTask" options={{ title: "AddTask" }} />
     </Stack.Navigator>
@@ -63,13 +66,16 @@ export default function App() {
   const Tab = createBottomTabNavigator();
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [todos, setTodos] = useState([]);
   const [error, setError] = useState('');
   var [uid, setuid] = useState(null);
 
 
   useEffect(() => {
-    clearAsyncStorage();
-    setTimeout (()=>{checkForToken()},2000)
+    //clearAsyncStorage();
+    //SHOULD BE REPLACED WITH RETRIEVEING THE TODOS
+
+    //setTimeout (()=>{checkForToken()},2000)
   }, []);
 
   const clearAsyncStorage = async () => {
@@ -80,7 +86,7 @@ export default function App() {
       console.error('Failed to clear AsyncStorage.');
     }
   };
-  
+
   // Call the function wherever you need to clear AsyncStorage
 
 
@@ -114,22 +120,24 @@ export default function App() {
     }
   };
 
-  if(loading === true){
-    return(<LoadingScreen/>);
-  }
-  if (token === null) {
-    //<Pressable onPress={handleGoogleLogin}><Text style={styles.text}>Continue with Google</Text></Pressable>
-    return (
-      <View style={styles.container}>
-         </View>
-    );
-  } else {
-    return (
+  // if(loading === true){
+  //   return(<LoadingScreen/>);
+  // }
+  // if (token === null) {
+  //<Pressable onPress={handleGoogleLogin}><Text style={styles.text}>Continue with Google</Text></Pressable>
+  //   return (
+  //     <View style={styles.container}>
+  //        </View>
+  //   );
+  // } else {
+  return (
+    <TodoProvider>
       <NavigationContainer>
-        <TabNavigator/>
+        <TabNavigator />
       </NavigationContainer>
-    );
-  }
+    </TodoProvider>
+  );
+  // }
 }
 
 const styles = StyleSheet.create({
@@ -141,7 +149,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-   // backgroundColor: '#F5FCFF',
+    // backgroundColor: '#F5FCFF',
   },
   header: {
     marginTop: '15%',

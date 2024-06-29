@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import { initializeApp } from 'firebase/app';
 import { getDatabase } from 'firebase/database';
@@ -27,26 +27,28 @@ import {
 import Entypo from 'react-native-vector-icons/Entypo';
 import TodoList from './TodoList';
 import EditTask from './EditTask';
+import { TodoContext } from './TodoContext';
 import { createTodo, readTodos, updateTodo, deleteTodo } from './TodosService';
 import { db } from "./firebase.js"
 
-export default function Minutes({minutesTodos, todos, setTodos}) {
+export default function Minutes() {
+
     const [value, setValue] = useState('');
-   // const [todos, setTodos] = useState([]);
+    // const [todos, setTodos] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [editingTask, setEditingTask] = useState({});
 
     //const todosKeys = Object.keys(todos);
 
-    useFocusEffect(() => {
-        const fetchTodos = async () => {
-            const todos = await readTodos();
-            setTodos(todos.filter(todo => todo.task_type === 'minutes'));
-        };
-        fetchTodos();
-    });
+    const { todos, addTodo, removeTodo, toggleTodoCompleted } = useContext(TodoContext);
 
-
+    /* useFocusEffect(() => {
+         const fetchTodos = async () => {
+             const todos = await readTodos();
+             setTodos(todos.filter(todo => todo.task_type === 'minutes'));
+         };
+         fetchTodos();
+     });*/
     const checkTodo = async (key) => {
         const todo = todos.find(todo => todo.key === key);
         //if (todo) {
@@ -58,7 +60,7 @@ export default function Minutes({minutesTodos, todos, setTodos}) {
         // }
     };
 
-  
+
 
 
     const handleDeleteTodo = async (key) => {
@@ -69,28 +71,27 @@ export default function Minutes({minutesTodos, todos, setTodos}) {
     return (<View style={styles.container}>
         <ScrollView style={styles.scroll}>
             {
-                todos.map(item => (
+                todos.filter(todo => todo.task_type === 'minutes').map(item => (
                     !item.completed &&
                     <TodoList
                         text={item.text}
                         key={item.key}
+                        the_key={item.key}
                         completed={item.completed}
                         due_date={item.due_date}
                         editMe={() => {
                             //console.log('date', item.due_date)
+                            //removeTodo(item.key)
                             setModalVisible(true)
                             setEditingTask(item)
-                            handleDeleteTodo(item.key)
-                            
-
                         }}
                         setChecked={() => {
-                            checkTodo(item.key)
+                            toggleTodoCompleted(item.key)
                         }
                         }
-                        deleteTodo={() => handleDeleteTodo(item.key)
+                        deleteTodo={() => removeTodo(item.key)
                         }
-                        //updateTodo = {()=> handleUpdateTodo(item.key)}
+                    //updateTodo = {()=> handleUpdateTodo(item.key)}
                     />
                 ))
             }
@@ -99,9 +100,8 @@ export default function Minutes({minutesTodos, todos, setTodos}) {
 
         <Modal transparent={true} visible={modalVisible} style={styles.modalView}>
             <View>
-                <EditTask todos = {todos} setTodos={setTodos} setModalVisible={setModalVisible} task={editingTask} 
-               // deleteOldTodo={handleDeleteTodo(editingTask)}
-                
+                <EditTask setModalVisible={setModalVisible} task={editingTask}
+                // {//deleteOldTodo={handleDeleteTodo(editingTask)}
                 />
             </View>
         </Modal>

@@ -10,7 +10,7 @@ import {
   Button,
   Modal,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffec, useContext } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Entypo from "react-native-vector-icons/Entypo";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -22,6 +22,7 @@ import AddTaskModal from "./HomeScreen/AddTaskModal";
 import TaskSelectionModal from "./HomeScreen/TaskSelectionModal";
 import CurrentTask from "./HomeScreen/CurrentTask";
 import NoTask from "./HomeScreen/NoTask";
+import  {TodoContext}  from './TodoContext';
 
 const styles = StyleSheet.create({
   curTask: {
@@ -109,38 +110,29 @@ export default function HomePage({ navigation }) {
   const [currentTask, setCurrentTask] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
   const [taskSelectionVisible, setTaskSelectionVisible] = useState(false);
-  const [todos, setTodos] = useState([]);
-
-  useEffect(() => {
-    console.log('yay render')
-    const fetchTodos = async () => {
-        const todos = await readTodos();
-        setTodos(todos.filter(todo => todo.completed===false))
-    };
-    fetchTodos();
-    console.log(todos)
-},[]);
+  //const [todos, setTodos] = useState([]);
+  const { todos, addTodo, removeTodo, toggleTodoCompleted } = useContext(TodoContext);
 
   return (
     <View style={styles.screen}>
       <AddTaskModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
-        todos = {todos}
-        setTodos = {setTodos}
+      //  todos = {todos.filter(todo => todo.completed===false)}
+       // setTodos = {setTodos}
       />
       <TaskSelectionModal
         taskSelectionVisible={taskSelectionVisible}
         setTaskSelectionVisible={setTaskSelectionVisible}
         setCurrentTask={setCurrentTask}
-        todos = {todos}
+      //  todos = {todos.filter(todo => todo.completed===false)}
       />
       {Object.keys(currentTask).length === 0 ? (
         <NoTask
           setTaskSelectionVisible={setTaskSelectionVisible}
           setModalVisible={setModalVisible}
           setCurrentTask={setCurrentTask}
-          todos = {todos}
+      //    todos = {todos.filter(todo => todo.completed===false)}
         />
       ) : (
         <CurrentTask
