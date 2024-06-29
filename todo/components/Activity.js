@@ -6,6 +6,8 @@ import { readTodos, deleteCompletedTodos } from "./TodosService";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import RemainingTasks from "./ActivityScreen/RemainingTasks";
 import GoalModal from "./ActivityScreen/GoalModal";
+import SummarySection from "./ActivityScreen/SummarySection"; // Import the SummarySection component
+
 
 export default function Activity() {
   const [value, setValue] = useState("");
@@ -99,21 +101,13 @@ export default function Activity() {
         )}
       </View>
       {/* Summary Section */}
-      <Text style={styles.summary}>Summary</Text>
-      <View style={styles.summaryContainer}>
-        <View style={styles.summaryBoxBlack}>
-          <Text style={styles.summaryBlackBoxText}>Completed Today: </Text>
-          <Text style={styles.summaryBlackBoxNum}>{completedToday}</Text>
-        </View>
-        <View style={styles.summaryBoxWhite}>
-          <Text style={styles.summaryWhiteBoxText}>Due Today: </Text>
-          <Text style={styles.summaryWhiteBoxNum}>{dueToday}</Text>
-        </View>
-        <View style={styles.summaryBoxWhite}>
-          <Text style={styles.summaryWhiteBoxText}>Due this week: </Text>
-          <Text style={styles.summaryWhiteBoxNum}>{dueThisWeek}</Text>
-        </View>
-      </View>
+            <Text style={styles.summary}>Summary</Text>
+      {/* Replace the summary section with SummarySection */}
+      <SummarySection
+        completedToday={completedToday}
+        dueToday={dueToday}
+        dueThisWeek={dueThisWeek}
+      />
 
       {/* if streak is null or 0,  display,  set task or complete daily goal to begin streak   */}
       <Text style={styles.buttonText}>Completed Tasks</Text>
@@ -215,51 +209,5 @@ const styles = StyleSheet.create({
     fontSize: 24,
     justifyContent: "flex-end",
   },
-  summaryContainer: {
-  justifyContent: "flex-end",
-    flex: 1,
-    padding: 16,
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  summaryBoxWhite: {
-    width: 100,
-    height: 80,
-    borderRadius: 10,
-    borderColor: "black",
-    borderWidth: 1,
-  },
-  summaryBoxBlack: {
-    width: 100,
-    height: 80,
-    borderRadius: 10,
-    backgroundColor: "black",
-  },
-  summaryBlackBoxText: {
-    color: "white",
-    left: 10,
-    top: 5,
-  },
-  summaryWhiteBoxText: {
-    color: "black",
-    padding: 5,
-  },
-  summaryWhiteBoxNum: {
-    fontFamily: "Inter",
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "black",
-    position: "absolute",
-    bottom: 10,
-    left: 20,
-  },
-  summaryBlackBoxNum: {
-    fontFamily: "Inter",
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "white",
-    position: "absolute",
-    bottom: 10,
-    left: 20,
-  },
+
 });
