@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { StyleSheet, Text, View, ScrollView } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import TodoList from "./TodoList";
@@ -7,24 +7,33 @@ import { readTodos, deleteCompletedTodos } from "./TodosService";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import RemainingTasks from "./ActivityScreen/RemainingTasks";
 
+import { TodoContext } from './TodoContext';
+
 export default function Activity() {
   const [value, setValue] = useState("");
-  const [todos, setTodos] = useState([]);
+ // const [todos, setTodos] = useState([]);
   const [currentDate, setCurrentDate] = useState("");
+
+  const { todos, addTodo, removeTodo, toggleTodoCompleted } = useContext(TodoContext);
+
   //placeholder
   let streak = 3;
     let completedToday = 3;
     let dueToday = 2;
     let dueThisWeek = 7;
 
-  useFocusEffect(() => {
-    const fetchTodos = async () => {
-      const todos = await readTodos();
-      deleteCompletedTodos();
-      setTodos(todos);
-    };
-    fetchTodos();
-  });
+   /* const completedToday = () =>{
+      dayjs(todo.key).format('YYYY-MM-DD') === today
+      todos.filter(todo => todo.completed === true && todo.completion_date)
+
+    }
+    const dueToday = () =>{
+      todos.filter(todo => todo.completed === false && todo.completion_date)
+    }
+    const dueThisWeek = () =>{
+      
+    }
+*/
 
   useEffect(() => {
     const date = new Date();
@@ -45,7 +54,6 @@ export default function Activity() {
       </View>
       {/* if none, display reached daily goal... if daily goal not set, just don't have...*/}
       <RemainingTasks />
-
             {/* Summary Section */}
             <Text style={styles.summary}>Summary</Text>
             <View style={styles.summaryContainer}>
