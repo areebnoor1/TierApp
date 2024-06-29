@@ -22,9 +22,9 @@ export default function NoTask({ setModalVisible, setCurrentTask,  }) {
   }, [todos]);*/
 
   const checkTodosExist = (taskType) => {
-    console.log('checking', todos)
+    //console.log('checking', todos)
     filteredTodos = todos.filter(todo => todo.task_type === taskType && todo.completed === false )
-    console.log('filteredtodos', filteredTodos)
+    //console.log('filteredtodos', filteredTodos)
     if (filteredTodos.length === 0) {
       return null;
     }

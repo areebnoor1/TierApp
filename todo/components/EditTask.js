@@ -25,16 +25,16 @@ import {
   remove
 } from 'firebase/database';
 import { db } from "./firebase.js"
-import  {TodoContext}  from './TodoContext';
-import { createTodo, readTodos, updateTodo, deleteTodo } from './TodosService';
+import { TodoContext } from './TodoContext';
+//import { createTodo, readTodos, updateTodo, deleteTodo } from './TodosService';
 
 export default function EditTask({ setModalVisible, task, deleteOldTodo }) {
   const [taskType, setTaskType] = useState(task.task_type);
   const [value, setValue] = useState(task.text);
-  const [date, setDate] = useState(Object.keys(task.due_date).length === 0? {}:new Date(task.due_date));
-  const [showDate, setShowDate] = useState(Object.keys(task.due_date).length === 0? false: true);
+  const [date, setDate] = useState(Object.keys(task.due_date).length === 0 ? {} : new Date(task.due_date));
+  const [showDate, setShowDate] = useState(Object.keys(task.due_date).length === 0 ? false : true);
 
-  const { todos, addTodo, removeTodo, toggleTodoCompleted } = useContext(TodoContext);
+  const { todos, addTodo, removeTodo, toggleTodoCompleted, updateTodo } = useContext(TodoContext);
 
   const getMessage = () => {
     switch (taskType) {
@@ -49,41 +49,15 @@ export default function EditTask({ setModalVisible, task, deleteOldTodo }) {
     }
   };
 
-  /*
-  let addTodo = async () => {
-
-    //delete old, add new
-    if (taskType == '') {
-      Alert.alert('', 'Please specify a task type (Minutes, Hours, Days).', [
-        { text: 'OK', onPress: () => console.log('OK Pressed') },
-      ]);
-    } else {
-      todo_result = await createTodo({
-        text: value, key: Date.now(), completed: false, task_type: taskType, date_set: showDate, due_date: date
-      });
-      //setTodos(readTodos)
-      console.log('afteredit', todos)
-      if (value.length > 0) {
-        setValue('');
-      }
-      
-    }
-  };*/
-
-  const handleDeleteTodo = async (key) => {
-    deleteTodo(key);
-    setTodos(todos.filter(todo => todo.key !== key));
-    console.log('afteredit', todos)
-  };
-
   return (
     <View style={styles.screen}>
       <View style={styles.topBar}>
         <Text style={styles.buttonText}>Edit task</Text>
         <TouchableOpacity onPress={() => {
-          //addTodo()
-          //setTodos(readTodos)
-          setModalVisible(false);
+          updateTodo(task.key, {
+            text: value, key: task.key, completed: false, task_type: taskType, date_set: showDate, due_date: date
+          })
+          setModalVisible(false)
         }}>
           <Text style={styles.buttonText}>Done</Text>
         </TouchableOpacity>
@@ -140,9 +114,9 @@ export default function EditTask({ setModalVisible, task, deleteOldTodo }) {
         //thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
         onValueChange={() => {
           setShowDate(!showDate)
-          if(!showDate){
+          if (!showDate) {
             setDate(new Date())
-          }else{
+          } else {
             setDate({})
           }
         }}
@@ -151,7 +125,7 @@ export default function EditTask({ setModalVisible, task, deleteOldTodo }) {
 
 
       {showDate && (
-        <DatePicker mode="datetime" date={date===null? Date.now():date} onDateChange={setDate} />
+        <DatePicker mode="datetime" date={date === null ? Date.now() : date} onDateChange={setDate} />
       )}
 
       <View>

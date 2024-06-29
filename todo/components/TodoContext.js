@@ -66,6 +66,7 @@ export const TodoProvider = ({ children }) => {
         if (index !== -1) {
           todos[index] = { ...todos[index], ...updatedTodo };
           const jsonValue = JSON.stringify(todos);
+          console.log('updates', todos)
           setTodos(todos)
           await AsyncStorage.setItem(TODOS_KEY, jsonValue);
         }
@@ -75,17 +76,17 @@ export const TodoProvider = ({ children }) => {
     };
 
     const toggleTodoCompleted = async (key) => {
-      console.log('toggled')
+      //console.log('toggled')
       const todo = todos.find(todo => todo.key === key);
       updateTodo(key, { completed: !todo.completed });
       
-      console.log('posttoggle', todos)
+      //console.log('posttoggle', todos)
     };
   
 
 
   return (
-    <TodoContext.Provider value={{ todos, setTodos, addTodo, removeTodo, toggleTodoCompleted }}>
+    <TodoContext.Provider value={{ todos,updateTodo, setTodos, addTodo, removeTodo, toggleTodoCompleted }}>
       {children}
     </TodoContext.Provider>
   );

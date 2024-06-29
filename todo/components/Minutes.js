@@ -34,34 +34,11 @@ import { db } from "./firebase.js"
 export default function Minutes() {
 
     const [value, setValue] = useState('');
-    // const [todos, setTodos] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [editingTask, setEditingTask] = useState({});
 
-    //const todosKeys = Object.keys(todos);
 
     const { todos, addTodo, removeTodo, toggleTodoCompleted } = useContext(TodoContext);
-
-    /* useFocusEffect(() => {
-         const fetchTodos = async () => {
-             const todos = await readTodos();
-             setTodos(todos.filter(todo => todo.task_type === 'minutes'));
-         };
-         fetchTodos();
-     });*/
-    const checkTodo = async (key) => {
-        const todo = todos.find(todo => todo.key === key);
-        //if (todo) {
-        // todo.completed = true
-        updateTodo(key, { completed: !todo.completed });
-        const index = todos.findIndex(todo => todo.key === key);
-        todos[index] = { ...todos[index], ...{ completed: !todo.completed } };
-        setTodos(todos.filter(todo => todo.key !== key));
-        // }
-    };
-
-
-
 
     const handleDeleteTodo = async (key) => {
         deleteTodo(key);
@@ -80,8 +57,6 @@ export default function Minutes() {
                         completed={item.completed}
                         due_date={item.due_date}
                         editMe={() => {
-                            //console.log('date', item.due_date)
-                            //removeTodo(item.key)
                             setModalVisible(true)
                             setEditingTask(item)
                         }}
@@ -91,7 +66,7 @@ export default function Minutes() {
                         }
                         deleteTodo={() => removeTodo(item.key)
                         }
-                    //updateTodo = {()=> handleUpdateTodo(item.key)}
+                
                     />
                 ))
             }
