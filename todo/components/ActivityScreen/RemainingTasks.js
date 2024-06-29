@@ -1,49 +1,62 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
+import { AntDesign } from "@expo/vector-icons";
 
 export default function RemainingTasks() {
   let minutesTasksLeft = 1;
   let hoursTasksLeft = 1;
   let daysTasksLeft = 3;
 
+  // Check if any tasks are left
+  const hasRemainingTasks = minutesTasksLeft > 0 || hoursTasksLeft > 0 || daysTasksLeft > 0;
+
   return (
     <View style={styles.container}>
       <View style={styles.remainingTasksContainer}>
-        <Text style={styles.header}>Remaining Tasks:</Text>
+        {hasRemainingTasks ? (
+          <>
+            <Text style={styles.header}>Remaining Tasks:</Text>
 
-        <View style={styles.taskNumberContainers}>
-          {minutesTasksLeft > 0 && (
-            <View style={styles.taskNumberContainer}>
-              <View style={styles.minuteEllipse}>
-                <Text style={styles.taskNumber}>{minutesTasksLeft}</Text>
-              </View>
-              <Text style={styles.taskText}>Minutes Tasks</Text>
-            </View>
-          )}
+            <View style={styles.taskNumberContainers}>
+              {minutesTasksLeft > 0 && (
+                <View style={styles.taskNumberContainer}>
+                  <View style={styles.minuteEllipse}>
+                    <Text style={styles.taskNumber}>{minutesTasksLeft}</Text>
+                  </View>
+                  <Text style={styles.taskText}>Minutes Tasks</Text>
+                </View>
+              )}
 
-          {hoursTasksLeft > 0 && (
-            <View style={styles.taskNumberContainer}>
-              <View style={styles.hourEllipse}>
-                <Text style={styles.taskNumber}>{hoursTasksLeft}</Text>
-              </View>
-              <Text style={styles.taskText}>Hours Tasks</Text>
-            </View>
-          )}
+              {hoursTasksLeft > 0 && (
+                <View style={styles.taskNumberContainer}>
+                  <View style={styles.hourEllipse}>
+                    <Text style={styles.taskNumber}>{hoursTasksLeft}</Text>
+                  </View>
+                  <Text style={styles.taskText}>Hours Tasks</Text>
+                </View>
+              )}
 
-          {daysTasksLeft > 0 && (
-            <View style={styles.taskNumberContainer}>
-              <View style={styles.dayEllipse}>
-                <Text style={styles.taskNumber}>{daysTasksLeft}</Text>
+              {daysTasksLeft > 0 && (
+                <View style={styles.taskNumberContainer}>
+                  <View style={styles.dayEllipse}>
+                    <Text style={styles.taskNumber}>{daysTasksLeft}</Text>
+                  </View>
+                  <Text style={styles.taskText}>Days Tasks</Text>
+                </View>
+              )}
+
+              <View style={styles.arrowContainer}>
+                <AntDesign name="right" size={24} color="black" />
               </View>
-              <Text style={styles.taskText}>Days Tasks</Text>
             </View>
-          )}
-        </View>
+          </>
+        ) : (
+          <Text style={styles.finishedText}>Finished all daily tasks, great job!</Text>
+        )}
       </View>
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -104,5 +117,14 @@ const styles = StyleSheet.create({
     width: 70,
     textAlign: "center",
     color: "black",
+  },
+  arrowContainer: {
+    marginLeft: "auto",
+  },
+  finishedText: {
+    fontSize: 16,
+    textAlign: "center",
+    fontStyle: "italic",
+    marginTop: 20,
   },
 });
