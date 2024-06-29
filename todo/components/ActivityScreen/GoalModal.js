@@ -1,10 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from "react-native";
 
-export default function GoalModal({ visible, onClose, onSave, initialMode }) {
+export default function GoalModal({ visible, onClose, onSave, initialMode, initialGoals }) {
   const [minutesGoal, setMinutesGoal] = useState('');
   const [hoursGoal, setHoursGoal] = useState('');
   const [daysGoal, setDaysGoal] = useState('');
+
+  useEffect(() => {
+    if (initialGoals) {
+      setMinutesGoal(initialGoals.minutesGoal);
+      setHoursGoal(initialGoals.hoursGoal);
+      setDaysGoal(initialGoals.daysGoal);
+    }
+  }, [initialGoals]);
 
   const handleSave = () => {
     onSave({ minutesGoal, hoursGoal, daysGoal });
@@ -69,7 +77,7 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
   },
   cancelText: {
-    color: "red",
+    color: "black",
   },
   title: {
     fontSize: 20,
@@ -85,3 +93,4 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
+

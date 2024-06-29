@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, ScrollView, Button} from "react-native";
+import { StyleSheet, Text, View, ScrollView, Button } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import TodoList from "./TodoList";
 import { readTodos, deleteCompletedTodos } from "./TodosService";
-//import streakIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import RemainingTasks from "./ActivityScreen/RemainingTasks";
 import GoalModal from "./ActivityScreen/GoalModal";
@@ -12,14 +11,17 @@ export default function Activity() {
   const [value, setValue] = useState("");
   const [todos, setTodos] = useState([]);
   const [currentDate, setCurrentDate] = useState("");
-    const [modalVisible, setModalVisible] = useState(false);
-    const [modalMode, setModalMode] = useState('set');
-  //placeholder
+  const [hasDailyGoal, setDailyGoal] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMode, setModalMode] = useState('set');
+  const [currentGoals, setCurrentGoals] = useState({ minutesGoal: '', hoursGoal: '', daysGoal: '' });
+
+  // Placeholder values
   let streak = 3;
     let completedToday = 3;
     let dueToday = 2;
     let dueThisWeek = 7;
-    const [hasDailyGoal, setDailyGoal] = useState(false);
+   // const [hasDailyGoal, setDailyGoal] = useState(false); /* can delete?*/
 
    /* useFocusEffect(() => {
         const fetchTodos = async () => {
@@ -39,21 +41,19 @@ export default function Activity() {
     setCurrentDate(`Today, ${month} ${day.replace(",", "")}, ${year}`);
   }, []);
 
-    const openGoalModal = (mode) => {
-      setModalMode(mode);
-      setModalVisible(true);
-    };
+  const openGoalModal = (mode) => {
+    setModalMode(mode);
+    setModalVisible(true);
+  };
 
-    const closeGoalModal = () => {
-      setModalVisible(false);
-    };
+  const closeGoalModal = () => {
+    setModalVisible(false);
+  };
 
-    const saveGoals = (goals) => {
-      // Save the goals here
-      setDailyGoal(true);
-      console.log('Saved goals:', goals);
-    };
-
+  const saveGoals = (goals) => {
+    setCurrentGoals(goals);
+    setDailyGoal(true);
+  };
 
   return (
     <View style={styles.container}>
@@ -77,12 +77,12 @@ export default function Activity() {
             />
           </View>
         ) : (
-        <View>
+          <View>
             <Button
               onPress={() => openGoalModal("edit")}
               title="Edit daily goal"
             />
-          <RemainingTasks />
+            <RemainingTasks />
           </View>
         )}
       </View>
@@ -121,12 +121,13 @@ export default function Activity() {
           )}
         </ScrollView>
       </View>
-            <GoalModal
-              visible={modalVisible}
-              onClose={closeGoalModal}
-              onSave={saveGoals}
-              initialMode={modalMode}
-            />
+      <GoalModal
+        visible={modalVisible}
+        onClose={closeGoalModal}
+        onSave={saveGoals}
+        initialMode={modalMode}
+        initialGoals={modalMode === 'edit' ? currentGoals : { minutesGoal: '', hoursGoal: '', daysGoal: '' }}
+      />
     </View>
   );
 }
@@ -137,13 +138,13 @@ const styles = StyleSheet.create({
     padding: 16,
     justifyContent: "space-between",
   },
-    remainingTasksContainer: {
-      width: "100%",
-      padding: 16,
-      borderColor: "black",
-      borderWidth: 1,
-      borderRadius: 10,
-    },
+  remainingTasksContainer: {
+    width: "100%",
+    padding: 16,
+    borderColor: "black",
+    borderWidth: 1,
+    borderRadius: 10,
+  },
   dateText: {
     fontSize: 18,
     fontWeight: "bold",
@@ -160,14 +161,10 @@ const styles = StyleSheet.create({
   streakContainer: {
     flexDirection: "row",
     alignItems: "center",
-    //height: 48,
     width: "100%",
-    //borderColor: "black",
-    //  borderWidth: 1,
   },
   streakHeader: {
     fontFamily: "Inter",
-    // letterSpacing: 0.4,
     color: "black",
     fontSize: 20,
   },
@@ -177,64 +174,56 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
   },
-
-    summary: {
-      fontFamily: "Inter",
-      color: "#A5A5A5",
-      fontSize: 24,
-      justifyContent: "flex-end",
-    },
-    summaryContainer: {
-      flex: 1,
-      padding: 16,
-      flexDirection: "row",
-      justifyContent: "space-between",
-    },
-    summaryBoxWhite: {
-      width: 100,
-      height: 80,
-      borderRadius: 10,
-      borderColor: "black",
-      borderWidth: 1,
-    },
-    summaryBoxBlack: {
-      width: 100,
-      height: 80,
-      borderRadius: 10,
-      backgroundColor: "black",
-    },
-    summaryBlackBoxText: {
-      color: "white",
-      left: 10,
-      top: 5,
-    },
-    summaryWhiteBoxText: {
-      color: "black",
-      padding: 5,
-    },
-    summaryWhiteBoxNum: {
-      fontFamily: "Inter",
-      fontSize: 20,
-      fontWeight: "bold",
-      color: "black",
-      position: "absolute",
-      bottom: 10,
-      left: 20,
-    },
-    summaryBlackBoxNum: {
-      fontFamily: "Inter",
-      fontSize: 20,
-      fontWeight: "bold",
-      color: "white",
-      position: "absolute",
-      bottom: 10,
-      left: 20,
-    },
-    setGoalText: {
-      fontSize: 20,
-      fontWeight: "bold",
-      color: "blue",
-      marginBottom: 16,
-    },
+  summary: {
+    fontFamily: "Inter",
+    color: "#A5A5A5",
+    fontSize: 24,
+    justifyContent: "flex-end",
+  },
+  summaryContainer: {
+    flex: 1,
+    padding: 16,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  summaryBoxWhite: {
+    width: 100,
+    height: 80,
+    borderRadius: 10,
+    borderColor: "black",
+    borderWidth: 1,
+  },
+  summaryBoxBlack: {
+    width: 100,
+    height: 80,
+    borderRadius: 10,
+    backgroundColor: "black",
+  },
+  summaryBlackBoxText: {
+    color: "white",
+    left: 10,
+    top: 5,
+  },
+  summaryWhiteBoxText: {
+    color: "black",
+    padding: 5,
+  },
+  summaryWhiteBoxNum: {
+    fontFamily: "Inter",
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "black",
+    position: "absolute",
+    bottom: 10,
+    left: 20,
+  },
+  summaryBlackBoxNum: {
+    fontFamily: "Inter",
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "white",
+    position: "absolute",
+    bottom: 10,
+    left: 20,
+  },
 });
-
