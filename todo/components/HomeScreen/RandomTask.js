@@ -9,104 +9,76 @@ import {
   TouchableOpacity,
 } from "react-native";
 import AntDesign from "react-native-vector-icons/AntDesign";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import TodoListButton from "../TodoListButton";
 import { createTodo, readTodos, updateTodo, deleteTodo, getTodos } from '../TodosService';
-import { useFocusEffect } from '@react-navigation/native';
 
 export default function RandomTask({
-  taskSelectionVisible,
-  setTaskSelectionVisible,
-  setCurrentTask,
+  filteredTodos,
+  setRandomTaskSelectionVisible,
+  randomTaskSelectionVisible,
   taskType,
+  setCurrentTask
 }) {
-  const [todos, setTodos] = useState([]);
-  const todosKeys = Object.keys(todos);
+  const [item, setItem] = useState({});
 
-
-    const getRandomTodo = async () => {
-    try {
-      const todos = await getTodos();    
-      todos.filter(todo => todo.task_type === taskType && todo.completed === false)
-
-      const randomIndex = Math.floor(Math.random() * todos.length);
-      return todos[randomIndex];
-      
-    } catch (e) {
-      console.error('Failed to fetch a random todo', e);
-      return null;
-    }
+  const getRandomTodo = () => {
+    filteredTodos = filteredTodos.filter(todo => todo.task_type === taskType)
+    const randomIndex = Math.floor(Math.random() * filteredTodos.length);
+    return filteredTodos[randomIndex];
   };
 
-
-
-
-  useFocusEffect(() => {
-    const fetchTodos = async () => {
-        const todos = await readTodos();
-        setTodos(todos.filter(todo => todo.task_type === taskType && todo.completed === false));
-        //setTodos(todos);
-    };
-    fetchTodos();
-});
+  useEffect(() => {
+    if (randomTaskSelectionVisible) {
+      console.log('modal visible!')
+      setItem(getRandomTodo());
+    }
+  }, [randomTaskSelectionVisible]);
 
   return (
-    
     <Modal
       animationType="slide"
       transparent={false}
-      visible={taskSelectionVisible}
+      visible={randomTaskSelectionVisible}
     >
-    
       <View style={styles.listContainer}>
         <View style={styles.topBar}>
           <TouchableOpacity
             onPress={() => {
-              setTaskSelectionVisible(false);
+              setRandomTaskSelectionVisible(false);
             }}
-            style={styles.closeButton}
-          >
+            style={styles.closeButton}     >
             <AntDesign name="close" size={20} />
           </TouchableOpacity>
-          <Text style={styles.topBarText}>Select a {taskType} task </Text>
+          <Text style={styles.topBarText}> Random Task </Text>
           <View style={styles.placeholder} />
         </View>
+        <Text style={{
+          fontSize: 15,
+          flex: 1,
+          textAlign: "center",
+        }
+        }>
+          {item.text}
+        </Text>
 
-        <ScrollView >
-                    {
-                       /* todosKeys.map(key => (
-                            <Pressable key={todos[key].key} onPress={() => {
-                                setCurrentTask(todos[key])
-                                setTaskSelectionVisible(false)
-                            }
-                            }>
-                                <TodoListButton
-                                    text={todos[key].text}
-                                    key={todos[key].key}
-                                    todoItem={todos[key].checked}
-                                    setChecked={() => todos[key].key}
-                                    deleteTodo={() => deleteTodo(key)}
-                                />
-                            </Pressable>
-                        ))*/
+        <TouchableOpacity onPress={() => {
+          setItem(getRandomTodo())
+        }}>
+          <Ionicons name="refresh-outline" size={20} />
+          <Text>Pick again</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            setCurrentTask(item)
+            setRandomTaskSelectionVisible(false)
+          }}
+        >
+          <Ionicons name="checkmark-circle-sharp" size={20} />
 
-                        todos.map(item => (
-                            <Pressable key={item.key} onPress={() => {
-                                setCurrentTask(item)
-                                setTaskSelectionVisible(false)
-                            }
-                            }>
-                               {!item.completed &&
-                                <TodoListButton
-                                    text={item.text}
-                                    key={item.key}
-                                    todoItem={item.completed}
-                                    setChecked={() => item.key}
-                                    deleteTodo={() => deleteTodo(key)}
-                                />}
-                            </Pressable>
-                        ))
-                    }
-                </ScrollView>
+          <Text>Begin</Text>
+        </TouchableOpacity>
+
       </View>
     </Modal>
   );

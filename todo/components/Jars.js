@@ -33,7 +33,7 @@ import {
 } from 'firebase/database';
 import { db } from "./firebase.js"
 
-export default function AddTask({ setModalVisible }) {
+export default function AddTask({ setModalVisible, todos}) {
     const [taskType, setTaskType] = useState('');
     //const [jar, setJar] = useState('');
 

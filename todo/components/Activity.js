@@ -17,14 +17,15 @@ export default function Activity() {
     let dueToday = 2;
     let dueThisWeek = 7;
 
-  useFocusEffect(() => {
-    const fetchTodos = async () => {
-      const todos = await readTodos();
-      deleteCompletedTodos();
-      setTodos(todos);
-    };
-    fetchTodos();
-  });
+   /* useFocusEffect(() => {
+        const fetchTodos = async () => {
+          const todos = await readTodos();
+          deleteCompletedTodos();
+          setTodos(todos);
+        };
+        fetchTodos();
+        //also delete all the tasks that are from a previous day
+      })*/
 
   useEffect(() => {
     const date = new Date();

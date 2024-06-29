@@ -2,11 +2,15 @@ import React from "react";
 import { StyleSheet, View, Modal } from "react-native";
 import AddTask from "../AddTask.js";
 
-export default function AddTaskModal({ modalVisible, setModalVisible }) {
+export default function AddTaskModal({ modalVisible, setModalVisible}) {
+
+
   return (
     <Modal transparent={true} visible={modalVisible} style={styles.modalView}>
       <View>
-        <AddTask setModalVisible={setModalVisible} />
+        <AddTask setModalVisible={setModalVisible} 
+
+        />
       </View>
     </Modal>
   );

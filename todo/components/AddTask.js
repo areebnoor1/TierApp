@@ -9,11 +9,13 @@ import {
   Pressable,
   Switch
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Entypo from "react-native-vector-icons/Entypo";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import DatePicker from "react-native-date-picker";
+
+import  {TodoContext}  from './TodoContext';
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import ToDoApp from './ToDoApp';
@@ -28,13 +30,18 @@ import { db } from "./firebase.js"
 
 import { createTodo, readTodos, updateTodo, deleteTodo } from './TodosService';
 
-export default function AddTask({ setModalVisible }) {
+
+
+export default function AddTask({ setModalVisible, setTodos}) {
   const [taskType, setTaskType] = useState("");
   const [value, setValue] = useState("");
   const [date, setDate] = useState({});
   const [time, setTime] = useState(new Date());
   const [showDate, setShowDate] = useState(false);
   const [showTime, setShowTime] = useState(false);
+
+  const { todos, addTodo, removeTodo, toggleTodoCompleted } = useContext(TodoContext);
+
 
   const getMessage = () => {
     switch (taskType) {
@@ -49,15 +56,17 @@ export default function AddTask({ setModalVisible }) {
     }
   };
 
-  let addTodo = async () => {
+  let addTodoWrapper = async () => {
     if (taskType == '') {
       Alert.alert('', 'Please specify a task type (Minutes, Hours, Days).', [
         { text: 'OK', onPress: () => console.log('OK Pressed') },
       ]);
     } else {
-      todo_result = await createTodo({
+
+      await addTodo({
         text: value, key: Date.now(), completed: false, task_type: taskType, due_date: date
-      });
+      })     
+
       if (value.length > 0) {
         setValue('');
       }
@@ -75,7 +84,7 @@ export default function AddTask({ setModalVisible }) {
 
         <Text style={styles.buttonText}>Add task</Text>
 
-        <TouchableOpacity onPress={() => addTodo()}>
+        <TouchableOpacity onPress={() => addTodoWrapper()}>
           <Text style={styles.buttonText}>Done</Text>
         </TouchableOpacity>
       </View>

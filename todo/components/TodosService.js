@@ -21,6 +21,7 @@ export const createTodo = async (todo) => {
     todos.push(todo);
     const jsonValue = JSON.stringify(todos);
     await AsyncStorage.setItem(TODOS_KEY, jsonValue);
+    console.log('saved the todo')
   } catch (e) {
     console.error('Failed to save the todo to storage', e);
   }
@@ -62,13 +63,9 @@ export const updateTodo = async (key, updatedTodo) => {
 export const deleteTodo = async (key) => {
   try {
     const todos = await getTodos();
-    console.log('oldtodos', todos)
     const newTodos = todos.filter(todo => todo.key !== key);
-
-    console.log('new', newTodos)
     const jsonValue = JSON.stringify(newTodos);
     await AsyncStorage.setItem(TODOS_KEY, jsonValue);
-
   } catch (e) {
     console.error('Failed to delete the todo from storage', e);
   }
