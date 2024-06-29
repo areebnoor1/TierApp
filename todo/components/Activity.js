@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { StyleSheet, Text, View, ScrollView, Button} from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import TodoList from "./TodoList";
 import { readTodos, deleteCompletedTodos } from "./TodosService";
@@ -16,6 +16,7 @@ export default function Activity() {
     let completedToday = 3;
     let dueToday = 2;
     let dueThisWeek = 7;
+    const [hasDailyGoal, setDailyGoal] = useState(false);
 
    /* useFocusEffect(() => {
         const fetchTodos = async () => {
@@ -45,6 +46,22 @@ export default function Activity() {
         <MaterialCommunityIcons name="fire" size={30} color="black" />
       </View>
       {/* if none, display reached daily goal... if daily goal not set, just don't have...*/}
+       <Text style={styles.summary}>Daily Goal</Text>
+
+        <View>
+          <Text>
+            You have set a daily Goal? {hasDailyGoal ? 'Yes' : 'No'}!
+          </Text>
+          <Button
+            onPress={() => {
+              setDailyGoal(true);
+            }}
+            disabled={hasDailyGoal}
+            title={hasDailyGoal ? 'Set daily goal' : 'edit daily goal'}
+          />
+        </View>
+
+
       <RemainingTasks />
 
             {/* Summary Section */}
