@@ -62,6 +62,9 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     justifyContent: "center",
+        borderColor: "black",
+        borderWidth: 1,
+        borderRadius: 10,
   //  alignItems: "center",
   },
   remainingTasksContainer: {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, ScrollView, Button } from "react-native";
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity,Button } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import TodoList from "./TodoList";
 import { readTodos, deleteCompletedTodos } from "./TodosService";
@@ -11,19 +11,22 @@ export default function Activity() {
   const [value, setValue] = useState("");
   const [todos, setTodos] = useState([]);
   const [currentDate, setCurrentDate] = useState("");
-  const [hasDailyGoal, setDailyGoal] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [modalMode, setModalMode] = useState('set');
-  const [currentGoals, setCurrentGoals] = useState({ minutesGoal: '', hoursGoal: '', daysGoal: '' });
+  const [goalModalVisible, setGoalModalVisible] = useState(false); // Add state for modal visibility
+  const [goalMode, setGoalMode] = useState("set"); // Add state for goal mode
+  const [initialGoals, setInitialGoals] = useState({
+    minutesGoal: "3",
+    hoursGoal: "1",
+    daysGoal: "1",
+  }); // Add state for initial goals
 
   // Placeholder values
   let streak = 3;
-    let completedToday = 3;
-    let dueToday = 2;
-    let dueThisWeek = 7;
-   // const [hasDailyGoal, setDailyGoal] = useState(false); /* can delete?*/
+  let completedToday = 3;
+  let dueToday = 2;
+  let dueThisWeek = 7;
 
-   /* useFocusEffect(() => {
+  const [hasDailyGoal, setDailyGoal] = useState(false);
+  /* useFocusEffect(() => {
         const fetchTodos = async () => {
           const todos = await readTodos();
           deleteCompletedTodos();
@@ -42,16 +45,16 @@ export default function Activity() {
   }, []);
 
   const openGoalModal = (mode) => {
-    setModalMode(mode);
-    setModalVisible(true);
+    setGoalMode(mode);
+    setGoalModalVisible(true);
   };
 
   const closeGoalModal = () => {
-    setModalVisible(false);
+    setGoalModalVisible(false);
   };
 
   const saveGoals = (goals) => {
-    setCurrentGoals(goals);
+    setInitialGoals(goals);
     setDailyGoal(true);
   };
 
@@ -65,12 +68,21 @@ export default function Activity() {
         <MaterialCommunityIcons name="fire" size={30} color="black" />
       </View>
       {/* If none, display "reached daily goal"... If daily goal not set, just don't have... */}
-      <Text style={styles.summary}>Daily Goal</Text>
+
+      <View style={styles.dailyGoalContainer}>
+        <Text style={styles.summary}>Daily Goal</Text>
+        <Text style={styles.editGoalText}>Edit Goal</Text>
+
+        {/* If none, display "reached daily goal"... If daily goal not set, just don't have... */}
+      </View>
 
       <View style={styles.container}>
         {!hasDailyGoal ? (
           <View style={styles.remainingTasksContainer}>
             <Text>Have not set a daily goal</Text>
+                   {/*     <TouchableOpacity oonPress={() => openGoalModal("set")} style={styles.button}>
+                          <Text style={styles.buttonText}>Confirm</Text>
+                        </TouchableOpacity> */}
             <Button
               onPress={() => openGoalModal("set")}
               title="Set daily goal"
@@ -122,11 +134,11 @@ export default function Activity() {
         </ScrollView>
       </View>
       <GoalModal
-        visible={modalVisible}
+        visible={goalModalVisible}
         onClose={closeGoalModal}
         onSave={saveGoals}
-        initialMode={modalMode}
-        initialGoals={modalMode === 'edit' ? currentGoals : { minutesGoal: '', hoursGoal: '', daysGoal: '' }}
+        initialMode={goalMode}
+        initialGoals={initialGoals}
       />
     </View>
   );
@@ -138,30 +150,16 @@ const styles = StyleSheet.create({
     padding: 16,
     justifyContent: "space-between",
   },
-  remainingTasksContainer: {
-    width: "100%",
-    padding: 16,
-    borderColor: "black",
-    borderWidth: 1,
-    borderRadius: 10,
-  },
-  dateText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 8,
-  },
-  buttonText: {
-    fontSize: 26,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  scroll: {
-    marginTop: 16,
-  },
+    dateText: {
+      fontSize: 18,
+      fontWeight: "bold",
+      marginBottom: 8,
+    },
   streakContainer: {
     flexDirection: "row",
     alignItems: "center",
     width: "100%",
+     //justifyContent: "flex-end",
   },
   streakHeader: {
     fontFamily: "Inter",
@@ -174,6 +172,43 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
   },
+  dailyGoalContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-end",
+  },
+  editGoalText: {
+      fontFamily: "Inter",
+      color: "#A5A5A5",
+      fontSize: 16,
+      justifyContent: "flex-end",
+   },
+  remainingTasksContainer: {
+    width: "100%",
+    padding: 16,
+    borderColor: "black",
+    borderWidth: 1,
+    borderRadius: 10,
+  },
+
+  buttonText: {
+    fontSize: 26,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+    button: {
+      alignItems: "center",
+      justifyContent: "center",
+      paddingVertical: 12,
+      paddingHorizontal: 100,
+      borderRadius: 16,
+      backgroundColor: "black",
+      marginTop: 40,
+    },
+
+  scroll: {
+    marginTop: 16,
+  },
   summary: {
     fontFamily: "Inter",
     color: "#A5A5A5",
@@ -181,6 +216,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   summaryContainer: {
+  justifyContent: "flex-end",
     flex: 1,
     padding: 16,
     flexDirection: "row",
