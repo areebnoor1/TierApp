@@ -4,6 +4,8 @@ import { useFocusEffect } from "@react-navigation/native";
 import TodoList from "./TodoList";
 import { readTodos, deleteCompletedTodos } from "./TodosService";
 //import streakIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { startOfWeek, endOfWeek, parseISO, isWithinInterval } from 'date-fns';
+
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import RemainingTasks from "./ActivityScreen/RemainingTasks";
 
@@ -11,29 +13,56 @@ import { TodoContext } from './TodoContext';
 
 export default function Activity() {
   const [value, setValue] = useState("");
- // const [todos, setTodos] = useState([]);
+  // const [todos, setTodos] = useState([]);
   const [currentDate, setCurrentDate] = useState("");
-
+  const [completedToday, setCompletedToday] = useState(0);
+  const [dueToday, setDueToday] = useState(0);
+  const [dueThisWeek, setDueThisWeek] = useState(0);
   const { todos, addTodo, removeTodo, toggleTodoCompleted } = useContext(TodoContext);
 
   //placeholder
   let streak = 3;
-    let completedToday = 3;
-    let dueToday = 2;
-    let dueThisWeek = 7;
+  //let completedToday = 3;
+  //let dueToday = 2;
+  //let dueThisWeek = 7;
 
-   /* const completedToday = () =>{
-      dayjs(todo.key).format('YYYY-MM-DD') === today
-      todos.filter(todo => todo.completed === true && todo.completion_date)
+  const isToday = (date) => {
+    const t = new Date();
+    const today = new Date(t.setHours(0,0,0,0))
+    const comparison = new Date(date.setHours(0,0,0,0))
+    return (
+      date===comparison
+    );
+  };
+  // Function to get todos due this week
 
-    }
-    const dueToday = () =>{
-      todos.filter(todo => todo.completed === false && todo.completion_date)
-    }
-    const dueThisWeek = () =>{
+  const getTodosDueThisWeek = () => {
+
+    const now = new Date();
+    const startOfWeekDate = startOfWeek(now, { weekStartsOn: 1 }); // assuming week starts on Monday
+    const endOfWeekDate = endOfWeek(now, { weekStartsOn: 1 });
+  
+    return todos.filter(todo => {
       
+      return dateExists(todo.due_date) && isWithinInterval(new Date(todo.due_date), { start: startOfWeekDate, end: endOfWeekDate });
+    }).length;
+  };
+
+
+  const getCompletedToday = () => {
+    return todos.filter(todo => todo.completed === true).length
+  }
+
+  const dateExists = (date) => {
+    if (Object.keys(date).length === 0){
+      return false
+    }else{
+      return true
     }
-*/
+  }
+  const getDueToday = () => {
+    todos.filter(todo => todo.completed === false && dateExists(todo.due_date) && isToday(todo.due_date).length)
+  }
 
   useEffect(() => {
     const date = new Date();
@@ -42,6 +71,13 @@ export default function Activity() {
     const [month, day, year] = formattedDate.split(" ");
     setCurrentDate(`Today, ${month} ${day.replace(",", "")}, ${year}`);
   }, []);
+
+  useEffect(() => {
+    setCompletedToday(getCompletedToday())
+    setDueToday(getDueToday())
+    setDueThisWeek(getTodosDueThisWeek())
+
+  }, [todos]);
 
   return (
     <View style={styles.container}>
@@ -54,22 +90,22 @@ export default function Activity() {
       </View>
       {/* if none, display reached daily goal... if daily goal not set, just don't have...*/}
       <RemainingTasks />
-            {/* Summary Section */}
-            <Text style={styles.summary}>Summary</Text>
-            <View style={styles.summaryContainer}>
-              <View style={styles.summaryBoxBlack}>
-                <Text style={styles.summaryBlackBoxText}>Completed Today: </Text>
-                <Text style={styles.summaryBlackBoxNum}>{completedToday}</Text>
-              </View>
-              <View style={styles.summaryBoxWhite}>
-                <Text style={styles.summaryWhiteBoxText}>Due Today: </Text>
-                <Text style={styles.summaryWhiteBoxNum}>{dueToday}</Text>
-              </View>
-              <View style={styles.summaryBoxWhite}>
-                <Text style={styles.summaryWhiteBoxText}>Due this week: </Text>
-                <Text style={styles.summaryWhiteBoxNum}>{dueThisWeek}</Text>
-              </View>
-            </View>
+      {/* Summary Section */}
+      <Text style={styles.summary}>Summary</Text>
+      <View style={styles.summaryContainer}>
+        <View style={styles.summaryBoxBlack}>
+          <Text style={styles.summaryBlackBoxText}>Completed Today: </Text>
+          <Text style={styles.summaryBlackBoxNum}>{completedToday}</Text>
+        </View>
+        <View style={styles.summaryBoxWhite}>
+          <Text style={styles.summaryWhiteBoxText}>Due Today: </Text>
+          <Text style={styles.summaryWhiteBoxNum}>{dueToday}</Text>
+        </View>
+        <View style={styles.summaryBoxWhite}>
+          <Text style={styles.summaryWhiteBoxText}>Due this week: </Text>
+          <Text style={styles.summaryWhiteBoxNum}>{dueThisWeek}</Text>
+        </View>
+      </View>
 
       {/* if streak is null or 0,  display,  set task or complete daily goal to begin streak   */}
       <Text style={styles.buttonText}>Completed Tasks</Text>
@@ -111,6 +147,7 @@ const styles = StyleSheet.create({
   },
   scroll: {
     marginTop: 16,
+    //flex: 1
   },
   streakContainer: {
     flexDirection: "row",
@@ -133,63 +170,63 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 
-    summary: {
-      fontFamily: "Inter",
-      color: "#A5A5A5",
-      fontSize: 24,
-      justifyContent: "flex-end",
-    },
-    summaryContainer: {
-      flex: 1,
-      padding: 16,
-      flexDirection: "row",
-      justifyContent: "space-between",
-    },
-    summaryBoxWhite: {
-      width: 100,
-      height: 80,
-      borderRadius: 10,
-      borderColor: "black",
-      borderWidth: 1,
-    },
-    summaryBoxBlack: {
-      width: 100,
-      height: 80,
-      borderRadius: 10,
-      backgroundColor: "black",
-    },
-    summaryBlackBoxText: {
-      color: "white",
-      left: 10,
-      top: 5,
-    },
-    summaryWhiteBoxText: {
-      color: "black",
-      padding: 5,
-    },
-    summaryWhiteBoxNum: {
-      fontFamily: "Inter",
-      fontSize: 20,
-      fontWeight: "bold",
-      color: "black",
-      position: "absolute",
-      bottom: 10,
-      left: 20,
-    },
-    summaryBlackBoxNum: {
-      fontFamily: "Inter",
-      fontSize: 20,
-      fontWeight: "bold",
-      color: "white",
-      position: "absolute",
-      bottom: 10,
-      left: 20,
-    },
-    setGoalText: {
-      fontSize: 20,
-      fontWeight: "bold",
-      color: "blue",
-      marginBottom: 16,
-    },
+  summary: {
+    fontFamily: "Inter",
+    color: "#A5A5A5",
+    fontSize: 24,
+    justifyContent: "flex-end",
+  },
+  summaryContainer: {
+    flex: 1,
+    padding: 16,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  summaryBoxWhite: {
+    width: 100,
+    height: 80,
+    borderRadius: 10,
+    borderColor: "black",
+    borderWidth: 1,
+  },
+  summaryBoxBlack: {
+    width: 100,
+    height: 80,
+    borderRadius: 10,
+    backgroundColor: "black",
+  },
+  summaryBlackBoxText: {
+    color: "white",
+    left: 10,
+    top: 5,
+  },
+  summaryWhiteBoxText: {
+    color: "black",
+    padding: 5,
+  },
+  summaryWhiteBoxNum: {
+    fontFamily: "Inter",
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "black",
+    position: "absolute",
+    bottom: 10,
+    left: 20,
+  },
+  summaryBlackBoxNum: {
+    fontFamily: "Inter",
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "white",
+    position: "absolute",
+    bottom: 10,
+    left: 20,
+  },
+  setGoalText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "blue",
+    marginBottom: 16,
+  },
 });
 

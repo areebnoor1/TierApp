@@ -100,9 +100,24 @@ export const TodoProvider = ({ children }) => {
   };
 
   const toggleTodoCompleted = async (key) => {
+    try {
+      const todo = todos.find(todo => todo.key === key);
+      //updateTodo(key, );
+
+      const index = todos.findIndex(todo => todo.key === key);
+
+      if (index !== -1) {
+        todos[index] = { ...todos[index], ...{ completed: !todo.completed, completion_date: Date.now() } };
+        const jsonValue = JSON.stringify(todos);
+        console.log('updates', todos)
+        setTodos(todos)
+        await AsyncStorage.setItem(TODOS_KEY, jsonValue);
+      }
+    } catch (e) {
+      console.error('Failed to update the todo in storage', e);
+    }
     //console.log('toggled')
-    const todo = todos.find(todo => todo.key === key);
-    updateTodo(key, { completed: !todo.completed, completion_date: Date.now() });
+
 
     //console.log('posttoggle', todos)
   };
