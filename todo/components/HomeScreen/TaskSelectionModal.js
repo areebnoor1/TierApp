@@ -22,9 +22,13 @@ export default function TaskSelectionModal({
   setTaskSelectionVisible,
   setCurrentTask,
   taskType,
- 
 }) {
-  const { todos, addTodo, removeTodo, toggleTodoCompleted } = useContext(TodoContext);
+  //const { todos, addTodo, removeTodo, toggleTodoCompleted } = useContext(TodoContext);
+const { todos } = useContext(TodoContext);
+
+ // Filter todos based on the taskType
+  const filteredTodos = todos.filter(todo => todo.task_type === taskType && !todo.completed);
+
 
   return (
     <Modal
@@ -48,8 +52,24 @@ export default function TaskSelectionModal({
         </View>
 
         <ScrollView >
-          {
-            todos.map(item => (
+
+          {filteredTodos.map(item => (
+                    <TouchableOpacity
+                      key={item.key}
+                      onPress={() => {
+                        setCurrentTask(item);
+                        setTaskSelectionVisible(false);
+                      }}
+
+                    >
+                      <TodoListButton
+                        text={item.text}
+                        todoItem={item}
+                      />
+                    </TouchableOpacity>
+                  ))}
+        {/*}
+          { todos.map(item => (
               <Pressable key={item.key} onPress={() => {
                 setCurrentTask(item)
                 setTaskSelectionVisible(false)
@@ -65,7 +85,7 @@ export default function TaskSelectionModal({
                   />}
               </Pressable>
             ))
-          }
+          } */}
         </ScrollView>
       </View>
     </Modal>
@@ -93,7 +113,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   placeholder: {
-    width: 20, // Adjust as needed
+    width: 20,
   },
   scrollView: {
     flex: 1,
@@ -101,8 +121,8 @@ const styles = StyleSheet.create({
   },
   pressableContainer: {
     backgroundColor: "#3d36a3",
-    borderRadius: 20,
-    padding: 15,
-    marginBottom: 10,
+ //   borderRadius: 20,
+   // padding: 15,
+ //s   marginBottom: 10,
   },
 });

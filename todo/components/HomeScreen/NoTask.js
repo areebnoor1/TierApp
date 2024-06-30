@@ -14,13 +14,15 @@ import DaysJar from "../SVGicons/DaysJar";
 import TaskSelectionModal from "./TaskSelectionModal";
 import RandomTask from "./RandomTask";
 import { TodoContext } from "../TodoContext";
-export default function NoTask({ setModalVisible, setCurrentTask,  }) {
+export default function NoTask({ setModalVisible, setCurrentTask }) {
   const [jarModalVisible, setJarModalVisible] = useState(false);
   const [taskSelectionVisible, setTaskSelectionVisible] = useState(false);
-  const [randomTaskSelectionVisible, setRandomTaskSelectionVisible] = useState(false);
+  const [randomTaskSelectionVisible, setRandomTaskSelectionVisible] =
+    useState(false);
   const [selectedJar, setSelectedJar] = useState(null);
 
-  const { todos, addTodo, removeTodo, toggleTodoCompleted } = useContext(TodoContext);
+  const { todos, addTodo, removeTodo, toggleTodoCompleted } =
+    useContext(TodoContext);
   /*useEffect(() => {
     const fetchTodos = async () => {
       const todos = await readTodos();
@@ -31,12 +33,14 @@ export default function NoTask({ setModalVisible, setCurrentTask,  }) {
 
   const checkTodosExist = (taskType) => {
     //console.log('checking', todos)
-    filteredTodos = todos.filter(todo => todo.task_type === taskType && todo.completed === false )
+    filteredTodos = todos.filter(
+      (todo) => todo.task_type === taskType && todo.completed === false
+    );
     //console.log('filteredtodos', filteredTodos)
     if (filteredTodos.length === 0) {
       return null;
     }
-  }
+  };
 
   const openJarModal = (jar) => {
     setSelectedJar(jar);
@@ -67,7 +71,7 @@ export default function NoTask({ setModalVisible, setCurrentTask,  }) {
                 ]);
               } else {
                 openJarModal("minutes");
-                setSelectedJar('minutes');
+                setSelectedJar("minutes");
                 setJarModalVisible(true);
               }
             }}
@@ -88,7 +92,7 @@ export default function NoTask({ setModalVisible, setCurrentTask,  }) {
                 ]);
               } else {
                 openJarModal("hours");
-                setSelectedJar('hours');
+                setSelectedJar("hours");
                 setJarModalVisible(true);
               }
             }}
@@ -102,7 +106,6 @@ export default function NoTask({ setModalVisible, setCurrentTask,  }) {
 
         {/* Container for Days */}
         <View style={styles.jarContainer}>
-
           <Pressable
             onPress={() => {
               if (checkTodosExist("days") === null) {
@@ -111,7 +114,7 @@ export default function NoTask({ setModalVisible, setCurrentTask,  }) {
                 ]);
               } else {
                 openJarModal("days");
-                setSelectedJar('days');
+                setSelectedJar("days");
                 setJarModalVisible(true);
               }
             }}
