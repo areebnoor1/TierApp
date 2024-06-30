@@ -1,18 +1,31 @@
-import React, { useState, useEffect , useContext} from "react";
-import { StyleSheet, View, Text, Pressable, Image, Modal, Alert } from "react-native";
+import React, { useState, useEffect, useContext } from "react";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Pressable,
+  Image,
+  Modal,
+  Alert,
+} from "react-native";
 import JarIcon from "../../components/SVGicons/JarIcon";
 import TaskSelectionModal from "./TaskSelectionModal";
-import RandomTask from './RandomTask';
-import { createTodo, readTodos, updateTodo, deleteTodo } from '../TodosService';
-import  {TodoContext}  from '../TodoContext';
+import RandomTask from "./RandomTask";
+import { createTodo, readTodos, updateTodo, deleteTodo } from "../TodosService";
+import { TodoContext } from "../TodoContext";
+import MintutesJar from "../SVGicons/MinutesJar";
+import HoursJar from "../SVGicons/HoursJar";
+import DaysJar from "../SVGicons/DaysJar";
 
-export default function NoTask({ setModalVisible, setCurrentTask,  }) {
+export default function NoTask({ setModalVisible, setCurrentTask }) {
   const [jarModalVisible, setJarModalVisible] = useState(false);
   const [taskSelectionVisible, setTaskSelectionVisible] = useState(false);
-  const [randomTaskSelectionVisible, setRandomTaskSelectionVisible] = useState(false);
+  const [randomTaskSelectionVisible, setRandomTaskSelectionVisible] =
+    useState(false);
   const [selectedJar, setSelectedJar] = useState(null);
 
-  const { todos, addTodo, removeTodo, toggleTodoCompleted } = useContext(TodoContext);
+  const { todos, addTodo, removeTodo, toggleTodoCompleted } =
+    useContext(TodoContext);
   /*useEffect(() => {
     const fetchTodos = async () => {
       const todos = await readTodos();
@@ -22,13 +35,15 @@ export default function NoTask({ setModalVisible, setCurrentTask,  }) {
   }, [todos]);*/
 
   const checkTodosExist = (taskType) => {
-    console.log('checking', todos)
-    filteredTodos = todos.filter(todo => todo.task_type === taskType && todo.completed === false )
-    console.log('filteredtodos', filteredTodos)
+    console.log("checking", todos);
+    filteredTodos = todos.filter(
+      (todo) => todo.task_type === taskType && todo.completed === false
+    );
+    console.log("filteredtodos", filteredTodos);
     if (filteredTodos.length === 0) {
       return null;
     }
-  }
+  };
 
   const openJarModal = (jar) => {
     setSelectedJar(jar);
@@ -45,84 +60,70 @@ export default function NoTask({ setModalVisible, setCurrentTask,  }) {
       <Text style={styles.welcomeText}>No tasks active.</Text>
 
       <View style={styles.jarsContainer}>
+        {/* Container for Minutes */}
         <View style={styles.jarContainer}>
-          <View style={styles.iconTextContainer}>
-            <Pressable
-              onPress={() => {
-                if (checkTodosExist("minutes") === null) {
-                  Alert.alert('', 'No todos in this category', [
-                    { text: 'OK', onPress: () => console.log('OK Pressed') },
-                  ]);
-                } else {
-                  openJarModal("minutes")
-                  setSelectedJar('minutes');
-                  setJarModalVisible(true);
-                }
+          <Pressable
+            onPress={() => {
+              if (checkTodosExist("minutes") === null) {
+                Alert.alert("", "No todos in this category", [
+                  { text: "OK", onPress: () => console.log("OK Pressed") },
+                ]);
+              } else {
+                openJarModal("minutes");
+                setSelectedJar("minutes");
+                setJarModalVisible(true);
               }
-              }
-              style={({ pressed }) => [
-                { opacity: pressed || selectedJar === "minutes" ? 0.6 : 1 },
-              ]}
-            >
-              <JarIcon
-                style={styles.jarIcon}
-                isActive={selectedJar === "minutes"}
-              />
-            </Pressable>
-            <Text style={styles.jarText}>Minutes</Text>
-          </View>
+            }}
+            style={({ pressed }) => [
+              { opacity: pressed || selectedJar === "minutes" ? 0.6 : 1 },
+            ]}
+          >
+            <MintutesJar />
+          </Pressable>
         </View>
 
+        {/* Container for Hours */}
         <View style={styles.jarContainer}>
-          <View style={styles.iconTextContainer}>
-            <Pressable
-              onPress={() => {
-                if (checkTodosExist("hours") === null) {
-                  Alert.alert('', 'No todos in this category', [
-                    { text: 'OK', onPress: () => console.log('OK Pressed') },
-                  ]);
-                } else {
-                  openJarModal("hours")
-                }
-              }}
-              style={({ pressed }) => [
-                { opacity: pressed || selectedJar === "hours" ? 0.6 : 1 },
-              ]}
-            >
-              <JarIcon
-                style={styles.jarIcon}
-                isActive={selectedJar === "hours"}
-              />
-            </Pressable>
-            <Text style={styles.jarText}>Hours</Text>
-          </View>
+          <Pressable
+            onPress={() => {
+              if (checkTodosExist("hours") === null) {
+                Alert.alert("", "No todos in this category", [
+                  { text: "OK", onPress: () => console.log("OK Pressed") },
+                ]);
+              } else {
+                openJarModal("hours");
+                setSelectedJar("hours");
+                setJarModalVisible(true);
+              }
+            }}
+            style={({ pressed }) => [
+              { opacity: pressed || selectedJar === "hours" ? 0.6 : 1 },
+            ]}
+          >
+            <HoursJar />
+          </Pressable>
         </View>
 
         {/* Container for Days */}
         <View style={styles.jarContainer}>
-          <View style={styles.iconTextContainer}>
-            <Pressable
-              onPress={() => {
-                if (checkTodosExist("days") === null) {
-                  Alert.alert('', 'No todos in this category', [
-                    { text: 'OK', onPress: () => console.log('OK Pressed') },
-                  ]);
-                } else {
-
-                  openJarModal("days")
-                }
-              }}
-              style={({ pressed }) => [
-                { opacity: pressed || selectedJar === "days" ? 0.6 : 1 },
-              ]}
-            >
-              <JarIcon
-                style={styles.jarIcon}
-                isActive={selectedJar === "days"}
-              />
-            </Pressable>
-            <Text style={styles.jarText}>Days</Text>
-          </View>
+          <Pressable
+            onPress={() => {
+              if (checkTodosExist("days") === null) {
+                Alert.alert("", "No todos in this category", [
+                  { text: "OK", onPress: () => console.log("OK Pressed") },
+                ]);
+              } else {
+                openJarModal("days");
+                setSelectedJar("days");
+                setJarModalVisible(true);
+              }
+            }}
+            style={({ pressed }) => [
+              { opacity: pressed || selectedJar === "days" ? 0.6 : 1 },
+            ]}
+          >
+            <DaysJar />
+          </Pressable>
         </View>
       </View>
 
@@ -257,12 +258,15 @@ const styles = StyleSheet.create({
   },
   jarsContainer: {
     flexDirection: "row",
+    //  backgroundColor: "red",
     justifyContent: "space-around",
     width: "100%",
-    paddingHorizontal: 20,
+    //paddingHorizontal: 20,
   },
   jarContainer: {
     alignItems: "center",
+    //height: 10,
+    //  backgroundColor: "white",
   },
   iconTextContainer: {
     position: "relative",
