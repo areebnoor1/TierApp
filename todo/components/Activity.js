@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { StyleSheet, Text, View, ScrollView } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import TodoList from "./TodoList";
-import { readTodos, deleteCompletedTodos } from "./TodosService";
+//import { readTodos, deleteCompletedTodos } from "./TodosService";
 //import streakIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { startOfWeek, endOfWeek, parseISO, isWithinInterval } from 'date-fns';
 
@@ -18,6 +18,7 @@ export default function Activity() {
   const [completedToday, setCompletedToday] = useState(0);
   const [dueToday, setDueToday] = useState(0);
   const [dueThisWeek, setDueThisWeek] = useState(0);
+
   const { todos, addTodo, removeTodo, toggleTodoCompleted } = useContext(TodoContext);
 
   //placeholder
@@ -27,25 +28,39 @@ export default function Activity() {
   //let dueThisWeek = 7;
 
   const isToday = (date) => {
+  //  console.log(date)
     const t = new Date();
     const today = new Date(t.setHours(0,0,0,0))
     const comparison = new Date(date.setHours(0,0,0,0))
-    return (
-      date===comparison
-    );
+  //  console.log('today', today)
+    // console.log('comparison', comparison)
+    //  console.log(today.getTime()==comparison.getTime())
+    return today.getTime()==comparison.getTime()
+    
   };
   // Function to get todos due this week
 
-  const getTodosDueThisWeek = () => {
+  function isDateInThisWeek(date) {
+    const todayObj = new Date();
+    const todayDate = todayObj.getDate();
+    const todayDay = todayObj.getDay();
+    // get first date of week
+    const firstDayOfWeek = new Date(todayObj.setDate(todayDate - todayDay));
 
-    const now = new Date();
-    const startOfWeekDate = startOfWeek(now, { weekStartsOn: 1 }); // assuming week starts on Monday
-    const endOfWeekDate = endOfWeek(now, { weekStartsOn: 1 });
-  
-    return todos.filter(todo => {
-      
-      return dateExists(todo.due_date) && isWithinInterval(new Date(todo.due_date), { start: startOfWeekDate, end: endOfWeekDate });
-    }).length;
+    // get last date of week
+    const lastDayOfWeek = new Date(firstDayOfWeek);
+    lastDayOfWeek.setDate(lastDayOfWeek.getDate() + 6);
+    //console.log('first',firstDayOfWeek)
+    //console.log('last',lastDayOfWeek)
+    //console.log(date >= firstDayOfWeek && date <= lastDayOfWeek)
+
+    //if date is equal or within the first and last dates of the week
+    return date >= firstDayOfWeek && date <= lastDayOfWeek;
+  }
+
+  const getTodosDueThisWeek = () => {
+    const newArr =  todos.filter(todo =>  !todo.completed && todo.has_due_date && isDateInThisWeek(new Date(todo.due_date)));
+    return newArr.length
   };
 
 
@@ -61,7 +76,12 @@ export default function Activity() {
     }
   }
   const getDueToday = () => {
-    todos.filter(todo => todo.completed === false && dateExists(todo.due_date) && isToday(todo.due_date).length)
+
+    const newArr = todos.filter(todo => todo.completed===false && todo.has_due_date===true && isToday(todo.due_date)===true)
+  //  console.log(newArr)
+    const amount =  newArr.length
+  //  console.log(amount)
+    return amount
   }
 
   useEffect(() => {
@@ -76,8 +96,7 @@ export default function Activity() {
     setCompletedToday(getCompletedToday())
     setDueToday(getDueToday())
     setDueThisWeek(getTodosDueThisWeek())
-
-  }, [todos]);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -95,15 +114,15 @@ export default function Activity() {
       <View style={styles.summaryContainer}>
         <View style={styles.summaryBoxBlack}>
           <Text style={styles.summaryBlackBoxText}>Completed Today: </Text>
-          <Text style={styles.summaryBlackBoxNum}>{completedToday}</Text>
+          <Text style={styles.summaryBlackBoxNum}>{getCompletedToday()}</Text>
         </View>
         <View style={styles.summaryBoxWhite}>
           <Text style={styles.summaryWhiteBoxText}>Due Today: </Text>
-          <Text style={styles.summaryWhiteBoxNum}>{dueToday}</Text>
+          <Text style={styles.summaryWhiteBoxNum}>{getDueToday()}</Text>
         </View>
         <View style={styles.summaryBoxWhite}>
           <Text style={styles.summaryWhiteBoxText}>Due this week: </Text>
-          <Text style={styles.summaryWhiteBoxNum}>{dueThisWeek}</Text>
+          <Text style={styles.summaryWhiteBoxNum}>{getTodosDueThisWeek()}</Text>
         </View>
       </View>
 

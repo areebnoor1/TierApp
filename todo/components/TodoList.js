@@ -13,6 +13,7 @@ import { format } from "date-fns";
 
 export default function TodoList(props) {
 	const { todos, addTodo, removeTodo, toggleTodoCompleted } = useContext(TodoContext);
+
 	const[completed, setCompleted] = useState(false)
 
 	return (
@@ -33,18 +34,13 @@ export default function TodoList(props) {
 				style={{ marginLeft: 15 }}
 				onPress={()=>{
 					props.editMe()
-					console.log('yay')
+				
 				}}
 			/>
-			<View style={{
-
-
-
-			}}>
+			<View >
 				<Text style={styles.listItem}>{props.text}</Text>
-				{Object.keys(props.due_date).length !== 0 &&
-					<Text style={styles.dateText}>{format(props.due_date, "eeee, MMMM do, HH:mm")}</Text>
-				}
+				{props.has_due_date &&
+				<Text style={styles.dateText}>{format(props.due_date, "eeee, MMMM do, HH:mm")}</Text>}
 			</View>
 			<Icon
 				name="trash-2"
@@ -54,8 +50,6 @@ export default function TodoList(props) {
 				marginRight={30}
 				onPress={props.deleteTodo}
 			/>
-
-
 		</View>
 	)
 

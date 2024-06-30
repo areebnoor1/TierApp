@@ -30,7 +30,6 @@ export default function RandomTask({
 
   useEffect(() => {
     if (randomTaskSelectionVisible) {
-      console.log('modal visible!')
       setItem(getRandomTodo());
     }
   }, [randomTaskSelectionVisible]);

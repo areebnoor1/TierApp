@@ -32,18 +32,16 @@ import { createTodo, readTodos, updateTodo, deleteTodo } from './TodosService';
 import { db } from "./firebase.js"
 
 export default function Minutes() {
-
     const [value, setValue] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
     const [editingTask, setEditingTask] = useState({});
 
-
     const { todos, addTodo, removeTodo, toggleTodoCompleted } = useContext(TodoContext);
 
-    const handleDeleteTodo = async (key) => {
-        deleteTodo(key);
-        setTodos(todos.filter(todo => todo.key !== key));
+    const handleToggleTodo = async (key) => {
+        await toggleTodoCompleted(key)
     };
+
 
     return (<View style={styles.container}>
         <ScrollView style={styles.scroll}>
@@ -55,13 +53,14 @@ export default function Minutes() {
                         key={item.key}
                         the_key={item.key}
                         completed={item.completed}
+                        has_due_date={item.has_due_date}
                         due_date={item.due_date}
                         editMe={() => {
                             setModalVisible(true)
                             setEditingTask(item)
                         }}
                         setChecked={() => {
-                            toggleTodoCompleted(item.key)
+                            handleToggleTodo(item.key)
                         }
                         }
                         deleteTodo={() => removeTodo(item.key)
