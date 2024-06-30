@@ -91,7 +91,7 @@ export default function Minutes() {
 
                             checkTodo(item.key)
                           
-                            console.log('checkec', todos)
+                           // console.log('checkec', todos)
                         }
                         }
                         deleteTodo={() => handleDeleteTodo(item.key)}

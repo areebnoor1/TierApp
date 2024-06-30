@@ -25,6 +25,13 @@ export default function NoTask({ setModalVisible, setCurrentTask }) {
   const { todos } = useContext(TodoContext);
 
   const checkTodosExist = (taskType) => {
+    //console.log('checking', todos)
+    filteredTodos = todos.filter(todo => todo.task_type === taskType && todo.completed === false )
+    //console.log('filteredtodos', filteredTodos)
+    if (filteredTodos.length === 0) {
+      return null;
+    }
+  }
     const filteredTodos = todos.filter(
       (todo) => todo.task_type === taskType && !todo.completed
     );
@@ -38,7 +45,7 @@ export default function NoTask({ setModalVisible, setCurrentTask }) {
 
   const closeModal = () => {
     setJarModalVisible(false);
-    setSelectedJar(null);
+    setSelectedJar(null); // Reset selectedJar when modal is closed
   };
 
   return (
@@ -89,6 +96,7 @@ export default function NoTask({ setModalVisible, setCurrentTask }) {
           </Pressable>
         </View>
 
+        {/* Container for Days */}
         <View style={styles.jarContainer}>
           <Pressable
             onPress={() => {
@@ -109,6 +117,7 @@ export default function NoTask({ setModalVisible, setCurrentTask }) {
         </View>
       </View>
 
+      {/* Jar Selection Modal */}
       <Modal
         transparent={true}
         visible={jarModalVisible}
@@ -116,24 +125,34 @@ export default function NoTask({ setModalVisible, setCurrentTask }) {
       >
         <View style={styles.modalView}>
           <View style={styles.modalContainer}>
+            {/* Close Modal Button */}
             <Pressable style={styles.pressableContainer} onPress={closeModal}>
               <Text style={styles.buttonText}>X</Text>
             </Pressable>
 
+            {/* Display selected jar */}
             <Text style={styles.selectedJarText}>
               Selected Jar: {selectedJar}
             </Text>
 
+            {/* Choose Random Task Button */}
             <Pressable
               style={styles.pressableContainer}
-              onPress={() => setRandomTaskSelectionVisible(true)}
+              onPress={() => {
+                //  closeModal();
+                setRandomTaskSelectionVisible(true);
+              }}
             >
               <Text style={styles.buttonText}>Choose random task</Text>
             </Pressable>
 
+            {/* Choose Task Button */}
             <Pressable
               style={styles.pressableContainer}
-              onPress={() => setTaskSelectionVisible(true)}
+              onPress={() => {
+                // closeModal();
+                setTaskSelectionVisible(true);
+              }}
             >
               <Text style={styles.buttonText}>Choose task</Text>
             </Pressable>
@@ -141,11 +160,13 @@ export default function NoTask({ setModalVisible, setCurrentTask }) {
         </View>
       </Modal>
 
+      {/* Task Selection Modal */}
       <TaskSelectionModal
         taskSelectionVisible={taskSelectionVisible}
         setTaskSelectionVisible={setTaskSelectionVisible}
         taskType={selectedJar}
         setCurrentTask={setCurrentTask}
+        //todos = {todos}
       />
 
       <RandomTask
@@ -255,7 +276,6 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins",
     color: "white",
   },
-
   selectedJarText: {
     fontSize: 20,
     fontFamily: "Poppins",

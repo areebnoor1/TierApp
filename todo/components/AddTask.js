@@ -36,9 +36,9 @@ export default function AddTask({ setModalVisible, setTodos}) {
   const [taskType, setTaskType] = useState("");
   const [value, setValue] = useState("");
   const [date, setDate] = useState({});
-  const [time, setTime] = useState(new Date());
+ // const [time, setTime] = useState(new Date());
   const [showDate, setShowDate] = useState(false);
-  const [showTime, setShowTime] = useState(false);
+ /// const [showTime, setShowTime] = useState(false);
 
   const { todos, addTodo, removeTodo, toggleTodoCompleted } = useContext(TodoContext);
 
@@ -64,7 +64,7 @@ export default function AddTask({ setModalVisible, setTodos}) {
     } else {
 
       await addTodo({
-        text: value, key: Date.now(), completed: false, task_type: taskType, due_date: date
+        text: value, key: Date.now(), completed: false, task_type: taskType, due_date: date, has_due_date: showDate
       })     
 
       if (value.length > 0) {

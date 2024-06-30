@@ -23,14 +23,13 @@ export default function RandomTask({
   const [item, setItem] = useState({});
 
   const getRandomTodo = () => {
-    filteredTodos = filteredTodos.filter(todo => todo.task_type === taskType)
+    filteredTodos = filteredTodos.filter(todo => todo.task_type === taskType && todo.completed ===false)
     const randomIndex = Math.floor(Math.random() * filteredTodos.length);
     return filteredTodos[randomIndex];
   };
 
   useEffect(() => {
     if (randomTaskSelectionVisible) {
-      console.log('modal visible!')
       setItem(getRandomTodo());
     }
   }, [randomTaskSelectionVisible]);

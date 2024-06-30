@@ -1,17 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity,Button } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import TodoList from "./TodoList";
-import { readTodos, deleteCompletedTodos } from "./TodosService";
+//import { readTodos, deleteCompletedTodos } from "./TodosService";
+//import streakIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { startOfWeek, endOfWeek, parseISO, isWithinInterval } from 'date-fns';
+
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import RemainingTasks from "./ActivityScreen/RemainingTasks";
 import GoalModal from "./ActivityScreen/GoalModal";
 import SummarySection from "./ActivityScreen/SummarySection"; // Import the SummarySection component
 
 
+import { TodoContext } from './TodoContext';
+
 export default function Activity() {
   const [value, setValue] = useState("");
-  const [todos, setTodos] = useState([]);
+  // const [todos, setTodos] = useState([]);
   const [currentDate, setCurrentDate] = useState("");
   const [goalModalVisible, setGoalModalVisible] = useState(false); // Add state for modal visibility
   const [goalMode, setGoalMode] = useState("set"); // Add state for goal mode
@@ -21,22 +26,75 @@ export default function Activity() {
     daysGoal: "1",
   }); // Add state for initial goals
 
+  const [completedToday, setCompletedToday] = useState(0);
+  const [dueToday, setDueToday] = useState(0);
+  const [dueThisWeek, setDueThisWeek] = useState(0);
+  const [hasDailyGoal, setDailyGoal] = useState(false);
+
+  const { todos, addTodo, removeTodo, toggleTodoCompleted } = useContext(TodoContext);
+
   // Placeholder values
   let streak = 3;
-  let completedToday = 3;
-  let dueToday = 2;
-  let dueThisWeek = 7;
+  //let completedToday = 3;
+  //let dueToday = 2;
+  //let dueThisWeek = 7;
 
-  const [hasDailyGoal, setDailyGoal] = useState(false);
-  /* useFocusEffect(() => {
-        const fetchTodos = async () => {
-          const todos = await readTodos();
-          deleteCompletedTodos();
-          setTodos(todos);
-        };
-        fetchTodos();
-        //also delete all the tasks that are from a previous day
-      })*/
+  const isToday = (date) => {
+  //  console.log(date)
+    const t = new Date();
+    const today = new Date(t.setHours(0,0,0,0))
+    const comparison = new Date(date.setHours(0,0,0,0))
+  //  console.log('today', today)
+    // console.log('comparison', comparison)
+    //  console.log(today.getTime()==comparison.getTime())
+    return today.getTime()==comparison.getTime()
+    
+  };
+  // Function to get todos due this week
+
+  function isDateInThisWeek(date) {
+    const todayObj = new Date();
+    const todayDate = todayObj.getDate();
+    const todayDay = todayObj.getDay();
+    // get first date of week
+    const firstDayOfWeek = new Date(todayObj.setDate(todayDate - todayDay));
+
+    // get last date of week
+    const lastDayOfWeek = new Date(firstDayOfWeek);
+    lastDayOfWeek.setDate(lastDayOfWeek.getDate() + 6);
+    //console.log('first',firstDayOfWeek)
+    //console.log('last',lastDayOfWeek)
+    //console.log(date >= firstDayOfWeek && date <= lastDayOfWeek)
+
+    //if date is equal or within the first and last dates of the week
+    return date >= firstDayOfWeek && date <= lastDayOfWeek;
+  }
+
+  const getTodosDueThisWeek = () => {
+    const newArr =  todos.filter(todo =>  !todo.completed && todo.has_due_date && isDateInThisWeek(new Date(todo.due_date)));
+    return newArr.length
+  };
+
+
+  const getCompletedToday = () => {
+    return todos.filter(todo => todo.completed === true).length
+  }
+
+  const dateExists = (date) => {
+    if (Object.keys(date).length === 0){
+      return false
+    }else{
+      return true
+    }
+  }
+  const getDueToday = () => {
+
+    const newArr = todos.filter(todo => todo.completed===false && todo.has_due_date===true && isToday(todo.due_date)===true)
+  //  console.log(newArr)
+    const amount =  newArr.length
+  //  console.log(amount)
+    return amount
+  }
 
   useEffect(() => {
     const date = new Date();
@@ -104,9 +162,9 @@ export default function Activity() {
             <Text style={styles.summary}>Summary</Text>
       {/* Replace the summary section with SummarySection */}
       <SummarySection
-        completedToday={completedToday}
-        dueToday={dueToday}
-        dueThisWeek={dueThisWeek}
+        completedToday={getCompletedToday()}
+        dueToday={getDueToday()}
+        dueThisWeek={getTodosDueThisWeek()}
       />
 
       {/* if streak is null or 0,  display,  set task or complete daily goal to begin streak   */}

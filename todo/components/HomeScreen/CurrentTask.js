@@ -64,6 +64,7 @@ currentTask,
                     <TouchableOpacity>
                         <Text style={styles.welcomText} onPress={() => {
                             currentTask.completed = true
+                            currentTask.completion_date = Date.now()
                             updateTodo(currentTask.key, currentTask)
                             setCurrentTask({})
 
