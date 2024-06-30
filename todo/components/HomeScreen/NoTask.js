@@ -61,7 +61,7 @@ export default function NoTask({ setModalVisible, setCurrentTask,  }) {
         <View style={styles.jarContainer}>
           <Pressable
             onPress={() => {
-              if (!checkTodosExist("minutes") === null) {
+              if (checkTodosExist("minutes") === null) {
                 Alert.alert("", "No todos in this category", [
                   { text: "OK", onPress: () => console.log("OK Pressed") },
                 ]);
@@ -82,7 +82,7 @@ export default function NoTask({ setModalVisible, setCurrentTask,  }) {
         <View style={styles.jarContainer}>
           <Pressable
             onPress={() => {
-              if (!checkTodosExist("hours") === null) {
+              if (checkTodosExist("hours") === null) {
                 Alert.alert("", "No todos in this category", [
                   { text: "OK", onPress: () => console.log("OK Pressed") },
                 ]);
@@ -105,7 +105,7 @@ export default function NoTask({ setModalVisible, setCurrentTask,  }) {
 
           <Pressable
             onPress={() => {
-              if (!checkTodosExist("days") === null) {
+              if (checkTodosExist("days") === null) {
                 Alert.alert("", "No todos in this category", [
                   { text: "OK", onPress: () => console.log("OK Pressed") },
                 ]);
