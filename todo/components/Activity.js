@@ -40,33 +40,20 @@ export default function Activity() {
   //let dueThisWeek = 7;
 
   const isToday = (date) => {
-  //  console.log(date)
+    const d = new Date(date)
     const t = new Date();
     const today = new Date(t.setHours(0,0,0,0))
-    const comparison = new Date(date.setHours(0,0,0,0))
-  //  console.log('today', today)
-    // console.log('comparison', comparison)
-    //  console.log(today.getTime()==comparison.getTime())
-    return today.getTime()==comparison.getTime()
-    
+    const comparison = new Date(d.setHours(0,0,0,0))
+    return today.getTime()==comparison.getTime() 
   };
-  // Function to get todos due this week
 
   function isDateInThisWeek(date) {
     const todayObj = new Date();
     const todayDate = todayObj.getDate();
     const todayDay = todayObj.getDay();
-    // get first date of week
     const firstDayOfWeek = new Date(todayObj.setDate(todayDate - todayDay));
-
-    // get last date of week
     const lastDayOfWeek = new Date(firstDayOfWeek);
     lastDayOfWeek.setDate(lastDayOfWeek.getDate() + 6);
-    //console.log('first',firstDayOfWeek)
-    //console.log('last',lastDayOfWeek)
-    //console.log(date >= firstDayOfWeek && date <= lastDayOfWeek)
-
-    //if date is equal or within the first and last dates of the week
     return date >= firstDayOfWeek && date <= lastDayOfWeek;
   }
 
@@ -74,7 +61,6 @@ export default function Activity() {
     const newArr =  todos.filter(todo =>  !todo.completed && todo.has_due_date && isDateInThisWeek(new Date(todo.due_date)));
     return newArr.length
   };
-
 
   const getCompletedToday = () => {
     return todos.filter(todo => todo.completed === true).length
@@ -90,9 +76,7 @@ export default function Activity() {
   const getDueToday = () => {
 
     const newArr = todos.filter(todo => todo.completed===false && todo.has_due_date===true && isToday(todo.due_date)===true)
-  //  console.log(newArr)
     const amount =  newArr.length
-  //  console.log(amount)
     return amount
   }
 

@@ -52,6 +52,7 @@ export default function Minutes() {
                         text={item.text}
                         key={item.key}
                         the_key={item.key}
+                       // todo = {item}
                         completed={item.completed}
                         has_due_date={item.has_due_date}
                         due_date={item.due_date}
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
         //flex: 1,
         // justifyContent: 'flex-start',
         //alignItems: 'center',
-        backgroundColor: '#F5FCFF',
+        backgroundColor: '#b7babd',
     },
     header: {
         marginTop: '15%',

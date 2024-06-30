@@ -3,19 +3,20 @@ import { createTodo, readTodos, deleteTodo, getTodos } from './TodosService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { loadLocalRawResource } from 'react-native-svg';
 
-const TODOS_KEY = 'todos';
+const GOALS_KEY = 'todos';
 // Create a context for theme
-export const TodoContext = createContext(1);
-
+export const GoalContext = createContext(1);
 // Create a provider component
-export const TodoProvider = ({ children }) => {
+
+
+//
+
+export const GoalProvider = ({ children }) => {
   const [todos, setTodos] = useState([]);
 
   useEffect(() => {
     //DELETE YESTERDAYS TODOS ON INITIAL COMPONENT MOUNT IF COMPLETED AND COMPLETION DATE WAS YESTER
-    
     clearAsyncStorage();
-
    // removeTodosCompletedBeforeToday()
    // console.log('loaded todos', todos)
   }, []);

@@ -8,7 +8,7 @@ import {
     Text,
     Pressable
 } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 
@@ -33,10 +33,11 @@ import {
 } from 'firebase/database';
 import { db } from "./firebase.js"
 
-export default function AddTask({ setModalVisible, todos}) {
+import { TodoContext } from './TodoContext';
+
+export default function Jars() {
     const [taskType, setTaskType] = useState('');
     //const [jar, setJar] = useState('');
-
     const [value, setValue] = useState('');
     const [date, setDate] = useState(new Date())
     const [time, setTime] = useState(new Date())
@@ -44,28 +45,52 @@ export default function AddTask({ setModalVisible, todos}) {
     const [showTime, setShowTime] = useState(false)
 
 
+    const { todos, addTodo, removeTodo, toggleTodoCompleted } = useContext(TodoContext);
 
+    const isToday = (date) => {
+        const d = new Date(date)
+        const t = new Date();
+        const today = new Date(t.setHours(0, 0, 0, 0))
+        const comparison = new Date(d.setHours(0, 0, 0, 0))
+        return today.getTime() == comparison.getTime()
+    };
 
+    function isDateInThisWeek(date) {
+        const todayObj = new Date();
+        const todayDate = todayObj.getDate();
+        const todayDay = todayObj.getDay();
+        const firstDayOfWeek = new Date(todayObj.setDate(todayDate - todayDay));
+        const lastDayOfWeek = new Date(firstDayOfWeek);
+        lastDayOfWeek.setDate(lastDayOfWeek.getDate() + 6);
+        return date >= firstDayOfWeek && date <= lastDayOfWeek;
+    }
 
-const tasksDueToday = async (taskType) => {
-    const todo = todos.find(todo => todo.key === key);
-   //if (todo) {
-        // todo.completed = true
-       updateTodo(key, { completed: !todo.completed });
-       const index = todos.findIndex(todo => todo.key === key);
-       todos[index] = { ...todos[index], ...{ completed: !todo.completed } };
-       setTodos(todos.filter(todo => todo.key !== key));
-   // }
-};
+    const getTodosDueThisWeek = () => {
+        const newArr = todos.filter(todo => !todo.completed && todo.has_due_date && isDateInThisWeek(new Date(todo.due_date)));
+        return newArr.length
+    };
 
-//cons tasksInJar = async ()
+    const getCompletedToday = () => {
+        return todos.filter(todo => todo.completed === true).length
+    }
 
+    const dateExists = (date) => {
+        if (Object.keys(date).length === 0) {
+            return false
+        } else {
+            return true
+        }
+    }
+
+    const getDueToday = () => {
+        const newArr = todos.filter(todo => todo.completed === false && todo.has_due_date === true && isToday(todo.due_date) === true)
+        const amount = newArr.length
+        return amount
+    }
 
 
     if (Object.keys(taskType).length === 0) {
         return (
-
-
             <View style={styles.screen}>
                 <View style={styles.topBar}>
                     <Text style={styles.buttonText}>My Tasks</Text>
@@ -84,26 +109,26 @@ const tasksDueToday = async (taskType) => {
                     <Entypo name='chevron-right' style={styles.icon} size={30} />
                 </TouchableOpacity>
                 <View style={styles.taskTypeDisplay}>
-
-                 {/*   <View>
-                        <Text>
-Tasks due today
-                        </Text>
-
-                        <Text>
-Completed tasks
-                        </Text>
-                        <Text>
-Tasks in jar
-                        </Text>
-                       
+                    <View style={styles.taskNumberContainers}>
+                        <View style={styles.taskNumberContainer}>
+                            <View style={styles.dayEllipse}>
+                                <Text style={styles.taskNumber}>{todos.filter(todo => todo.task_type === 'hours').length}</Text>
+                            </View>
+                            <Text style={styles.taskText}>Tasks in jar</Text>
+                        </View>
+                        <View style={styles.taskNumberContainer}>
+                            <View style={styles.dayEllipse}>
+                                <Text style={styles.taskNumber}>{todos.filter(todo => todo.task_type === 'hours').length}</Text>
+                            </View>
+                            <Text style={styles.taskText}>Tasks due today</Text>
+                        </View>
+                        <View style={styles.taskNumberContainer}>
+                            <View style={styles.dayEllipse}>
+                                <Text style={styles.taskNumber}>{todos.filter(todo => todo.task_type === 'hours').length}</Text>
+                            </View>
+                            <Text style={styles.taskText}>Tasks due this week</Text>
+                        </View>
                     </View>
-
-                    <View>
-
-        </View>*/}
-
-                    <Text>Interesting facts go here</Text>
                 </View>
                 <TouchableOpacity style={styles.jarHeader} onPress={() => setTaskType('days')}>
                     <Entypo name='calendar' style={[styles.icon, taskType === 'days' && styles.activeText]} size={40} />
@@ -126,9 +151,9 @@ Tasks in jar
                     <Text style={styles.buttonText}>Minutes Jar
                     </Text>
 
-                   
-                        <Text style={styles.buttonText}></Text>
-                    
+
+                    <Text style={styles.buttonText}></Text>
+
                 </View>
                 <Minutes />
             </View>
@@ -137,26 +162,20 @@ Tasks in jar
     } else if (taskType === 'hours') {
         return (
             <View>
-            <View style={styles.topBar}>
+                <View style={styles.topBar}>
                     <TouchableOpacity onPress={() => setTaskType("")}>
                         <Entypo name='chevron-left' size={30} />
                     </TouchableOpacity>
-
-                    <Text style={styles.buttonText}>Hours Jar
-                    </Text>
-
-                   
-                        <Text style={styles.buttonText}></Text>
-                    
+                    <Text style={styles.buttonText}>Hours Jar</Text>
+                    <Text style={styles.buttonText}></Text>
                 </View>
-
-            <Hours />
+                <Hours />
             </View>
         );
     } else if (taskType === 'days') {
         return (
             <View>
-            <View style={styles.topBar}>
+                <View style={styles.topBar}>
                     <TouchableOpacity onPress={() => setTaskType("")}>
                         <Entypo name='chevron-left' size={30} />
                     </TouchableOpacity>
@@ -164,21 +183,20 @@ Tasks in jar
                     <Text style={styles.buttonText}>Days Jar
                     </Text>
 
-                   
-                        <Text style={styles.buttonText}></Text>
-                    
+
+                    <Text style={styles.buttonText}></Text>
+
                 </View>
-            <Days />
+                <Days />
             </View>
         );
     }
-    
+
 }
 
 const styles = StyleSheet.create({
-
     taskTypeDisplay: {
-        backgroundColor: "#48249c",
+        backgroundColor: "#b7babd",
         textAlign: 'center',
         borderRadius: 20,
         marginBottom: 10,
@@ -195,7 +213,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-
+    taskNumberContainers: {
+        flexDirection: "row",
+        justifyContent: "flex-start",
+    },
     jarHeader: {
         flexDirection: 'row',
     },
@@ -239,7 +260,69 @@ const styles = StyleSheet.create({
         textShadow: 'rgba(240, 240, 240, 0.47)'
     },
 
-
+    remainingTasksContainer: {
+        width: "100%",
+        padding: 16,
+        borderColor: "black",
+        borderWidth: 1,
+        borderRadius: 10,
+    },
+    header: {
+        fontSize: 16,
+        fontWeight: "bold",
+        marginBottom: 8,
+    },
+    taskNumberContainers: {
+        flexDirection: "row",
+        justifyContent: "flex-start",
+    },
+    taskNumberContainer: {
+        alignItems: "center",
+        marginRight: 16,
+    },
+    minuteEllipse: {
+        width: 44,
+        height: 44,
+        backgroundColor: "rgba(255, 38, 246, 0.75)",
+        borderRadius: 22,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    hourEllipse: {
+        width: 44,
+        height: 44,
+        backgroundColor: "#9D6AF0",
+        borderRadius: 22,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    dayEllipse: {
+        width: 44,
+        height: 44,
+        backgroundColor: "#7DA1FD",
+        borderRadius: 22,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    taskNumber: {
+        color: "black",
+        fontSize: 24,
+        fontWeight: "bold",
+    },
+    taskText: {
+        width: 70,
+        textAlign: "center",
+        color: "black",
+    },
+    arrowContainer: {
+        marginLeft: "auto",
+    },
+    finishedText: {
+        fontSize: 16,
+        textAlign: "center",
+        fontStyle: "italic",
+        marginTop: 20,
+    },
 
     screen: {
         //flex: 1,
