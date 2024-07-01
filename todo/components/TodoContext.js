@@ -114,20 +114,6 @@ export const TodoProvider = ({ children }) => {
     } catch (e) {
       console.error('Failed to update the todo in storage', e);
     }
-
-/*
-    try {
-      const index = todos.findIndex(todo => todo.key === key);
-      if (index !== -1) {
-        todos[index] = { ...todos[index], ...updatedTodo };
-        const jsonValue = JSON.stringify(todos);
-        setTodos(todos)
-        // console.log('updates', todos)
-        await AsyncStorage.setItem(TODOS_KEY, jsonValue);
-      }
-    } catch (e) {
-      console.error('Failed to update the todo in storage', e);
-    }*/
   };
 
   const makeProgressDayTask = async (key, updatedTodo) => {

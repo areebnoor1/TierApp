@@ -1,14 +1,34 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 
+import { GoalContext } from "../DailyGoalContext";
+
+
+
 export default function RemainingTasks() {
-  let minutesTasksLeft = 1;
-  let hoursTasksLeft = 1;
-  let daysTasksLeft = 3;
+ 
 
   // Check if any tasks are left
   const hasRemainingTasks = minutesTasksLeft > 0 || hoursTasksLeft > 0 || daysTasksLeft > 0;
+
+  const { todos, addTodo, removeTodo, toggleTodoCompleted } = useContext(TodoContext);
+  const { goal, goalExists, updateGoal } = useContext(GoalContext);
+
+
+
+
+ const minutesTasksLeft = () =>{
+//return return todos.filter(todo => todo.completed === true).length
+ };
+ const hoursTasksLeft = () =>{
+ }
+ const daysTasksLeft = () =>{
+
+ }
+
+
+
 
   return (
 
