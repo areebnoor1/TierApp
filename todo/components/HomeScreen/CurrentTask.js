@@ -14,22 +14,37 @@ export default function CurrentTask({ visible, currentTask, setCurrentTask }) {
   const { toggleTodoCompleted } = useContext(TodoContext);
   const [modalVisible, setModalVisible] = useState(false);
   const translateY = useState(new Animated.Value(-windowHeight))[0];
+  const opacity = useState(new Animated.Value(0))[0];
 
   const openModal = () => {
     setModalVisible(true);
-    Animated.timing(translateY, {
-      toValue: -200,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
+    Animated.parallel([
+      Animated.timing(translateY, {
+        toValue: -200,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+      Animated.timing(opacity, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+    ]).start();
   };
 
   const closeModal = () => {
-    Animated.timing(translateY, {
-      toValue: -windowHeight,
-      duration: 300,
-      useNativeDriver: true,
-    }).start(() => setModalVisible(false));
+    Animated.parallel([
+      Animated.timing(translateY, {
+        toValue: -windowHeight,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+      Animated.timing(opacity, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+    ]).start(() => setModalVisible(false));
   };
 
   const handleFinishTask = async () => {
@@ -65,8 +80,14 @@ export default function CurrentTask({ visible, currentTask, setCurrentTask }) {
             <Text style={styles.taskText}>{currentTask.text}</Text>
           </ScrollView>
 
+          {/* Overlay to darken background */}
+          {modalVisible && (
+            <Animated.View style={[styles.overlay, { opacity }]} />
+          )}
+
+          {/* Animated modal */}
           <Animated.View style={[styles.modalContainer, { transform: [{ translateY }] }]}>
-            <View style={styles.modalContent}>
+            <View style={currentTask.task_type === 'days' ? styles.modalContentDay : styles.modalContent}>
               <View style={styles.closeIconContainer}>
                 <TouchableOpacity onPress={() => setCurrentTask({})}>
                   <FontAwesome name="close" style={styles.closeIcon} size={40} />
@@ -83,11 +104,15 @@ export default function CurrentTask({ visible, currentTask, setCurrentTask }) {
                     });
                   }}
                 >
-                  <Text>Made progress</Text>
+                  <Text style={styles.madeProgressButton}>Made Progress</Text>
                 </TouchableOpacity>
               )}
               <View style={styles.modalItem}>
-                <TouchableOpacity onPress={completeTask}>
+                <TouchableOpacity onPress={() => {
+                  toggleTodoCompleted(currentTask.key);
+                  setCurrentTask({});
+                  navigation.navigate("Activity");
+                }}>
                   <Text style={styles.finishedTaskButton}>Finished Task</Text>
                 </TouchableOpacity>
               </View>
@@ -108,17 +133,18 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
   },
   exitTaskArrow: {
     position: "absolute",
     bottom: 70,
     alignItems: 'flex-end',
+    right: 40,
   },
   curTask: {
     backgroundColor: "white",
     padding: 24,
-    height: 400,
+    height: 450,
   },
   welcomeText: {
     fontSize: 32,
@@ -150,7 +176,16 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "white",
     padding: 20,
-    height: 400,
+    height: 300,
+  },
+  modalContentDay: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    backgroundColor: "white",
+    padding: 20,
+    height: 400, // Adjust the height as needed for days tasks
   },
   closeIconContainer: {
     alignItems: "flex-start",
@@ -159,7 +194,8 @@ const styles = StyleSheet.create({
   modalItem: {
     alignItems: "center",
     width: "100%",
-    marginVertical: 10,
+    marginVertical: 20,
+
   },
   closeIcon: {
     alignSelf: "flex-start",
@@ -169,10 +205,25 @@ const styles = StyleSheet.create({
   finishedTaskButton: {
     backgroundColor: "black",
     color: "white",
-    borderRadius: 8,
+    borderRadius: 10,
     padding: 10,
+    width: 220,
     fontSize: 18,
     textAlign: "center",
     marginTop: 10,
+  },
+  madeProgressButton: {
+    backgroundColor: "black",
+    color: "white",
+    borderRadius: 10,
+    padding: 10,
+    width: 220,
+    fontSize: 18,
+    textAlign: "center",
+    marginTop: 10,
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
   },
 });
