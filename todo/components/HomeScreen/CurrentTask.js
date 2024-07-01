@@ -23,6 +23,21 @@ export default function CurrentTask({
         <TouchableOpacity onPress={() => setCurrentTask({})}>
           <FontAwesome name='close' style={styles.icon} size={40} />
         </TouchableOpacity>
+
+
+        {currentTask.task_type === 'days' &&
+          <TouchableOpacity onPress={() => {
+            setCurrentTask({})
+            days_of_progress = "days_made_progress" in currentTask ? currentTask.days_made_progress+1 : 1
+            updateTodo(currentTask.key,{
+              most_recent_day_made_progress: Date.now(), days_made_progress: days_of_progress
+            })
+          }}>
+            <Text>Made progress</Text>
+          </TouchableOpacity>
+        }
+
+
         <TouchableOpacity>
           <Text
             style={styles.welcomText}
@@ -32,8 +47,7 @@ export default function CurrentTask({
              navigation.navigate("Activity"); // Navigate back to the Activity component
             }}
           >
-            Done
-          </Text>
+            Done</Text>
         </TouchableOpacity>
         <Text style={styles.welcomText}>Active task</Text>
         <Text style={{ fontSize: 25, color: 'white' }}>{currentTask.text}</Text>

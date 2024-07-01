@@ -51,7 +51,7 @@ export default function Minutes() {
                     <TodoList
                         text={item.text}
                         key={item.key}
-                       // todo = {item}
+                        todo = {item}
                         the_key={item.key}
                         completed={item.completed}
                         has_due_date={item.has_due_date}
