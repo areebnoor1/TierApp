@@ -45,9 +45,8 @@ export default function CurrentTask({
  return (
    <Modal visible={visible} transparent={true}>
      <View style={styles.screen}>
-       {modalVisible && (
-         <View style={styles.overlay} />
-       )}
+       {modalVisible
+     }
        <TouchableOpacity onPress={openModal}>
          <View style={styles.upArrowContainer}>
            <AntDesign name="upcircle" size={24} color="white" />
@@ -56,11 +55,9 @@ export default function CurrentTask({
 
        <View style={styles.curTask}>
          <TouchableOpacity onPress={() => setCurrentTask({})}>
-           <FontAwesome name="close" style={styles.icon} size={40} />
+           <FontAwesome name="close" style={styles.exitIcon} size={40} />
          </TouchableOpacity>
-         <TouchableOpacity onPress={handleFinishTask}>
-           <Text style={styles.welcomeText}>Done</Text>
-         </TouchableOpacity>
+
          <Text style={styles.welcomeText}>Active task</Text>
          <Text style={{ fontSize: 25, color: 'white', marginBottom: 20 }}>{currentTask.text}</Text>
 
@@ -72,14 +69,15 @@ export default function CurrentTask({
          </TouchableOpacity>
 
          {/* Custom animated modal */}
+
          <Animated.View style={[styles.modalContainer, { transform: [{ translateY }] }]}>
            <View style={styles.modalContent}>
-             <TouchableOpacity onPress={handleFinishTask}>
-               <Text style={styles.modalButton}>Finished</Text>
-             </TouchableOpacity>
              <TouchableOpacity onPress={closeModal}>
                <FontAwesome name="close" size={24} color="black" />
              </TouchableOpacity>
+                      <TouchableOpacity onPress={() => setCurrentTask({})}>
+                        <FontAwesome name="close" style={styles.exitIcon} size={40} />
+                      </TouchableOpacity>
              <TouchableOpacity onPress={closeModal}>
                <AntDesign name="downcircleo" size={24} color="black" />
              </TouchableOpacity>
@@ -95,24 +93,20 @@ const styles = StyleSheet.create({
  screen: {
    flex: 1,
    justifyContent: 'center',
-   backgroundColor: '#000',
- },
- overlay: {
-   ...StyleSheet.absoluteFillObject,
-   backgroundColor: 'rgba(0, 0, 0, 0.1)',
+   backgroundColor: 'rgba(0, 0, 0, 0.7)',
  },
  curTask: {
-   backgroundColor: '#333',
+   backgroundColor:  '#EBEBEB',
    padding: 20,
    borderRadius: 10,
  },
- icon: {
-   color: 'white',
+ exitIcon: {
+   color: 'black',
    marginBottom: 10,
  },
  welcomeText: {
    fontSize: 20,
-   color: 'white',
+   color: 'black',
    textAlign: 'center',
    marginBottom: 10,
  },
@@ -123,23 +117,18 @@ const styles = StyleSheet.create({
    right: 0,
    justifyContent: 'flex-start',
    alignItems: 'center',
-   backgroundColor: "red",
+  // backgroundColor: "red",
  },
  modalContent: {
    width: '100%',
    height: windowHeight / 3,
-   backgroundColor: '#EBEBEB',
+  backgroundColor: '#F5FCFF',
    padding: 20,
    alignItems: 'center',
  },
- modalButton: {
-   fontSize: 18,
-   color: '#000',
-   marginBottom: 10,
- },
  upArrowContainer: {
      position: "absolute",
-     bottom: 20,
+     bottom: 50,
      right: 20,
  }
 });
