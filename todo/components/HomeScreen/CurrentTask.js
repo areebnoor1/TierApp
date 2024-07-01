@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Animated, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Animated, Dimensions, Modal } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { updateTodo } from '../TodosService';
 import { useNavigation } from '@react-navigation/native';
@@ -8,6 +8,7 @@ import { AntDesign } from '@expo/vector-icons';
 const windowHeight = Dimensions.get('window').height;
 
 export default function CurrentTask({
+  visible,
   currentTask,
   setCurrentTask,
 }) {
@@ -16,12 +17,12 @@ export default function CurrentTask({
   const translateY = useState(new Animated.Value(-windowHeight))[0];
 
   const openModal = () => {
+    setModalVisible(true);
     Animated.timing(translateY, {
-      toValue: 0,
+      toValue: -windowHeight / 3,
       duration: 300,
       useNativeDriver: true,
     }).start();
-    setModalVisible(true);
   };
 
   const closeModal = () => {
@@ -42,37 +43,51 @@ export default function CurrentTask({
   };
 
   return (
-    <View style={styles.screen}>
-      <View style={styles.curTask}>
-        <TouchableOpacity onPress={() => setCurrentTask({})}>
-          <FontAwesome name="close" style={styles.icon} size={40} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleFinishTask}>
-          <Text style={styles.welcomeText}>Done</Text>
-        </TouchableOpacity>
-        <Text style={styles.welcomeText}>Active task</Text>
-        <Text style={{ fontSize: 25, color: 'white', marginBottom: 20 }}>{currentTask.text}</Text>
+    <Modal visible={visible} transparent={true}>
+      <View style={styles.screen}>
+        {modalVisible && (
+          <View style={styles.overlay} />
+        )}
+                  <TouchableOpacity onPress={openModal}>
+                  <View style={styles.upArrowContainer}>
+                    <AntDesign name="upcircle" size={24} color="white" />
+                    </View>
+                  </TouchableOpacity>
 
-        {/* Arrow icon to open modal */}
-        <TouchableOpacity onPress={openModal}>
-           <AntDesign name="downcircleo" size={24} color="black" />
-        </TouchableOpacity>
+        <View style={styles.curTask}>
+          <TouchableOpacity onPress={() => setCurrentTask({})}>
+            <FontAwesome name="close" style={styles.icon} size={40} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleFinishTask}>
+            <Text style={styles.welcomeText}>Done</Text>
+          </TouchableOpacity>
+          <Text style={styles.welcomeText}>Active task</Text>
+          <Text style={{ fontSize: 25, color: 'white', marginBottom: 20 }}>{currentTask.text}</Text>
 
-        {/* Custom animated modal */}
-        <Animated.View style={[styles.modalContainer, { transform: [{ translateY }] }]}>
-          <TouchableOpacity style={styles.modalBackground} onPress={closeModal} />
-          <View style={styles.modalContent}>
-            <TouchableOpacity onPress={handleFinishTask}>
-              <Text style={styles.modalButton}>Finished task</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={closeModal}>
+          {/* Arrow icon to open modal */}
+          <TouchableOpacity onPress={openModal}>
+          <View style={styles.upArrowContainer}>
+            <AntDesign name="upcircle" size={24} color="white" />
+            </View>
+          </TouchableOpacity>
 
-               <AntDesign name="upcircle" size={24} color="black" />
-            </TouchableOpacity>
-          </View>
-        </Animated.View>
+          {/* Custom animated modal */}
+          <Animated.View style={[styles.modalContainer, { transform: [{ translateY }] }]}>
+            <View style={styles.modalContent}>
+              <TouchableOpacity onPress={handleFinishTask}>
+                <Text style={styles.modalButton}>Finished</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={closeModal}>
+                <FontAwesome name="close" size={24} color="black" />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={closeModal}>
+                <AntDesign name="downcircleo" size={24} color="black" />
+              </TouchableOpacity>
+            </View>
+          </Animated.View>
+        </View>
       </View>
-    </View>
+    </Modal>
   );
 }
 
@@ -82,6 +97,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#000',
     padding: 20,
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   curTask: {
     backgroundColor: '#333',
@@ -95,22 +114,20 @@ const styles = StyleSheet.create({
   welcomeText: {
     fontSize: 20,
     color: 'white',
-    textAlign: 'center/',
+    textAlign: 'center',
     marginBottom: 10,
   },
   modalContainer: {
     ...StyleSheet.absoluteFillObject,
-    justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalBackground: {
-    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
   },
   modalContent: {
-    backgroundColor: '#fff',
-    //padding: 20,
-   // borderTopLeftRadius: 20,
-  //  borderTopRightRadius: 20,
+    width: '100%',
+    height: windowHeight / 3,
+    backgroundColor: '#EBEBEB',
+    borderRadius: 10,
+    padding: 20,
     alignItems: 'center',
   },
   modalButton: {
@@ -118,4 +135,9 @@ const styles = StyleSheet.create({
     color: '#000',
     marginBottom: 10,
   },
+  upArrowContainer: {
+      position: "absolute",
+      bottom: 20,
+      right: 20,
+  }
 });
