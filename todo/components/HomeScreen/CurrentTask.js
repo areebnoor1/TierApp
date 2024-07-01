@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Animated, Dimensions, Modal } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Animated, Dimensions, Modal, ScrollView} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { updateTodo } from '../TodosService';
 import { useNavigation } from '@react-navigation/native';
 import { AntDesign } from '@expo/vector-icons';
-
+import VerticalLine from "../SVGicons/VerticalLine";
 const windowHeight = Dimensions.get('window').height;
 
 export default function CurrentTask({
@@ -41,45 +41,54 @@ export default function CurrentTask({
    closeModal(); // Close modal after finishing task
    navigation.navigate('Activity'); // Navigate back to the Activity component
  };
+  const completeTask = async () => {
+    currentTask.completed = true;
+    currentTask.completion_date = Date.now();
+    await updateTodo(currentTask.key, currentTask);
+    setCurrentTask({});
+    navigation.navigate("Activity"); // Navigate back to the Activity component
+  };
 
  return (
    <Modal visible={visible} transparent={true}>
      <View style={styles.screen}>
-       {modalVisible
-     }
-       <TouchableOpacity onPress={openModal}>
-         <View style={styles.upArrowContainer}>
-           <AntDesign name="upcircle" size={24} color="white" />
-         </View>
-       </TouchableOpacity>
+
+       {/* remove later*/}
+              <TouchableOpacity onPress={() => setCurrentTask({})}>
+                <FontAwesome name="close" style={styles.exitIcon} size={40} />
+              </TouchableOpacity>
+
+ {/* opens the exit task modal. Should be positioned absolute somewhere above taskcard.*/}
+        <TouchableOpacity onPress={openModal}>
+           <View style={styles.exitTaskArrow}>
+             <AntDesign name="downcircle" size={24} color="white" />
+           </View>
+        </TouchableOpacity>
 
        <View style={styles.curTask}>
-         <TouchableOpacity onPress={() => setCurrentTask({})}>
-           <FontAwesome name="close" style={styles.exitIcon} size={40} />
-         </TouchableOpacity>
+              {/* */}
+ <ScrollView style={styles.scroll}>
+         <Text style={styles.welcomeText}>Active Task</Text>
+         <VerticalLine/>
 
-         <Text style={styles.welcomeText}>Active task</Text>
-         <Text style={{ fontSize: 25, color: 'white', marginBottom: 20 }}>{currentTask.text}</Text>
+         <Text style={styles.taskText}>{currentTask.text}</Text>
 
-         {/* Arrow icon to open modal */}
-         <TouchableOpacity onPress={openModal}>
-           <View style={styles.upArrowContainer}>
-             <AntDesign name="upcircle" size={24} color="white" />
-           </View>
+  </ScrollView>
+
+   {/* Done button to move to modal*/}
+         <TouchableOpacity onPress={completeTask}>
+           <Text style={styles.welcomeText}>Done</Text>
          </TouchableOpacity>
 
          {/* Custom animated modal */}
 
          <Animated.View style={[styles.modalContainer, { transform: [{ translateY }] }]}>
            <View style={styles.modalContent}>
-             <TouchableOpacity onPress={closeModal}>
-               <FontAwesome name="close" size={24} color="black" />
-             </TouchableOpacity>
                       <TouchableOpacity onPress={() => setCurrentTask({})}>
                         <FontAwesome name="close" style={styles.exitIcon} size={40} />
                       </TouchableOpacity>
              <TouchableOpacity onPress={closeModal}>
-               <AntDesign name="downcircleo" size={24} color="black" />
+                 <AntDesign name="upcircle" size={24} color="black" />
              </TouchableOpacity>
            </View>
          </Animated.View>
@@ -96,19 +105,34 @@ const styles = StyleSheet.create({
    backgroundColor: 'rgba(0, 0, 0, 0.7)',
  },
  curTask: {
-   backgroundColor:  '#EBEBEB',
-   padding: 20,
-   borderRadius: 10,
+   backgroundColor:  "white", //'#EBEBEB',
+   padding: 24,
+   //borderRadius: 10,
+     //width: "100%",
+       height: 400,
+ },
+ taskCard: {
+    position: "absolute",
+    width: 360,
+    height: 467,
+    left: 0,
+    top: 133,
+
  },
  exitIcon: {
    color: 'black',
    marginBottom: 10,
  },
  welcomeText: {
-   fontSize: 20,
-   color: 'black',
-   textAlign: 'center',
+   fontSize: 32,
+   color: '#BEBEBE',
+   textAlign: 'left',
    marginBottom: 10,
+ },
+ taskText: {
+ fontSize: 24,
+ color: 'black',
+ marginBottom: 20,
  },
  modalContainer: {
    position: 'absolute',
@@ -128,7 +152,21 @@ const styles = StyleSheet.create({
  },
  upArrowContainer: {
      position: "absolute",
-     bottom: 50,
-     right: 20,
- }
+    // bottom: 50,
+    // right: 20,
+ },
+ //should be positioned above taskcard
+ exitTaskArrow: {
+      //position: "absolute",
+     // bottom: 50,
+    //  right: 20,
+  //  marginBottom: 20,
+   alignItems: 'flex-end',
+  //position: "absolute",
+ // left: 286,
+ // top: 96,
+ },
+   scroll: {
+     marginTop: 16,
+   },
 });
