@@ -12,22 +12,37 @@ export default function CurrentTask({ visible, currentTask, setCurrentTask }) {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const translateY = useState(new Animated.Value(-windowHeight))[0];
+  const opacity = useState(new Animated.Value(0))[0];
 
   const openModal = () => {
     setModalVisible(true);
-    Animated.timing(translateY, {
-      toValue: -200,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
+    Animated.parallel([
+      Animated.timing(translateY, {
+        toValue: -200,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+      Animated.timing(opacity, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+    ]).start();
   };
 
   const closeModal = () => {
-    Animated.timing(translateY, {
-      toValue: -windowHeight,
-      duration: 300,
-      useNativeDriver: true,
-    }).start(() => setModalVisible(false));
+    Animated.parallel([
+      Animated.timing(translateY, {
+        toValue: -windowHeight,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+      Animated.timing(opacity, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+    ]).start(() => setModalVisible(false));
   };
 
   const handleFinishTask = async () => {
@@ -65,6 +80,9 @@ export default function CurrentTask({ visible, currentTask, setCurrentTask }) {
           </ScrollView>
 
           {/* Custom animated modal */}
+          {modalVisible && (
+            <Animated.View style={[styles.overlay, { opacity }]} />
+          )}
           <Animated.View style={[styles.modalContainer, { transform: [{ translateY }] }]}>
             <View style={styles.modalContent}>
               <View style={styles.closeIconContainer}>
@@ -85,8 +103,6 @@ export default function CurrentTask({ visible, currentTask, setCurrentTask }) {
                   <AntDesign name="upcircle" size={40} color="black" />
                 </TouchableOpacity>
               </View>
-
-
             </View>
           </Animated.View>
           {/* end Custom animated modal */}
@@ -100,6 +116,10 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     justifyContent: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
   },
   // should be positioned above curTask
@@ -138,8 +158,9 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
+    //justifyContent: "center",
+    //alignItems: "center",
+    alignItems: "space-evenly",
     width: "100%",
     backgroundColor: "white",
     padding: 20,
@@ -148,14 +169,16 @@ const styles = StyleSheet.create({
   closeIconContainer: {
     alignItems: "flex-start",
     width: "100%",
+   // backgroundColor: "red",
   },
   modalItem: {
     alignItems: "center",
     width: "100%",
     marginVertical: 10,
+    marginBottom: 10,
   },
   closeIcon: {
-    alignSelf: "flex-start",
+   // alignSelf: "flex-start",
     color: 'black',
     marginBottom: 10,
   },
@@ -167,10 +190,5 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: "center",
     marginTop: 10,
-  },
-  modalSetOpacity: {
-  position: "absolute",
-       height: 1000,
-       backgroundColor: 'rgba(0, 0, 0, 0.7)',
   },
 });
