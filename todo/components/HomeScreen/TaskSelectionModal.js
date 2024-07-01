@@ -75,7 +75,7 @@ const { todos } = useContext(TodoContext);
                 setTaskSelectionVisible(false)
               }
               }>
-                {!item.completed &&
+                {!item.completed && item.task_type === taskType &&
                   <TodoListButton
                     text={item.text}
                     key={item.key}

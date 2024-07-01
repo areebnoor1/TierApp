@@ -31,8 +31,8 @@ import { TodoContext } from './TodoContext';
 export default function EditTask({ setModalVisible, task, deleteOldTodo }) {
   const [taskType, setTaskType] = useState(task.task_type);
   const [value, setValue] = useState(task.text);
-  const [date, setDate] = useState(Object.keys(task.due_date).length === 0 ? {} : new Date(task.due_date));
-  const [showDate, setShowDate] = useState(Object.keys(task.due_date).length === 0 ? false : true);
+  const [date, setDate] = useState(task.has_due_date ? new Date(task.due_date): {});
+  const [showDate, setShowDate] = useState(task.has_due_date);
 
   const { todos, addTodo, removeTodo, toggleTodoCompleted, updateTodo } = useContext(TodoContext);
 
@@ -55,7 +55,7 @@ export default function EditTask({ setModalVisible, task, deleteOldTodo }) {
         <Text style={styles.buttonText}>Edit task</Text>
         <TouchableOpacity onPress={() => {
           updateTodo(task.key, {
-            text: value, key: task.key, completed: false, task_type: taskType, date_set: showDate, due_date: date
+            text: value, key: task.key, completed: false, task_type: taskType, has_due_date: showDate, due_date: date
           })
           setModalVisible(false)
         }}>

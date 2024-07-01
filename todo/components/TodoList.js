@@ -8,13 +8,19 @@ import {
 	TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
-import  {TodoContext}  from './TodoContext';
+import { TodoContext } from './TodoContext';
 import { format } from "date-fns";
 
 export default function TodoList(props) {
 	const { todos, addTodo, removeTodo, toggleTodoCompleted } = useContext(TodoContext);
 
-	const[completed, setCompleted] = useState(false)
+	const [completed, setCompleted] = useState(false)
+
+	const formatDate = (date) => {
+		const options = { month: 'long', day: 'numeric' };
+		const formattedDate = date.toLocaleDateString('en-US', options);
+	}
+
 
 	return (
 		<View style={styles.listContainer}>
@@ -23,24 +29,37 @@ export default function TodoList(props) {
 				size={25}
 				color='black'
 				style={{ marginLeft: 15 }}
-				onPress={()=>{
+				onPress={() => {
 					setCompleted(!completed)
-					toggleTodoCompleted(props.the_key)}}
+					toggleTodoCompleted(props.the_key)
+				}}
 			/>
 			<Icon
 				name={'edit'}
 				size={25}
 				color='black'
 				style={{ marginLeft: 15 }}
-				onPress={()=>{
+				onPress={() => {
 					props.editMe()
-				
+
 				}}
 			/>
 			<View >
+
 				<Text style={styles.listItem}>{props.text}</Text>
+
+				{"days_made_progress" in props.todo &&
+					<View>
+						<Text> Last day made progress: {format(props.todo.most_recent_day_made_progress, "eeee, MMMM do")} </Text>
+						<Text> Number of progress sessions: {props.todo.days_made_progress} </Text>
+					</View>
+			}
+
+
+
+
 				{props.has_due_date &&
-				<Text style={styles.dateText}>{format(props.due_date, "eeee, MMMM do, HH:mm")}</Text>}
+					<Text style={styles.dateText}>{format(props.due_date, "eeee, MMMM do, HH:mm")}</Text>}
 			</View>
 			<Icon
 				name="trash-2"

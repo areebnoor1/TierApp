@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Modal,
   View,
@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
+import { GoalContext } from "../DailyGoalContext";
 import { AntDesign } from "@expo/vector-icons";
 
 export default function GoalModal({
@@ -19,6 +20,8 @@ export default function GoalModal({
   const [minutesGoal, setMinutesGoal] = useState("3");
   const [hoursGoal, setHoursGoal] = useState("1");
   const [daysGoal, setDaysGoal] = useState("1");
+
+  const { goal, updateGoal } = useContext(GoalContext);
 
   useEffect(() => {
     if (initialMode === "edit" && initialGoals) {
@@ -33,7 +36,7 @@ export default function GoalModal({
   }, [initialMode, initialGoals]);
 
   const handleSave = () => {
-    onSave({ minutesGoal, hoursGoal, daysGoal });
+    onSave({ minutes: minutesGoal, hours: hoursGoal, days: daysGoal });
     onClose();
   };
 

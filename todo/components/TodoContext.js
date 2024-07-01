@@ -13,11 +13,11 @@ export const TodoProvider = ({ children }) => {
 
   useEffect(() => {
     //DELETE YESTERDAYS TODOS ON INITIAL COMPONENT MOUNT IF COMPLETED AND COMPLETION DATE WAS YESTER
-    
+
     clearAsyncStorage();
 
-   // removeTodosCompletedBeforeToday()
-   // console.log('loaded todos', todos)
+    // removeTodosCompletedBeforeToday()
+    // console.log('loaded todos', todos)
   }, []);
 
 
@@ -30,7 +30,7 @@ export const TodoProvider = ({ children }) => {
     }
   };
 
-  
+
 
   const beforeToday = (date) => {
     const today = new Date();
@@ -100,48 +100,42 @@ export const TodoProvider = ({ children }) => {
 
   const updateTodo = async (key, updatedTodo) => {
     try {
-      const index = todos.findIndex(todo => todo.key === key);
-
-      if (index !== -1) {
-        todos[index] = { ...todos[index], ...updatedTodo };
-        const jsonValue = JSON.stringify(todos);
-        setTodos(todos)
-        // console.log('updates', todos)
-        await AsyncStorage.setItem(TODOS_KEY, jsonValue);
+      new_todos = todos.map(todo => {
+        if (todo.key === key) {
+          return { ...todo, ...updatedTodo };
+        } else {
+          return todo;
+        }
       }
+      )
+      const jsonValue = JSON.stringify(new_todos);
+      setTodos(new_todos)
+      await AsyncStorage.setItem(TODOS_KEY, jsonValue);
     } catch (e) {
       console.error('Failed to update the todo in storage', e);
     }
   };
 
+  const makeProgressDayTask = async (key, updatedTodo) => {
+
+  }
+
   const toggleTodoCompleted = async (key) => {
     try {
-      //  const index = todos.findIndex(todo => todo.key === key);
-
       new_todos = todos.map(todo => {
         if (todo.key === key) {
-          // Create a *new* object with changes
           return { ...todo, completed: !todo.completed, completion_date: Date.now() };
         } else {
-          // No changes
           return todo;
         }
       }
       )
-
-      //    new_todos = { [...todos[index], ...{ completed: !todo.completed, completion_date: Date.now() } ]};
       const jsonValue = JSON.stringify(new_todos);
       setTodos(new_todos)
-      //console.log('updates', new_todos)
       await AsyncStorage.setItem(TODOS_KEY, jsonValue);
-
     } catch (e) {
       console.error('Failed to update the todo in storage', e);
     }
-    //console.log('toggled')
-
-
-    //console.log('posttoggle', todos)
   };
 
 
