@@ -105,6 +105,7 @@ export default function Activity() {
   return (
     <View style={styles.container}>
       <Text style={styles.dateText}>{currentDate}</Text>
+      <ScrollView style={styles.scroll}>
       <View style={styles.streakContainer}>
         {/* If streak is null or 0, display "Set task or complete daily goal to begin streak" */}
         <Text style={styles.streakHeader}>Streak: </Text>
@@ -154,10 +155,19 @@ export default function Activity() {
       {/* if streak is null or 0,  display,  set task or complete daily goal to begin streak   */}
       <Text style={styles.buttonText}>Completed Tasks</Text>
       <View>
-        <ScrollView style={styles.scroll}>
-          {todos.map(
-            (item) =>
-              item.completed && (
+
+          {todos.map((item) =>
+            item.completed ? (
+              <View
+                key={item.key}
+                style={
+                  item.taskType === "minutes"
+                    ? styles.minutesTask
+                    : item.taskType === "hours"
+                    ? styles.hoursTask
+                    : styles.daysTask
+                }
+              >
                 <TodoList
                   text={item.text}
                   key={item.key}
@@ -165,9 +175,9 @@ export default function Activity() {
                   due_date={item.due_date}
                   todoItem={item.completed}
                 />
-              )
+              </View>
+            ) : null
           )}
-        </ScrollView>
       </View>
       <GoalModal
         visible={goalModalVisible}
@@ -176,10 +186,10 @@ export default function Activity() {
         initialMode={goalMode}
         initialGoals={initialGoals}
       />
+             </ScrollView>
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -251,5 +261,19 @@ const styles = StyleSheet.create({
     fontSize: 24,
     justifyContent: "flex-end",
   },
-
+  minutesTask: {
+    backgroundColor: "rgba(255, 38, 246, 0.75)",
+    borderRadius: 5,
+    marginVertical: 5,
+  },
+  hoursTask: {
+    backgroundColor: "#9D6AF0",
+    borderRadius: 5,
+    marginVertical: 5,
+  },
+  daysTask: {
+    backgroundColor: "#7DA1FD",
+    borderRadius: 5,
+    marginVertical: 5,
+  },
 });

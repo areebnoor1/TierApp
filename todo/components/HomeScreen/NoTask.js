@@ -1,18 +1,28 @@
-import React, { useState, useEffect , useContext} from "react";
-import { StyleSheet, View, Text, Pressable, Image, Modal, Alert } from "react-native";
-import JarIcon from "../../components/SVGicons/JarIcon";
+import React, { useState, useContext } from "react";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Pressable,
+  Image,
+  Modal,
+  Alert,
+} from "react-native";
+import MintutesJar from "../SVGicons/MinutesJar";
+import HoursJar from "../SVGicons/HoursJar";
+import DaysJar from "../SVGicons/DaysJar";
 import TaskSelectionModal from "./TaskSelectionModal";
-import RandomTask from './RandomTask';
-import { createTodo, readTodos, updateTodo, deleteTodo } from '../TodosService';
-import  {TodoContext}  from '../TodoContext';
-
-export default function NoTask({ setModalVisible, setCurrentTask,  }) {
+import RandomTask from "./RandomTask";
+import { TodoContext } from "../TodoContext";
+export default function NoTask({ setModalVisible, setCurrentTask }) {
   const [jarModalVisible, setJarModalVisible] = useState(false);
   const [taskSelectionVisible, setTaskSelectionVisible] = useState(false);
-  const [randomTaskSelectionVisible, setRandomTaskSelectionVisible] = useState(false);
+  const [randomTaskSelectionVisible, setRandomTaskSelectionVisible] =
+    useState(false);
   const [selectedJar, setSelectedJar] = useState(null);
 
-  const { todos, addTodo, removeTodo, toggleTodoCompleted } = useContext(TodoContext);
+  const { todos, addTodo, removeTodo, toggleTodoCompleted } =
+    useContext(TodoContext);
   /*useEffect(() => {
     const fetchTodos = async () => {
       const todos = await readTodos();
@@ -23,12 +33,14 @@ export default function NoTask({ setModalVisible, setCurrentTask,  }) {
 
   const checkTodosExist = (taskType) => {
     //console.log('checking', todos)
-    filteredTodos = todos.filter(todo => todo.task_type === taskType && todo.completed === false )
+    filteredTodos = todos.filter(
+      (todo) => todo.task_type === taskType && todo.completed === false
+    );
     //console.log('filteredtodos', filteredTodos)
     if (filteredTodos.length === 0) {
       return null;
     }
-  }
+  };
 
   const openJarModal = (jar) => {
     setSelectedJar(jar);
@@ -42,87 +54,76 @@ export default function NoTask({ setModalVisible, setCurrentTask,  }) {
 
   return (
     <View style={styles.screen}>
-      <Text style={styles.welcomeText}>No tasks active.</Text>
+      <View style={styles.welcomeTextContainer}>
+        <Text style={styles.welcomeTextTitle}>No tasks active.</Text>
+        <Text style={styles.welcomeTextHeader}>
+          Select a jar to get started!
+        </Text>
+      </View>
 
       <View style={styles.jarsContainer}>
         <View style={styles.jarContainer}>
-          <View style={styles.iconTextContainer}>
-            <Pressable
-              onPress={() => {
-                if (checkTodosExist("minutes") === null) {
-                  Alert.alert('', 'No todos in this category', [
-                    { text: 'OK', onPress: () => console.log('OK Pressed') },
-                  ]);
-                } else {
-                  openJarModal("minutes")
-                  setSelectedJar('minutes');
-                  setJarModalVisible(true);
-                }
+          <Pressable
+            onPress={() => {
+              if (checkTodosExist("minutes") === null) {
+                Alert.alert("", "No todos in this category", [
+                  { text: "OK", onPress: () => console.log("OK Pressed") },
+                ]);
+              } else {
+                openJarModal("minutes");
+                setSelectedJar("minutes");
+                setJarModalVisible(true);
               }
-              }
-              style={({ pressed }) => [
-                { opacity: pressed || selectedJar === "minutes" ? 0.6 : 1 },
-              ]}
-            >
-              <JarIcon
-                style={styles.jarIcon}
-                isActive={selectedJar === "minutes"}
-              />
-            </Pressable>
-            <Text style={styles.jarText}>Minutes</Text>
-          </View>
+            }}
+            style={({ pressed }) => [
+              { opacity: pressed || selectedJar === "minutes" ? 0.6 : 1 },
+            ]}
+          >
+            <MintutesJar />
+          </Pressable>
         </View>
 
         <View style={styles.jarContainer}>
-          <View style={styles.iconTextContainer}>
-            <Pressable
-              onPress={() => {
-                if (checkTodosExist("hours") === null) {
-                  Alert.alert('', 'No todos in this category', [
-                    { text: 'OK', onPress: () => console.log('OK Pressed') },
-                  ]);
-                } else {
-                  openJarModal("hours")
-                }
-              }}
-              style={({ pressed }) => [
-                { opacity: pressed || selectedJar === "hours" ? 0.6 : 1 },
-              ]}
-            >
-              <JarIcon
-                style={styles.jarIcon}
-                isActive={selectedJar === "hours"}
-              />
-            </Pressable>
-            <Text style={styles.jarText}>Hours</Text>
-          </View>
+          <Pressable
+            onPress={() => {
+              if (checkTodosExist("hours") === null) {
+                Alert.alert("", "No todos in this category", [
+                  { text: "OK", onPress: () => console.log("OK Pressed") },
+                ]);
+              } else {
+                openJarModal("hours");
+                setSelectedJar("hours");
+                setJarModalVisible(true);
+              }
+            }}
+            style={({ pressed }) => [
+              { opacity: pressed || selectedJar === "hours" ? 0.6 : 1 },
+            ]}
+          >
+            <HoursJar />
+          </Pressable>
         </View>
 
         {/* Container for Days */}
         <View style={styles.jarContainer}>
-          <View style={styles.iconTextContainer}>
-            <Pressable
-              onPress={() => {
-                if (checkTodosExist("days") === null) {
-                  Alert.alert('', 'No todos in this category', [
-                    { text: 'OK', onPress: () => console.log('OK Pressed') },
-                  ]);
-                } else {
-
-                  openJarModal("days")
-                }
-              }}
-              style={({ pressed }) => [
-                { opacity: pressed || selectedJar === "days" ? 0.6 : 1 },
-              ]}
-            >
-              <JarIcon
-                style={styles.jarIcon}
-                isActive={selectedJar === "days"}
-              />
-            </Pressable>
-            <Text style={styles.jarText}>Days</Text>
-          </View>
+          <Pressable
+            onPress={() => {
+              if (checkTodosExist("days") === null) {
+                Alert.alert("", "No todos in this category", [
+                  { text: "OK", onPress: () => console.log("OK Pressed") },
+                ]);
+              } else {
+                openJarModal("days");
+                setSelectedJar("days");
+                setJarModalVisible(true);
+              }
+            }}
+            style={({ pressed }) => [
+              { opacity: pressed || selectedJar === "days" ? 0.6 : 1 },
+            ]}
+          >
+            <DaysJar />
+          </Pressable>
         </View>
       </View>
 
@@ -199,53 +200,67 @@ export default function NoTask({ setModalVisible, setCurrentTask,  }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#48249c",
-    textAlign: "center",
-    borderRadius: 20,
-    marginBottom: 10,
+  screen: {
+    flex: 1,
+    justifyContent: "center", // Center content vertically
     alignItems: "center",
-    padding: 10,
+    margin: 10,
   },
+
+  welcomeTextContainer: {
+    alignItems: "center",
+    justifyContent: "center", // Center content horizontally and vertically
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    marginBottom: 180, // Adjust this value as needed
+  },
+
+  welcomeTextTitle: {
+    fontSize: 36,
+    fontFamily: "Poppins-Bold",
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 10,
+    color: "#48249c",
+  },
+
+  welcomeTextHeader: {
+    marginTop: 20,
+    fontSize: 24,
+    fontFamily: "Poppins-Regular",
+    textAlign: "center",
+    color: "#6a1b9a",
+  },
+
+  jarsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "88%",
+    position: "absolute",
+    bottom: 130,
+  },
+
+  jarContainer: {
+    alignItems: "center",
+  },
+
   addTaskButton: {
     position: "absolute",
     bottom: 20,
     right: 20,
   },
-  screen: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  pressableContainer: {
-    backgroundColor: "#48249c",
-    textAlign: "center",
-    borderRadius: 20,
-    marginBottom: 10,
-    alignItems: "center",
-    padding: 10,
-  },
-  welcomeText: {
-    fontSize: 30,
-    // fontWeight: "bold",
-    fontFamily: "Poppins",
-    textAlign: "center",
-    marginTop: 12,
-    marginBottom: 50,
-  },
-  buttonText: {
-    fontSize: 26,
-    fontWeight: "bold",
-    fontFamily: "Poppins",
-    color: "white",
-    marginBottom: 5,
-  },
+
   modalContainer: {
     padding: 40,
     backgroundColor: "white",
     alignItems: "center",
     justifyContent: "flex-start",
-
     borderRadius: 10,
   },
 
@@ -255,33 +270,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  jarsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    width: "100%",
-    paddingHorizontal: 20,
-  },
-  jarContainer: {
-    alignItems: "center",
-  },
-  iconTextContainer: {
-    position: "relative",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  jarIcon: {
-    width: 145,
-    height: 167,
-  },
-  jarText: {
-    color: "white",
-    fontSize: 16,
+
+  pressableContainer: {
+    backgroundColor: "#48249c",
     textAlign: "center",
-    position: "absolute",
+    borderRadius: 20,
+    marginBottom: 10,
+    alignItems: "center",
+    padding: 10,
+  },
+
+  buttonText: {
+    fontSize: 26,
+    fontWeight: "bold",
+    fontFamily: "Poppins",
+    color: "white",
   },
   selectedJarText: {
     fontSize: 20,
-    fontWeight: "bold",
     fontFamily: "Poppins",
     color: "#48249c",
     marginBottom: 20,
