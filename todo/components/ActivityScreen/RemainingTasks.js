@@ -7,12 +7,12 @@ import { TodoContext } from "../TodoContext";
 
 
 
-export default function RemainingTasks() {
+export default function RemainingTasks({ remaining, minutesTasksLeft, hoursTasksLeft, daysTasksLeft }) {
 
   // Check if any tasks are left
   const { todos, addTodo, removeTodo, toggleTodoCompleted } = useContext(TodoContext);
   const { goal, goalExists, updateGoal, setCompleted } = useContext(GoalContext);
-  const [remaining, setRemaining] = useState(true)
+  //const [remaining, setRemaining] = useState(true)
 
   const isToday = (date) => {
     const d = new Date(date)
@@ -22,29 +22,13 @@ export default function RemainingTasks() {
     return today.getTime() == comparison.getTime()
   };
 
-  const minutesTasksLeft = () => {
-    console.log('minutes left', goal.minutes_tasks - todos.filter(todo => todo.completed === true && todo.task_type === 'minutes').length)
-    return goal.minutes_tasks - todos.filter(todo => todo.completed === true && todo.task_type === 'minutes').length
-  };
-  const hoursTasksLeft = () => {
-    return goal.hours_tasks - todos.filter(todo => todo.completed === true && todo.task_type === 'hours').length
-  }
-  const daysTasksLeft = () => {
-    return goal.days_tasks - todos.filter(todo => todo.task_type === 'days' && (todo.completed === true || isToday(todo.most_recent_day_made_progress))).length
-  }
 
-  const hasRemainingTasks = () => {
-    if (!('last_day_completed' in goal) && minutesTasksLeft() === 0 && hoursTasksLeft() === 0 && daysTasksLeft() === 0) {
-      setCompleted()
-    } else if ('last_day_completed' in goal && !isToday(goal.last_day_completed) && minutesTasksLeft() === 0 && hoursTasksLeft() === 0 && daysTasksLeft() === 0) {
-      setCompleted()
-    }
-    return minutesTasksLeft() > 0 || hoursTasksLeft() > 0 || daysTasksLeft() > 0
-  };
 
 
   useEffect(() => {
-    setRemaining(hasRemainingTasks())
+   // r = hasRemainingTasks()
+    //console.log('remaining', r)
+   // setRemaining(r)
 
   }, [])
 
@@ -56,28 +40,28 @@ export default function RemainingTasks() {
           <Text style={styles.header}>Remaining Tasks:</Text>
 
           <View style={styles.taskNumberContainers}>
-            {minutesTasksLeft() > 0 && (
+            {minutesTasksLeft > 0 && (
               <View style={styles.taskNumberContainer}>
                 <View style={styles.minuteEllipse}>
-                  <Text style={styles.taskNumber}>{minutesTasksLeft()}</Text>
+                  <Text style={styles.taskNumber}>{minutesTasksLeft}</Text>
                 </View>
                 <Text style={styles.taskText}>Minutes Tasks</Text>
               </View>
             )}
 
-            {hoursTasksLeft() > 0 && (
+            {hoursTasksLeft > 0 && (
               <View style={styles.taskNumberContainer}>
                 <View style={styles.hourEllipse}>
-                  <Text style={styles.taskNumber}>{hoursTasksLeft()}</Text>
+                  <Text style={styles.taskNumber}>{hoursTasksLeft}</Text>
                 </View>
                 <Text style={styles.taskText}>Hours Tasks</Text>
               </View>
             )}
 
-            {daysTasksLeft() > 0 && (
+            {daysTasksLeft > 0 && (
               <View style={styles.taskNumberContainer}>
                 <View style={styles.dayEllipse}>
-                  <Text style={styles.taskNumber}>{daysTasksLeft()}</Text>
+                  <Text style={styles.taskNumber}>{daysTasksLeft}</Text>
                 </View>
                 <Text style={styles.taskText}>Days Tasks</Text>
               </View>

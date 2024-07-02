@@ -15,7 +15,7 @@ export const GoalProvider = ({ children }) => {
   }, []);
 
   const goalExists = () => {
-    console.log('goal', Object.keys(goal).length)
+    //console.log('goal', Object.keys(goal).length)
     return Object.keys(goal).length === 0 ? false : true
   }
 
@@ -27,15 +27,16 @@ export const GoalProvider = ({ children }) => {
          ...goal,
          ...updatedGoal
        })*/
-/*
-      for (const key in updatedGoal) {
-        if (updatedGoal.hasOwnProperty(key)) {
-          goal[key] = updatedGoal[key];
-        }
-      }*/
+      /*
+            for (const key in updatedGoal) {
+              if (updatedGoal.hasOwnProperty(key)) {
+                goal[key] = updatedGoal[key];
+              }
+            }*/
       new_goal = {
         ...goal,
-        ...updatedGoal}
+        ...updatedGoal
+      }
 
       const jsonValue = JSON.stringify(new_goal);
 
@@ -59,9 +60,16 @@ export const GoalProvider = ({ children }) => {
 
   const setCompleted = async () => {
     if ('last_day_completed' in goal && isYesterday(goal.last_day_completed)) {
-      updateGoal({ streak: goal.streak + 1, last_day_completed: Date.now() })
-    }else{
-      updateGoal({ streak: 1, last_day_completed: Date.now() })
+      //updateGoal({ streak: goal.streak + 1, last_day_completed: Date.now() })
+      goal.streak = goal.streak + 1
+      goal.last_day_completed = Date.now()
+      setGoal(goal)
+      //console.log(goal)
+    } else {
+      // updateGoal({ streak: 1, last_day_completed: Date.now() })
+      goal.streak = 1
+      goal.last_day_completed = Date.now()
+      setGoal(goal)
     }
   }
 

@@ -21,7 +21,7 @@ export default function Activity() {
   const [currentDate, setCurrentDate] = useState("");
   const [goalModalVisible, setGoalModalVisible] = useState(false); // Add state for modal visibility
   //const [goalMode, setGoalMode] = useState("set"); // Add state for goal mode
-  
+
   const [initialGoals, setInitialGoals] = useState({
     minutesGoal: "3",
     hoursGoal: "1",
@@ -31,13 +31,14 @@ export default function Activity() {
   const [completedToday, setCompletedToday] = useState(0);
   const [dueToday, setDueToday] = useState(0);
   const [dueThisWeek, setDueThisWeek] = useState(0);
+  const[hasRemaining, setHasRemaining] = useState(true);
   //const [hasDailyGoal, setDailyGoal] = useState(false);
 
   const { todos, addTodo, removeTodo, toggleTodoCompleted } = useContext(TodoContext);
-  const { goal, goalExists, updateGoal } = useContext(GoalContext);
+  const { goal, goalExists, updateGoal, setCompleted } = useContext(GoalContext);
 
   // Placeholder values
- // let streak = 3;
+  // let streak = 3;
   //let completedToday = 3;
   //let dueToday = 2;
   //let dueThisWeek = 7;
@@ -49,6 +50,8 @@ export default function Activity() {
     const comparison = new Date(d.setHours(0, 0, 0, 0))
     return today.getTime() == comparison.getTime()
   };
+
+
 
   function isDateInThisWeek(date) {
     const todayObj = new Date();
@@ -76,12 +79,39 @@ export default function Activity() {
       return true
     }
   }
-  const getDueToday = () => {
 
+  const getDueToday = () => {
     const newArr = todos.filter(todo => todo.completed === false && todo.has_due_date === true && isToday(todo.due_date) === true)
     const amount = newArr.length
     return amount
   }
+
+
+
+  const minutesTasksLeft = () => {
+    //console.log('minutes left', goal.minutes_tasks - todos.filter(todo => todo.completed === true && todo.task_type === 'minutes').length)
+    return goal.minutes_tasks - todos.filter(todo => todo.completed === true && todo.task_type === 'minutes').length
+  };
+  const hoursTasksLeft = () => {
+    return goal.hours_tasks - todos.filter(todo => todo.completed === true && todo.task_type === 'hours').length
+  }
+  const daysTasksLeft = () => {
+    return goal.days_tasks - todos.filter(todo => todo.task_type === 'days' && (todo.completed === true || isToday(todo.most_recent_day_made_progress))).length
+  }
+
+  const hasRemainingTasks = () => {
+   // console.log('check remaining')
+    if (!('last_day_completed' in goal) && minutesTasksLeft() === 0 && hoursTasksLeft() === 0 && daysTasksLeft() === 0) {
+     // console.log('set')
+      setCompleted()
+    } else if ('last_day_completed' in goal && !isToday(goal.last_day_completed) && minutesTasksLeft() === 0 && hoursTasksLeft() === 0 && daysTasksLeft() === 0) {
+      //console.log('set')
+      setCompleted()
+    }
+    return minutesTasksLeft() > 0 || hoursTasksLeft() > 0 || daysTasksLeft() > 0
+  };
+
+
 
   useEffect(() => {
     const date = new Date();
@@ -90,6 +120,10 @@ export default function Activity() {
     const [month, day, year] = formattedDate.split(" ");
     setCurrentDate(`Today, ${month} ${day.replace(",", "")}, ${year}`);
   }, []);
+
+  useEffect(()=>{
+    setHasRemaining()
+  },[])
 
   const openGoalModal = (mode) => {
     //setGoalMode(mode);
@@ -101,7 +135,7 @@ export default function Activity() {
   };
 
   const saveGoals = (goals) => {
-    updateGoal({minutes_tasks: goals.minutes, hours_tasks: goals.hours, days_tasks: goals.days, completed: false, last_goal_refresh: Date.now()})
+    updateGoal({ minutes_tasks: goals.minutes, hours_tasks: goals.hours, days_tasks: goals.days, completed: false, last_goal_refresh: Date.now() })
     //save goal to secure storage using the context
     setInitialGoals(goals);
     //setDailyGoal(true);
@@ -110,95 +144,100 @@ export default function Activity() {
 
   return (
     //<GoalProvider>
-      <View style={styles.container}>
-        <Text style={styles.dateText}>{currentDate}</Text>
-        <ScrollView style={styles.scroll}>
-          <View style={styles.streakContainer}>
-            {/* If streak is null or 0, display "Set task or complete daily goal to begin streak" */}
-            <Text style={styles.streakHeader}>Streak: </Text>
-            {"streak" in goal ? 
-            <Text style={styles.streakNumber}>{goal.streak}</Text> : 
+    <View style={styles.container}>
+      <Text style={styles.dateText}>{currentDate}</Text>
+      <ScrollView style={styles.scroll}>
+        <View style={styles.streakContainer}>
+          {/* If streak is null or 0, display "Set task or complete daily goal to begin streak" */}
+          <Text style={styles.streakHeader}>Streak: </Text>
+          {"streak" in goal ?
+            <Text style={styles.streakNumber}>{goal.streak}</Text> :
             <Text style={styles.streakNumber}>0</Text>
           }
-            <MaterialCommunityIcons name="fire" size={30} color="black" />
-          </View>
+          <MaterialCommunityIcons name="fire" size={30} color="black" />
+        </View>
+        {/* If none, display "reached daily goal"... If daily goal not set, just don't have... */}
+
+        <View style={styles.dailyGoalContainer}>
+          <Text style={styles.summary}>Daily Goal</Text>
+          <Text style={styles.editGoalText}>Edit Goal</Text>
+
           {/* If none, display "reached daily goal"... If daily goal not set, just don't have... */}
+        </View>
 
-          <View style={styles.dailyGoalContainer}>
-            <Text style={styles.summary}>Daily Goal</Text>
-            <Text style={styles.editGoalText}>Edit Goal</Text>
-
-            {/* If none, display "reached daily goal"... If daily goal not set, just don't have... */}
-          </View>
-
-          <View style={styles.container}>
-            {!goalExists() ? (
-              <View style={styles.remainingTasksContainer}>
-                <Text>Have not set a daily goal</Text>
-                {/*     <TouchableOpacity oonPress={() => openGoalModal("set")} style={styles.button}>
+        <View style={styles.container}>
+          {!goalExists() ? (
+            <View style={styles.remainingTasksContainer}>
+              <Text>Have not set a daily goal</Text>
+              {/*     <TouchableOpacity oonPress={() => openGoalModal("set")} style={styles.button}>
                           <Text style={styles.buttonText}>Confirm</Text>
                         </TouchableOpacity> */}
-                <Button
-                  onPress={() => openGoalModal("set")}
-                  title="Set daily goal"
-                />
-              </View>
-            ) : (
-              <View>
-                <Button
-                  onPress={() => openGoalModal("edit")}
-                  title="Edit daily goal"
-                />
-                <RemainingTasks />
-              </View>
-            )}
-          </View>
-          {/* Summary Section */}
-          <Text style={styles.summary}>Summary</Text>
-          {/* Replace the summary section with SummarySection */}
-          <SummarySection
-            completedToday={getCompletedToday()}
-            dueToday={getDueToday()}
-            dueThisWeek={getTodosDueThisWeek()}
-          />
+              <Button
+                onPress={() => openGoalModal("set")}
+                title="Set daily goal"
+              />
+            </View>
+          ) : (
+            <View>
+              <Button
+                onPress={() => openGoalModal("edit")}
+                title="Edit daily goal"
+              />
+              <RemainingTasks
+                remaining={hasRemainingTasks()}
+                minutesTasksLeft = {minutesTasksLeft()}
+                hoursTasksLeft = {hoursTasksLeft()}
+                daysTasksLeft = {daysTasksLeft()}
+              />
+            </View>
+          )}
+        </View>
+        {/* Summary Section */}
+        <Text style={styles.summary}>Summary</Text>
+        {/* Replace the summary section with SummarySection */}
+        <SummarySection
+          completedToday={getCompletedToday()}
+          dueToday={getDueToday()}
+          dueThisWeek={getTodosDueThisWeek()}
+        />
 
-          {/* if streak is null or 0,  display,  set task or complete daily goal to begin streak   */}
-          <Text style={styles.buttonText}>Completed Tasks</Text>
-          <View>
+        {/* if streak is null or 0,  display,  set task or complete daily goal to begin streak   */}
+        <Text style={styles.buttonText}>Completed Tasks</Text>
+        <View>
 
-            {todos.map((item) =>
-              item.completed ? (
-                <View
+          {todos.map((item) =>
+            item.completed ? (
+              <View
+                key={item.key}
+                style={
+                  item.taskType === "minutes"
+                    ? styles.minutesTask
+                    : item.taskType === "hours"
+                      ? styles.hoursTask
+                      : styles.daysTask
+                }
+              >
+                <TodoList
+                  text={item.text}
                   key={item.key}
-                  style={
-                    item.taskType === "minutes"
-                      ? styles.minutesTask
-                      : item.taskType === "hours"
-                        ? styles.hoursTask
-                        : styles.daysTask
-                  }
-                >
-                  <TodoList
-                    text={item.text}
-                    key={item.key}
-                    todo={item}
-                    not_editable={true}
-                    due_date={item.due_date}
-                    todoItem={item.completed}
-                  />
-                </View>
-              ) : null
-            )}
-          </View>
-          <GoalModal
-            visible={goalModalVisible}
-            onClose={closeGoalModal}
-            onSave={saveGoals}
-            initialMode={goalExists()? "initialMode" : "set"}
-            initialGoals={initialGoals}
-          />
-        </ScrollView>
-      </View>
+                  todo={item}
+                  not_editable={true}
+                  due_date={item.due_date}
+                  todoItem={item.completed}
+                />
+              </View>
+            ) : null
+          )}
+        </View>
+        <GoalModal
+          visible={goalModalVisible}
+          onClose={closeGoalModal}
+          onSave={saveGoals}
+          initialMode={goalExists() ? "initialMode" : "set"}
+          initialGoals={initialGoals}
+        />
+      </ScrollView>
+    </View>
     //</GoalProvider>
   );
 }
