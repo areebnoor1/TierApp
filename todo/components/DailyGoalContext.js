@@ -16,33 +16,54 @@ export const GoalProvider = ({ children }) => {
 
   const goalExists = () => {
     console.log('goal', Object.keys(goal).length)
-    return Object.keys(goal).length === 0 ? false:true
+    return Object.keys(goal).length === 0 ? false : true
   }
 
   const updateGoal = async (updatedGoal) => {
     try {
-     /* console.log(goal)
-      console.log(updatedGoal)
-      new_goal = () => ({
-        ...goal,
-        ...updatedGoal
-      })*/
-
+      /* console.log(goal)
+       console.log(updatedGoal)
+       new_goal = () => ({
+         ...goal,
+         ...updatedGoal
+       })*/
+/*
       for (const key in updatedGoal) {
         if (updatedGoal.hasOwnProperty(key)) {
           goal[key] = updatedGoal[key];
         }
-      }
+      }*/
+      new_goal = {
+        ...goal,
+        ...updatedGoal}
 
-      const jsonValue = JSON.stringify(goal);
+      const jsonValue = JSON.stringify(new_goal);
 
-      console.log(goal)
-      setGoal(goal)
+      console.log(new_goal)
+      setGoal(new_goal)
       await AsyncStorage.setItem(GOALS_KEY, jsonValue);
     } catch (e) {
       console.error('Failed to update the todo in storage', e);
     }
   };
+
+
+  const isYesterday = (date) => {
+    const d = new Date(date)
+    const t = new Date();
+    const today = new Date(t.setHours(0, 0, 0, 0))
+    const comparison = new Date(d.setHours(0, 0, 0, 0))
+    return today.getDate() - 1 == comparison.getTime()
+  };
+
+
+  const setCompleted = async () => {
+    if ('last_day_completed' in goal && isYesterday(goal.last_day_completed)) {
+      updateGoal({ streak: goal.streak + 1, last_day_completed: Date.now() })
+    }else{
+      updateGoal({ streak: 1, last_day_completed: Date.now() })
+    }
+  }
 
   const getGoal = async () => {
     try {
@@ -55,7 +76,7 @@ export const GoalProvider = ({ children }) => {
   };
 
   return (
-    <GoalContext.Provider value={{ goal, goalExists, updateGoal }}>
+    <GoalContext.Provider value={{ goal, goalExists, updateGoal, setCompleted }}>
       {children}
     </GoalContext.Provider>
   );

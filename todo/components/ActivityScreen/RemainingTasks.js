@@ -9,14 +9,10 @@ import { TodoContext } from "../TodoContext";
 
 export default function RemainingTasks() {
 
-
   // Check if any tasks are left
-
-
-
   const { todos, addTodo, removeTodo, toggleTodoCompleted } = useContext(TodoContext);
-  const { goal, goalExists, updateGoal } = useContext(GoalContext);
-
+  const { goal, goalExists, updateGoal, setCompleted } = useContext(GoalContext);
+  const [remaining, setRemaining] = useState(true)
 
   const isToday = (date) => {
     const d = new Date(date)
@@ -34,18 +30,28 @@ export default function RemainingTasks() {
     return goal.hours_tasks - todos.filter(todo => todo.completed === true && todo.task_type === 'hours').length
   }
   const daysTasksLeft = () => {
-    return goal.days_tasks - todos.filter(todo =>  todo.task_type === 'days' && (todo.completed === true || isToday(most_recent_day_made_progress) )).length
+    return goal.days_tasks - todos.filter(todo => todo.task_type === 'days' && (todo.completed === true || isToday(todo.most_recent_day_made_progress))).length
   }
 
-  const hasRemainingTasks = () =>{
-    
-    return minutesTasksLeft() > 0 || hoursTasksLeft() > 0 || daysTasksLeft() > 0};
+  const hasRemainingTasks = () => {
+    if (!('last_day_completed' in goal) && minutesTasksLeft() === 0 && hoursTasksLeft() === 0 && daysTasksLeft() === 0) {
+      setCompleted()
+    } else if ('last_day_completed' in goal && !isToday(goal.last_day_completed) && minutesTasksLeft() === 0 && hoursTasksLeft() === 0 && daysTasksLeft() === 0) {
+      setCompleted()
+    }
+    return minutesTasksLeft() > 0 || hoursTasksLeft() > 0 || daysTasksLeft() > 0
+  };
 
+
+  useEffect(() => {
+    setRemaining(hasRemainingTasks())
+
+  }, [])
 
   return (
 
     <View style={styles.remainingTasksContainer}>
-      {hasRemainingTasks() ? (
+      {remaining ? (
         <>
           <Text style={styles.header}>Remaining Tasks:</Text>
 

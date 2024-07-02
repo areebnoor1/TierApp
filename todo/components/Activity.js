@@ -37,7 +37,7 @@ export default function Activity() {
   const { goal, goalExists, updateGoal } = useContext(GoalContext);
 
   // Placeholder values
-  let streak = 3;
+ // let streak = 3;
   //let completedToday = 3;
   //let dueToday = 2;
   //let dueThisWeek = 7;
@@ -116,7 +116,10 @@ export default function Activity() {
           <View style={styles.streakContainer}>
             {/* If streak is null or 0, display "Set task or complete daily goal to begin streak" */}
             <Text style={styles.streakHeader}>Streak: </Text>
-            <Text style={styles.streakNumber}>{streak}</Text>
+            {"streak" in goal ? 
+            <Text style={styles.streakNumber}>{goal.streak}</Text> : 
+            <Text style={styles.streakNumber}>0</Text>
+          }
             <MaterialCommunityIcons name="fire" size={30} color="black" />
           </View>
           {/* If none, display "reached daily goal"... If daily goal not set, just don't have... */}
