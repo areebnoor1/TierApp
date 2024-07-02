@@ -20,7 +20,8 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
-  Pressable
+  Pressable,
+  Settings
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/Feather';
@@ -35,6 +36,7 @@ import Hours from './Hours';
 import Activity from './Activity';
 import ActivityWrapper from './ActivityWrapper';
 import Days from './Days';
+import SettingsScreen from './Settings';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
@@ -74,7 +76,7 @@ export default function TabNavigator() {
       
         <Tab.Screen name='Activity' component={ActivityWrapper} options={{ tabBarIcon: () => (<MaterialIcons name='playlist-add-check' style={styles.icon} size={30} />) }} />
 
-      <Tab.Screen name='Settings' component={Hours} options={{ tabBarIcon: () => (<Feather name='settings' style={styles.icon} size={30} />) }} />
+      <Tab.Screen name='Settings' component={SettingsScreen} options={{ tabBarIcon: () => (<Feather name='settings' style={styles.icon} size={30} />) }} />
 
 
     </Tab.Navigator>
