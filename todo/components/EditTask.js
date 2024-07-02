@@ -43,7 +43,7 @@ export default function EditTask({ setModalVisible, task, deleteOldTodo }) {
       case "hours":
         return "Task takes an hour or more to complete";
       case "days":
-        return '(Something like, "Task takes an hour or more to complete broken up over several days")';
+        return "Task takes an hour or more to complete broken up over several days";
       default:
         return "";
     }
