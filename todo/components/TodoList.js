@@ -42,8 +42,11 @@ export default function TodoList(props) {
 						size={30}
 						color='black'
 						style={{
-							marginLeft: 10,
-							flex: 1,
+							marginLeft: 8,
+							marginTop: 8,
+							marginRight: 8,
+							marginBottom: 8,
+							//flex: 1,
 							flexDirection: 'row',
 							alignItems: 'center',
 							justifyContent: 'center'
@@ -92,6 +95,7 @@ export default function TodoList(props) {
 const styles = StyleSheet.create({
 	listContainer: {
 		marginTop: '2%',
+		//margin
 		justifyContent: "flex-start",
 		borderWidth: 2,
 		borderRadius: 10,
@@ -108,7 +112,7 @@ const styles = StyleSheet.create({
 		paddingBottom: 5,
 		paddingHorizontal: 10,
 		right: 10,
-		marginTop: 6,
+		marginTop: 12,
 		fontSize: 17,
 		fontWeight: 'bold',
 		color: 'black'
