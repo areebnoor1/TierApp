@@ -4,14 +4,10 @@ import {
   StyleSheet,
   View,
   Text,
-  Pressable,
-  ScrollView,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
-import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import TodoListButton from "../TodoListButton";
-import { createTodo, readTodos, updateTodo, deleteTodo, getTodos } from '../TodosService';
 
 export default function RandomTask({
   filteredTodos,
@@ -22,98 +18,139 @@ export default function RandomTask({
 }) {
   const [item, setItem] = useState({});
 
-  const getRandomTodo = () => {
-    filteredTodos = filteredTodos.filter(todo => todo.task_type === taskType && todo.completed ===false)
-    const randomIndex = Math.floor(Math.random() * filteredTodos.length);
-    return filteredTodos[randomIndex];
-  };
-
   useEffect(() => {
     if (randomTaskSelectionVisible) {
       setItem(getRandomTodo());
     }
   }, [randomTaskSelectionVisible]);
 
+  const getRandomTodo = () => {
+    const filtered = filteredTodos.filter(todo => todo.task_type === taskType && !todo.completed);
+    const randomIndex = Math.floor(Math.random() * filtered.length);
+    return filtered[randomIndex];
+  };
+
+  const closeModal = () => {
+    setRandomTaskSelectionVisible(false);
+  };
+
+  const getTaskTypeMessage = (taskType) => {
+    switch (taskType) {
+      case 'minutes':
+        return 'Random Minutes Task';
+      case 'hours':
+        return 'Random Hours Task';
+      case 'days':
+        return 'Random Days Task';
+      default:
+        return 'Random Task';
+    }
+  };
+
+  const handlePickAgain = () => {
+    setItem(getRandomTodo());
+  };
+
+  const handleBeginTask = () => {
+    setCurrentTask(item);
+    setRandomTaskSelectionVisible(false);
+  };
+
   return (
     <Modal
-      animationType="slide"
-      transparent={false}
+      animationType="fade"
+      transparent={true}
       visible={randomTaskSelectionVisible}
+      onRequestClose={closeModal}
     >
-      <View style={styles.listContainer}>
-        <View style={styles.topBar}>
-          <TouchableOpacity
-            onPress={() => {
-              setRandomTaskSelectionVisible(false);
-            }}
-            style={styles.closeButton}     >
-            <AntDesign name="close" size={20} />
+
+      <View style={styles.centeredView}>
+        <View style={styles.modalView}>
+
+
+
+
+
+          <TouchableOpacity onPress={closeModal} style={styles.closeModalIcon}>
+            <Ionicons name="arrow-back-circle" size={30} color="black" />
           </TouchableOpacity>
-          <Text style={styles.topBarText}> Random Task </Text>
-          <View style={styles.placeholder} />
+          <Text style={styles.modalTitle}>{getTaskTypeMessage(taskType)}</Text>
+
+          <ScrollView style={styles.taskContainer}>
+            <Text style={styles.itemText}>{item.text}</Text>
+          </ScrollView>
+
+          <View style={styles.iconsContainer}>
+            <TouchableOpacity onPress={handlePickAgain} style={styles.iconContainer}>
+              <Ionicons name="refresh-outline" size={50} color="black" />
+              <Text style={styles.buttonText}>Pick again</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={handleBeginTask} style={styles.iconContainer}>
+              <Ionicons name="checkmark-circle-sharp" size={50} color="black" />
+              <Text style={styles.buttonText}>Begin</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        <Text style={{
-          fontSize: 15,
-          flex: 1,
-          textAlign: "center",
-        }
-        }>
-          {item.text}
-        </Text>
-
-        <TouchableOpacity onPress={() => {
-          setItem(getRandomTodo())
-        }}>
-          <Ionicons name="refresh-outline" size={20} />
-          <Text>Pick again</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            setCurrentTask(item)
-            setRandomTaskSelectionVisible(false)
-          }}
-        >
-          <Ionicons name="checkmark-circle-sharp" size={20} />
-
-          <Text>Begin</Text>
-        </TouchableOpacity>
-
       </View>
     </Modal>
   );
 }
 
 const styles = StyleSheet.create({
-  listContainer: {
+  centeredView: {
     flex: 1,
-    backgroundColor: "#fff",
-    padding: 20,
+    justifyContent: "center",
+    alignItems: "center",
   },
-  topBar: {
+  modalView: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 40,
+    alignItems: "center",
+    width: "90%",
+  },
+  closeModalIcon: {
+    position: "absolute",
+    top: 20,
+    left: 20,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontFamily: "Poppins-Bold",
+    color: "#D9D9D9",
+    marginBottom: 20,
+    textAlign: "center",
+  },
+  taskContainer: {
+    backgroundColor: "white",
+    borderWidth: 1,
+    borderColor: "black",
+    borderRadius: 5,
+    height: 120,
+    marginBottom: 20,
+    width: "100%",
+  },
+  itemText: {
+    fontSize: 20,
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  iconsContainer: {
     flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 20,
+    width: "100%",
+  },
+  iconContainer: {
     alignItems: "center",
     marginBottom: 10,
   },
-  closeButton: {
-    padding: 10,
-  },
-  topBarText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    flex: 1,
+  buttonText: {
+    fontSize: 12,
+    fontFamily: "Poppins-Bold",
+    color: "black",
+    marginTop: 5,
     textAlign: "center",
-  },
-  placeholder: {
-    width: 20, // Adjust as needed
-  },
-  scrollView: {
-    flex: 1,
-    marginTop: 10,
-  },
-  pressableContainer: {
-    backgroundColor: "#3d36a3",
-    borderRadius: 20,
-    padding: 15,
-    marginBottom: 10,
   },
 });
