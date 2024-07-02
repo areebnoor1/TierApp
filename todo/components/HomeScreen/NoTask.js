@@ -7,6 +7,7 @@ import {
   Image,
   Modal,
   Alert,
+  TouchableOpacity,
 } from "react-native";
 import MintutesJar from "../SVGicons/MinutesJar";
 import HoursJar from "../SVGicons/HoursJar";
@@ -14,6 +15,7 @@ import DaysJar from "../SVGicons/DaysJar";
 import TaskSelectionModal from "./TaskSelectionModal";
 import RandomTask from "./RandomTask";
 import { TodoContext } from "../TodoContext";
+import { EvilIcons } from '@expo/vector-icons';
 export default function NoTask({ setModalVisible, setCurrentTask }) {
   const [jarModalVisible, setJarModalVisible] = useState(false);
   const [taskSelectionVisible, setTaskSelectionVisible] = useState(false);
@@ -135,17 +137,19 @@ export default function NoTask({ setModalVisible, setCurrentTask }) {
       >
         <View style={styles.modalView}>
           <View style={styles.modalContainer}>
-            {/* Close Modal Button */}
-            <Pressable style={styles.pressableContainer} onPress={closeModal}>
-              <Text style={styles.buttonText}>X</Text>
-            </Pressable>
+            <TouchableOpacity  onPress={closeModal}>
+             <EvilIcons name="close" size={24} color="black" />
+            </TouchableOpacity>
 
             {/* Display selected jar */}
             <Text style={styles.selectedJarText}>
-              Selected Jar: {selectedJar}
+              start {selectedJar} task
             </Text>
 
             {/* Choose Random Task Button */}
+                <TouchableOpacity>
+                              <Text>Choose Random Task</Text>
+                    </TouchableOpacity>
             <Pressable
               style={styles.pressableContainer}
               onPress={() => {
@@ -153,7 +157,7 @@ export default function NoTask({ setModalVisible, setCurrentTask }) {
                 setRandomTaskSelectionVisible(true);
               }}
             >
-              <Text style={styles.buttonText}>Choose random task</Text>
+              <Text style={styles.buttonText}>Choose Random Task</Text>
             </Pressable>
 
             {/* Choose Task Button */}

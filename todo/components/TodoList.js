@@ -23,37 +23,57 @@ export default function TodoList(props) {
 
 
 	return (
-		<TouchableOpacity onPress={() => {
-			props.editMe()
+		<View styles={{
+			justifyContent: "flex-end",
+			flex: 1,
+			padding: 16,
+			flexDirection: "row",
+			justifyContent: "space-between",
 		}}>
-		<View style={styles.listContainer}>
-			<Icon
-				name={'ellipse-outline'}
-				size={25}
-				color='black'
-				style={{ marginLeft: 15 }}
-				onPress={() => {
-					setCompleted(!completed)
-					toggleTodoCompleted(props.the_key)
-				}}
-			/>
+			<TouchableOpacity onPress={() => {
+				props.editMe()
+			}}>
 
-			
-			<View >
+				<View style={styles.listContainer}>
 
-				<Text style={styles.listItem}>{props.text}</Text>
 
-				{"days_made_progress" in props.todo &&
-					<View>
-						<Text> Last day made progress: {format(props.todo.most_recent_day_made_progress, "eeee, MMMM do")} </Text>
-						<Text> Number of progress sessions: {props.todo.days_made_progress} </Text>
+					<Icon
+						name={'ellipse-outline'}
+						size={30}
+						color='black'
+						style={{
+							marginLeft: 10,
+							flex: 1,
+							flexDirection: 'row',
+							alignItems: 'center',
+							justifyContent: 'center'
+						
+						}}
+						onPress={() => {
+							setCompleted(!completed)
+							toggleTodoCompleted(props.the_key)
+						}}
+					/>
+
+
+					<View styles={{
+						flex:1,
+						//flexDirection: 'row',
+					}} >
+
+						<Text style={styles.listItem}>{props.text}</Text>
+
+						{"days_made_progress" in props.todo &&
+							<View>
+								<Text> Last day made progress: {format(props.todo.most_recent_day_made_progress, "eeee, MMMM do")} </Text>
+								<Text> Number of progress sessions: {props.todo.days_made_progress} </Text>
+							</View>
+						}
+
+						{props.has_due_date &&
+							<Text style={styles.dateText}>{format(props.due_date, "eeee, MMMM do")}</Text>}
 					</View>
-			}
-
-				{props.has_due_date &&
-					<Text style={styles.dateText}>{format(props.due_date, "eeee, MMMM do, HH:mm")}</Text>}
-			</View>
-			{/*<Icon
+					{/*<Icon
 				name="trash-bin"
 				size={25}
 				//color="red"
@@ -61,25 +81,31 @@ export default function TodoList(props) {
 				marginRight={30}
 				onPress={props.deleteTodo}
 				/>*/}
-		</View>
+				</View>
 
-		</TouchableOpacity>
+			</TouchableOpacity>
+		</View>
 	)
 
 }
 
 const styles = StyleSheet.create({
 	listContainer: {
-		marginTop: '5%',
+		marginTop: '2%',
+		justifyContent: "flex-start",
 		borderWidth: 2,
 		borderRadius: 10,
+		//padding: 16,
+		//display: 'flex',
+		//justifyContent: 'center',
 		flexDirection: 'row',
-		width: '100%',
-		alignItems: 'stretch',
-		minHeight: 40
+		marginLeft: '2%',
+		width: '96%',
+		//alignItems: 'center',
+		minHeight: 30
 	},
 	listItem: {
-		paddingBottom: 10,
+		paddingBottom: 5,
 		paddingHorizontal: 10,
 		right: 10,
 		marginTop: 6,
