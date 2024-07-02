@@ -7,7 +7,8 @@ import {
   Alert,
   Text,
   Pressable,
-  Switch
+  Switch,
+  Modal,
 } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -32,7 +33,7 @@ import { createTodo, readTodos, updateTodo, deleteTodo } from './TodosService';
 
 
 
-export default function AddTask({ setModalVisible, setTodos}) {
+export default function AddTask({ setModalVisible, setTodos, visible}) {
   const [taskType, setTaskType] = useState("");
   const [value, setValue] = useState("");
   const [date, setDate] = useState({});
@@ -65,7 +66,7 @@ export default function AddTask({ setModalVisible, setTodos}) {
 
       await addTodo({
         text: value, key: Date.now(), completed: false, task_type: taskType, due_date: date, has_due_date: showDate
-      })     
+      })
 
       if (value.length > 0) {
         setValue('');
@@ -73,24 +74,24 @@ export default function AddTask({ setModalVisible, setTodos}) {
       setModalVisible(false);
     }
   };
-  
+
   return (
-    <View style={styles.screen}>
-      <View style={styles.topBar}>
-        <TouchableOpacity onPress={() => setModalVisible(false)}
-        >
-          <AntDesign name='close' size={30} />
-        </TouchableOpacity>
+  <>
+  <Modal visible={visible} animationType="slide" transparent={true}>
+     <View style={styles.modalContainer}>
+     <View style={styles.modalContent}>
+      {/* Close, title, Done:  */}
+             <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.cancelButton}>
+                   <Text style={styles.cancelText}>Cancel</Text>
+             </TouchableOpacity>
+                     <TouchableOpacity onPress={() => setModalVisible(false)}  style={styles.cancelButton}>
+                            <AntDesign name='close' size={30} />
+                       </TouchableOpacity>
+                      <Text style={styles.title}>Add Task</Text>
+                        <Text style={styles.goalTitle}>Select Task Type</Text>
 
-        <Text style={styles.buttonText}>Add task</Text>
-
-        <TouchableOpacity onPress={() => addTodoWrapper()}>
-          <Text style={styles.buttonText}>Done</Text>
-        </TouchableOpacity>
-      </View>
-
+{/* Task Types */}
       <Text style={styles.smallText}>Select a task type</Text>
-
       <View
         style={{
           flexDirection: "row",
@@ -106,7 +107,7 @@ export default function AddTask({ setModalVisible, setTodos}) {
           />
           <Text>Minutes</Text>
         </TouchableOpacity>
-        
+
         <TouchableOpacity onPress={() => setTaskType("hours")}>
           <Ionicons
             name="hourglass-outline"
@@ -114,7 +115,7 @@ export default function AddTask({ setModalVisible, setTodos}) {
             size={40}
           />
           <Text>Hours</Text>
-          
+
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setTaskType("days")}>
           <Entypo
@@ -124,16 +125,12 @@ export default function AddTask({ setModalVisible, setTodos}) {
           />
           <Text>Days</Text>
         </TouchableOpacity>
-       
       </View>
 
       <Text>{getMessage()}</Text>
-
-      <Text
-      style={{
-        fontSize:20,
-      }}
-      >Due date</Text>
+{/* ****************/}
+ {/*Date*/}
+      <Text style={{fontSize:20,}}>Add Due Date</Text>
 
       <Switch
         // trackColor={{ false: '#767577', true: '#81b0ff' }}
@@ -148,23 +145,35 @@ export default function AddTask({ setModalVisible, setTodos}) {
         }}
         value={showDate}
       />
+ {/************************/}
+
+    {/*Task Description: */}
+       {showDate && (
+         <DatePicker mode="datetime" date={date} onDateChange={setDate} />
+       )}
+
+       <View>
+         <TextInput
+           style={styles.textInput}
+           multiline={true}
+           placeholder="Enter task"
+           placeholderTextColor="#abbabb"
+           value={value}
+           onChangeText={(_value) => setValue(_value)}
+         />
+       </View>
+        {/*      <TouchableOpacity onPress={() => addTodoWrapper()} style={styles.button}>
+                     <Text style={styles.buttonText}>Confirm</Text>
+              </TouchableOpacity>*/}
 
 
-      {showDate && (
-        <DatePicker mode="datetime" date={date} onDateChange={setDate} />
-      )}
 
-      <View>
-        <TextInput
-          style={styles.textInput}
-          multiline={true}
-          placeholder="Enter task"
-          placeholderTextColor="#abbabb"
-          value={value}
-          onChangeText={(_value) => setValue(_value)}
-        />
-      </View>
-    </View>
+            </View>
+         </View>
+        </Modal>
+
+
+    </>
   );
 }
 
@@ -255,4 +264,67 @@ const styles = StyleSheet.create({
     textAlign: "center",
     //color: 'white'
   },
+
+   modalContainer: {
+      flex: 1,
+      justifyContent: "flex-end",
+      alignItems: "center",
+      backgroundColor: "rgba(0, 0, 0, 0.5)",
+    },
+    modalContent: {
+      width: "95%",
+      height: "95%",
+      backgroundColor: "#EBEBEB",
+      borderRadius: 10,
+      padding: 20,
+      alignItems: "center",
+    },
+    cancelButton: {
+      alignSelf: "flex-start",
+    },
+    cancelText: {
+      color: "black",
+    },
+    title: {
+      fontSize: 14,
+      marginBottom: 10,
+    },
+    goalTitle: {
+      fontSize: 24,
+      fontWeight: "bold",
+      marginBottom: 40,
+    },
+    taskText: {
+      fontSize: 20,
+      marginBottom: 10,
+    },
+    taskGoalContainer: {
+      alignItems: "center",
+    },
+    taskCountContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      marginBottom: 35,
+      width: "90%",
+    },
+    input: {
+      borderColor: "white",
+      borderWidth: 1,
+      borderRadius: 12,
+      backgroundColor: "white",
+      padding: 10,
+      textAlign: "center",
+      width: 100,
+      fontSize: 24,
+    },
+    button: {
+      alignItems: "center",
+      justifyContent: "center",
+      paddingVertical: 12,
+      paddingHorizontal: 100,
+      borderRadius: 16,
+      backgroundColor: "black",
+      marginTop: 40,
+    },
 });
