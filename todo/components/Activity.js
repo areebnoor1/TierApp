@@ -31,7 +31,7 @@ export default function Activity() {
   const [completedToday, setCompletedToday] = useState(0);
   const [dueToday, setDueToday] = useState(0);
   const [dueThisWeek, setDueThisWeek] = useState(0);
-  const[hasRemaining, setHasRemaining] = useState(true);
+  const [hasRemaining, setHasRemaining] = useState(true);
   //const [hasDailyGoal, setDailyGoal] = useState(false);
 
   const { todos, addTodo, removeTodo, toggleTodoCompleted } = useContext(TodoContext);
@@ -100,9 +100,9 @@ export default function Activity() {
   }
 
   const hasRemainingTasks = () => {
-   // console.log('check remaining')
+    // console.log('check remaining')
     if (!('last_day_completed' in goal) && minutesTasksLeft() === 0 && hoursTasksLeft() === 0 && daysTasksLeft() === 0) {
-     // console.log('set')
+      // console.log('set')
       setCompleted()
     } else if ('last_day_completed' in goal && !isToday(goal.last_day_completed) && minutesTasksLeft() === 0 && hoursTasksLeft() === 0 && daysTasksLeft() === 0) {
       //console.log('set')
@@ -121,9 +121,9 @@ export default function Activity() {
     setCurrentDate(`Today, ${month} ${day.replace(",", "")}, ${year}`);
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     setHasRemaining()
-  },[])
+  }, [])
 
   const openGoalModal = (mode) => {
     //setGoalMode(mode);
@@ -135,7 +135,7 @@ export default function Activity() {
   };
 
   const saveGoals = (goals) => {
-    updateGoal({ minutes_tasks: goals.minutes, hours_tasks: goals.hours, days_tasks: goals.days, completed: false, last_goal_refresh: Date.now() })
+    updateGoal({ streak: 'streak' in goal ? goal.streak : 0, minutes_tasks: goals.minutes, hours_tasks: goals.hours, days_tasks: goals.days, completed: false, last_goal_refresh: Date.now() })
     //save goal to secure storage using the context
     setInitialGoals(goals);
     //setDailyGoal(true);
@@ -149,11 +149,18 @@ export default function Activity() {
       <ScrollView style={styles.scroll}>
         <View style={styles.streakContainer}>
           {/* If streak is null or 0, display "Set task or complete daily goal to begin streak" */}
+
+
           <Text style={styles.streakHeader}>Streak: </Text>
-          {"streak" in goal ?
-            <Text style={styles.streakNumber}>{goal.streak}</Text> :
-            <Text style={styles.streakNumber}>0</Text>
+
+          {
+            !("streak" in goal) ?
+              <Text style={styles.streakNumber}>0</Text> :
+              !hasRemainingTasks() && !isToday(goal.last_day_completed) ?
+                <Text style={styles.streakNumber}>{goal.streak + 1}</Text> :
+                <Text style={styles.streakNumber}>{goal.streak}</Text>
           }
+
           <MaterialCommunityIcons name="fire" size={30} color="black" />
         </View>
         {/* If none, display "reached daily goal"... If daily goal not set, just don't have... */}
@@ -185,9 +192,9 @@ export default function Activity() {
               />
               <RemainingTasks
                 remaining={hasRemainingTasks()}
-                minutesTasksLeft = {minutesTasksLeft()}
-                hoursTasksLeft = {hoursTasksLeft()}
-                daysTasksLeft = {daysTasksLeft()}
+                minutesTasksLeft={minutesTasksLeft()}
+                hoursTasksLeft={hoursTasksLeft()}
+                daysTasksLeft={daysTasksLeft()}
               />
             </View>
           )}

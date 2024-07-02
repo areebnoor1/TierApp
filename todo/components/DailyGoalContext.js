@@ -21,26 +21,12 @@ export const GoalProvider = ({ children }) => {
 
   const updateGoal = async (updatedGoal) => {
     try {
-      /* console.log(goal)
-       console.log(updatedGoal)
-       new_goal = () => ({
-         ...goal,
-         ...updatedGoal
-       })*/
-      /*
-            for (const key in updatedGoal) {
-              if (updatedGoal.hasOwnProperty(key)) {
-                goal[key] = updatedGoal[key];
-              }
-            }*/
       new_goal = {
         ...goal,
         ...updatedGoal
       }
 
       const jsonValue = JSON.stringify(new_goal);
-
-      console.log(new_goal)
       setGoal(new_goal)
       await AsyncStorage.setItem(GOALS_KEY, jsonValue);
     } catch (e) {
@@ -54,7 +40,7 @@ export const GoalProvider = ({ children }) => {
     const t = new Date();
     const today = new Date(t.setHours(0, 0, 0, 0))
     const comparison = new Date(d.setHours(0, 0, 0, 0))
-    return today.getDate() - 1 == comparison.getTime()
+    return today.getDate() - 1 == comparison.getDate()
   };
 
 
@@ -64,12 +50,19 @@ export const GoalProvider = ({ children }) => {
       goal.streak = goal.streak + 1
       goal.last_day_completed = Date.now()
       setGoal(goal)
+      const jsonValue = JSON.stringify(goal);
+
+      await AsyncStorage.setItem(GOALS_KEY, jsonValue);
       //console.log(goal)
     } else {
       // updateGoal({ streak: 1, last_day_completed: Date.now() })
       goal.streak = 1
       goal.last_day_completed = Date.now()
       setGoal(goal)
+
+      const jsonValue = JSON.stringify(goal);
+
+      await AsyncStorage.setItem(GOALS_KEY, jsonValue);
     }
   }
 

@@ -101,7 +101,32 @@ export default function Jars() {
                     <Entypo name='chevron-right' style={styles.icon} size={30} />
                 </TouchableOpacity>
                 <View style={styles.taskTypeDisplay}>
-                    <Text>Interesting facts go here</Text>
+                    
+
+
+                <View style={styles.taskNumberContainers}>
+                        <View style={styles.taskNumberContainer}>
+                            <View style={styles.dayEllipse}>
+                                <Text style={styles.taskNumber}>{todos.filter(todo => todo.task_type === 'minutes').length}</Text>
+                            </View>
+                            <Text style={styles.taskText}>Tasks in jar</Text>
+                        </View>
+                        <View style={styles.taskNumberContainer}>
+                            <View style={styles.dayEllipse}>
+                                <Text style={styles.taskNumber}>{todos.filter(todo => todo.task_type === 'minutes').length}</Text>
+                            </View>
+                            <Text style={styles.taskText}>Tasks due today</Text>
+                        </View>
+                        <View style={styles.taskNumberContainer}>
+                            <View style={styles.dayEllipse}>
+                                <Text style={styles.taskNumber}>{todos.filter(todo => todo.task_type === 'minutes').length}</Text>
+                            </View>
+                            <Text style={styles.taskText}>Tasks due this week</Text>
+                        </View>
+                    </View>
+
+
+
                 </View>
                 <TouchableOpacity style={styles.jarHeader} onPress={() => setTaskType('hours')}>
                     <Ionicons name='hourglass-outline' style={[styles.icon, taskType === 'hours' && styles.activeText]} size={40} />
@@ -109,6 +134,7 @@ export default function Jars() {
                     <Entypo name='chevron-right' style={styles.icon} size={30} />
                 </TouchableOpacity>
                 <View style={styles.taskTypeDisplay}>
+
                     <View style={styles.taskNumberContainers}>
                         <View style={styles.taskNumberContainer}>
                             <View style={styles.dayEllipse}>
@@ -129,6 +155,7 @@ export default function Jars() {
                             <Text style={styles.taskText}>Tasks due this week</Text>
                         </View>
                     </View>
+
                 </View>
                 <TouchableOpacity style={styles.jarHeader} onPress={() => setTaskType('days')}>
                     <Entypo name='calendar' style={[styles.icon, taskType === 'days' && styles.activeText]} size={40} />
@@ -136,7 +163,32 @@ export default function Jars() {
                     <Entypo name='chevron-right' style={styles.icon} size={30} />
                 </TouchableOpacity>
                 <View style={styles.taskTypeDisplay}>
-                    <Text>Interesting facts go here</Text>
+                    
+
+
+                <View style={styles.taskNumberContainers}>
+                        <View style={styles.taskNumberContainer}>
+                            <View style={styles.dayEllipse}>
+                                <Text style={styles.taskNumber}>{todos.filter(todo => todo.task_type === 'days').length}</Text>
+                            </View>
+                            <Text style={styles.taskText}>Tasks in jar</Text>
+                        </View>
+                        <View style={styles.taskNumberContainer}>
+                            <View style={styles.dayEllipse}>
+                                <Text style={styles.taskNumber}>{todos.filter(todo => todo.task_type === 'days').length}</Text>
+                            </View>
+                            <Text style={styles.taskText}>Tasks due today</Text>
+                        </View>
+                        <View style={styles.taskNumberContainer}>
+                            <View style={styles.dayEllipse}>
+                                <Text style={styles.taskNumber}>{todos.filter(todo => todo.task_type === 'days').length}</Text>
+                            </View>
+                            <Text style={styles.taskText}>Tasks due this week</Text>
+                        </View>
+                    </View>
+
+
+
                 </View>
             </View>
         );
