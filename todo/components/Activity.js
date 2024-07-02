@@ -209,7 +209,7 @@ export default function Activity() {
         />
 
         {/* if streak is null or 0,  display,  set task or complete daily goal to begin streak   */}
-        <Text style={styles.buttonText}>Completed Tasks</Text>
+        <Text style={styles.buttonText}>Today's progress</Text>
         <View>
 
           {todos.map((item) =>

@@ -7,7 +7,7 @@ import {
 	TextInput,
 	TouchableOpacity,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { TodoContext } from './TodoContext';
 import { format } from "date-fns";
 
@@ -23,9 +23,12 @@ export default function TodoList(props) {
 
 
 	return (
+		<TouchableOpacity onPress={() => {
+			props.editMe()
+		}}>
 		<View style={styles.listContainer}>
 			<Icon
-				name={completed ? 'check' : 'square'}
+				name={'ellipse-outline'}
 				size={25}
 				color='black'
 				style={{ marginLeft: 15 }}
@@ -34,16 +37,8 @@ export default function TodoList(props) {
 					toggleTodoCompleted(props.the_key)
 				}}
 			/>
-			<Icon
-				name={'edit'}
-				size={25}
-				color='black'
-				style={{ marginLeft: 15 }}
-				onPress={() => {
-					props.editMe()
 
-				}}
-			/>
+			
 			<View >
 
 				<Text style={styles.listItem}>{props.text}</Text>
@@ -55,21 +50,20 @@ export default function TodoList(props) {
 					</View>
 			}
 
-
-
-
 				{props.has_due_date &&
 					<Text style={styles.dateText}>{format(props.due_date, "eeee, MMMM do, HH:mm")}</Text>}
 			</View>
-			<Icon
-				name="trash-2"
+			{/*<Icon
+				name="trash-bin"
 				size={25}
 				//color="red"
 				style={{ marginLeft: 'auto' }}
 				marginRight={30}
 				onPress={props.deleteTodo}
-			/>
+				/>*/}
 		</View>
+
+		</TouchableOpacity>
 	)
 
 }
@@ -77,6 +71,8 @@ export default function TodoList(props) {
 const styles = StyleSheet.create({
 	listContainer: {
 		marginTop: '5%',
+		borderWidth: 2,
+		borderRadius: 10,
 		flexDirection: 'row',
 		width: '100%',
 		alignItems: 'stretch',
@@ -84,7 +80,8 @@ const styles = StyleSheet.create({
 	},
 	listItem: {
 		paddingBottom: 10,
-		paddingLeft: 10,
+		paddingHorizontal: 10,
+		right: 10,
 		marginTop: 6,
 		fontSize: 17,
 		fontWeight: 'bold',

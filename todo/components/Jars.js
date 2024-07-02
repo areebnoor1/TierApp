@@ -34,6 +34,7 @@ import {
 import { db } from "./firebase.js"
 
 import { TodoContext } from './TodoContext';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry.js';
 
 export default function Jars() {
     const [taskType, setTaskType] = useState('');
@@ -65,14 +66,11 @@ export default function Jars() {
         return date >= firstDayOfWeek && date <= lastDayOfWeek;
     }
 
-    const getTodosDueThisWeek = () => {
-        const newArr = todos.filter(todo => !todo.completed && todo.has_due_date && isDateInThisWeek(new Date(todo.due_date)));
+    const getTodosDueThisWeek = (type) => {
+        const newArr = todos.filter(todo => !todo.completed && todo.task_type === type &&todo.has_due_date && isDateInThisWeek(new Date(todo.due_date)));
         return newArr.length
     };
 
-    const getCompletedToday = () => {
-        return todos.filter(todo => todo.completed === true).length
-    }
 
     const dateExists = (date) => {
         if (Object.keys(date).length === 0) {
@@ -82,8 +80,8 @@ export default function Jars() {
         }
     }
 
-    const getDueToday = () => {
-        const newArr = todos.filter(todo => todo.completed === false && todo.has_due_date === true && isToday(todo.due_date) === true)
+    const getDueToday = (type) => {
+        const newArr = todos.filter(todo => todo.task_type === type && todo.completed === false && todo.has_due_date === true && isToday(todo.due_date) === true)
         const amount = newArr.length
         return amount
     }
@@ -107,19 +105,19 @@ export default function Jars() {
                 <View style={styles.taskNumberContainers}>
                         <View style={styles.taskNumberContainer}>
                             <View style={styles.dayEllipse}>
-                                <Text style={styles.taskNumber}>{todos.filter(todo => todo.task_type === 'minutes').length}</Text>
+                                <Text style={styles.taskNumber}>{todos.filter(todo => todo.task_type === 'minutes'&& todo.completed === false).length}</Text>
                             </View>
                             <Text style={styles.taskText}>Tasks in jar</Text>
                         </View>
                         <View style={styles.taskNumberContainer}>
                             <View style={styles.dayEllipse}>
-                                <Text style={styles.taskNumber}>{todos.filter(todo => todo.task_type === 'minutes').length}</Text>
+                                <Text style={styles.taskNumber}>{getDueToday( 'minutes')}</Text>
                             </View>
                             <Text style={styles.taskText}>Tasks due today</Text>
                         </View>
                         <View style={styles.taskNumberContainer}>
                             <View style={styles.dayEllipse}>
-                                <Text style={styles.taskNumber}>{todos.filter(todo => todo.task_type === 'minutes').length}</Text>
+                                <Text style={styles.taskNumber}>{getTodosDueThisWeek('minutes')}</Text>
                             </View>
                             <Text style={styles.taskText}>Tasks due this week</Text>
                         </View>
@@ -138,19 +136,19 @@ export default function Jars() {
                     <View style={styles.taskNumberContainers}>
                         <View style={styles.taskNumberContainer}>
                             <View style={styles.dayEllipse}>
-                                <Text style={styles.taskNumber}>{todos.filter(todo => todo.task_type === 'hours').length}</Text>
+                                <Text style={styles.taskNumber}>{todos.filter(todo => todo.task_type === 'hours' && todo.completed === false).length}</Text>
                             </View>
                             <Text style={styles.taskText}>Tasks in jar</Text>
                         </View>
                         <View style={styles.taskNumberContainer}>
                             <View style={styles.dayEllipse}>
-                                <Text style={styles.taskNumber}>{todos.filter(todo => todo.task_type === 'hours').length}</Text>
+                                <Text style={styles.taskNumber}>{getDueToday('hours')}</Text>
                             </View>
                             <Text style={styles.taskText}>Tasks due today</Text>
                         </View>
                         <View style={styles.taskNumberContainer}>
                             <View style={styles.dayEllipse}>
-                                <Text style={styles.taskNumber}>{todos.filter(todo => todo.task_type === 'hours').length}</Text>
+                                <Text style={styles.taskNumber}>{getTodosDueThisWeek('hours')}</Text>
                             </View>
                             <Text style={styles.taskText}>Tasks due this week</Text>
                         </View>
@@ -169,19 +167,19 @@ export default function Jars() {
                 <View style={styles.taskNumberContainers}>
                         <View style={styles.taskNumberContainer}>
                             <View style={styles.dayEllipse}>
-                                <Text style={styles.taskNumber}>{todos.filter(todo => todo.task_type === 'days').length}</Text>
+                                <Text style={styles.taskNumber}>{todos.filter(todo => todo.task_type === 'days' && todo.completed === false).length}</Text>
                             </View>
                             <Text style={styles.taskText}>Tasks in jar</Text>
                         </View>
                         <View style={styles.taskNumberContainer}>
                             <View style={styles.dayEllipse}>
-                                <Text style={styles.taskNumber}>{todos.filter(todo => todo.task_type === 'days').length}</Text>
+                                <Text style={styles.taskNumber}>{getDueToday( 'days')}</Text>
                             </View>
                             <Text style={styles.taskText}>Tasks due today</Text>
                         </View>
                         <View style={styles.taskNumberContainer}>
                             <View style={styles.dayEllipse}>
-                                <Text style={styles.taskNumber}>{todos.filter(todo => todo.task_type === 'days').length}</Text>
+                                <Text style={styles.taskNumber}>{getTodosDueThisWeek('days')}</Text>
                             </View>
                             <Text style={styles.taskText}>Tasks due this week</Text>
                         </View>

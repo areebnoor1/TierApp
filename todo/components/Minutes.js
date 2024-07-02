@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
         //flex: 1,
         // justifyContent: 'flex-start',
         //alignItems: 'center',
-        backgroundColor: '#b7babd',
+        //backgroundColor: '#b7babd',
     },
     header: {
         marginTop: '15%',

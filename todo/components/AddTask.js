@@ -13,7 +13,8 @@ import React, { useState, useEffect, useContext } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Entypo from "react-native-vector-icons/Entypo";
 import AntDesign from "react-native-vector-icons/AntDesign";
-import DatePicker from "react-native-date-picker";
+import DateTimePicker from '@react-native-community/datetimepicker';
+//import DatePicker from "react-native-date-picker";
 
 import  {TodoContext}  from './TodoContext';
 
@@ -129,11 +130,13 @@ export default function AddTask({ setModalVisible, setTodos}) {
 
       <Text>{getMessage()}</Text>
 
+     <Pressable> 
       <Text
       style={{
         fontSize:20,
       }}
-      >Due date</Text>
+      >Set due date</Text> 
+      </Pressable>
 
       <Switch
         // trackColor={{ false: '#767577', true: '#81b0ff' }}
@@ -143,16 +146,35 @@ export default function AddTask({ setModalVisible, setTodos}) {
           if(!showDate){
             setDate(new Date())
           }else{
-            setDate({})
+            //setDate({})
           }
         }}
         value={showDate}
       />
 
+{
+showDate && (
+  
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={date}
+          mode={'date'}
+          is24Hour={true}
+          onChange={onChange = (event, selectedDate) => {
+            const currentDate = selectedDate;
+            setShowDate(false)
+            setDate(currentDate);
+          }}
+        />
+      )
+      
+      }
 
+{/* 
       {showDate && (
         <DatePicker mode="datetime" date={date} onDateChange={setDate} />
       )}
+      */}
 
       <View>
         <TextInput
