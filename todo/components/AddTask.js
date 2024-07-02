@@ -13,6 +13,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import Entypo from "react-native-vector-icons/Entypo";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import DatePicker from "react-native-date-picker";
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 import { TodoContext } from "./TodoContext";
 
@@ -21,6 +22,7 @@ export default function AddTask({ setModalVisible, setTodos }) {
   const [value, setValue] = useState("");
   const [date, setDate] = useState({});
   const [showDate, setShowDate] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
   const { addTodo } = useContext(TodoContext);
 
@@ -143,17 +145,50 @@ export default function AddTask({ setModalVisible, setTodos }) {
       </ScrollView>
 
       <View style={styles.dueDateContainer}>
-        <Text style={styles.header}>Add Due Date</Text>
+        <View
+          style={{ flexDirection: 'column' }}>
+
+          <Text style={styles.header}>Add Due Date</Text>
+          {showDate &&
+            <Text style={styles.header}>Date selected: {date.toDateString()}</Text>}
+        </View>
         <Switch
           trackColor={{ false: "#767577", true: "#81b0ff" }}
           onValueChange={() => {
+
             setShowDate(!showDate);
+            if (!showDatePicker && !showDate) {
+              setShowDatePicker(true)
+            }
+
             setDate(showDate ? {} : new Date());
           }}
           value={showDate}
         />
+
+
+
+
+
       </View>
-      {showDate && <DatePicker mode="datetime" date={date} onDateChange={setDate} />}
+
+      {showDatePicker &&
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={date}
+          mode={'date'}
+          is24Hour={true}
+          onChange={onChange = (event, selectedDate) => {
+            const currentDate = selectedDate;
+            setShowDatePicker(false)
+            setDate(currentDate);
+          }}
+        />
+      }
+
+
+
+
     </View>
   );
 }
