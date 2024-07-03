@@ -21,7 +21,7 @@ export default function GoalModal({
   const [hoursGoal, setHoursGoal] = useState("1");
   const [daysGoal, setDaysGoal] = useState("1");
 
-  const { goal, updateGoal } = useContext(GoalContext);
+  //const { goal, updateGoal } = useContext(GoalContext);
 
   useEffect(() => {
     if (initialMode === "edit" && initialGoals) {

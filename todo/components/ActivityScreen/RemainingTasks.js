@@ -11,7 +11,7 @@ export default function RemainingTasks({ remaining, minutesTasksLeft, hoursTasks
 
   // Check if any tasks are left
   const { todos, addTodo, removeTodo, toggleTodoCompleted } = useContext(TodoContext);
-  const { goal, goalExists, updateGoal, setCompleted } = useContext(GoalContext);
+ // const { goal, goalExists, updateGoal, setCompleted } = useContext(GoalContext);
   //const [remaining, setRemaining] = useState(true)
 
   const isToday = (date) => {

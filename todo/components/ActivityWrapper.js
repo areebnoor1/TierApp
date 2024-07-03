@@ -45,10 +45,14 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 export default function ActivityWrapper() {
     return (
-        <GoalProvider>
-            <Activity />
-        </GoalProvider>
 
+
+        < View >
+            {/*} <GoalProvider>
+            <Activity />
+    </GoalProvider>*/}
+            <Activity />
+        </View >
     );
 
 }

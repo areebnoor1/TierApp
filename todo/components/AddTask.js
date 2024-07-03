@@ -8,6 +8,7 @@ import {
   Switch,
   ScrollView,
   Alert,
+  Pressable
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Entypo from "react-native-vector-icons/Entypo";
@@ -21,6 +22,7 @@ export default function AddTask({ setModalVisible, setTodos }) {
   const [taskType, setTaskType] = useState("");
   const [value, setValue] = useState("");
   const [date, setDate] = useState({});
+  const [importance, setImportance] = useState(1);
   const [showDate, setShowDate] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
@@ -131,6 +133,9 @@ export default function AddTask({ setModalVisible, setTodos }) {
       </View>
 
       <Text style={styles.smallText}>{getMessage()}</Text>
+     
+
+
 
       <ScrollView>
         <TextInput
@@ -143,6 +148,8 @@ export default function AddTask({ setModalVisible, setTodos }) {
           onChangeText={setValue}
         />
       </ScrollView>
+
+
 
       <View style={styles.dueDateContainer}>
         <View
@@ -172,7 +179,8 @@ export default function AddTask({ setModalVisible, setTodos }) {
 
       </View>
 
-      {showDatePicker &&
+      {
+        showDatePicker &&
         <DateTimePicker
           testID="dateTimePicker"
           value={date}
@@ -187,12 +195,230 @@ export default function AddTask({ setModalVisible, setTodos }) {
       }
 
 
+<Text style={styles.header}>Importance:</Text>
+      <View style={styles.taskNumberContainers}>
+        <View style={styles.taskNumberContainer}>
+          <Pressable 
+            style={[
+              styles.dayEllipse,
+              importance === 1 && styles.activeOption,
+            ]}
+            onPress = {()=>{setImportance(1)}}
+            >
+            <Text style={
+              styles.taskNumber}>1</Text>
+          </Pressable>
+          <Text style={styles.taskText}>Least important</Text>
+        </View>
+        <View style={styles.taskNumberContainer}>
+          <Pressable style={[
+              styles.dayEllipse,
+              importance === 2 && styles.activeOption,
+            ]}
+            onPress = {()=>{setImportance(2)}}>
+            <Text style={styles.taskNumber}>2</Text>
+          </Pressable>
+          <Text style={styles.taskText}> </Text>
+        </View>
+        <View style={styles.taskNumberContainer}>
+          <Pressable style={[
+              styles.dayEllipse,
+              importance === 3 && styles.activeOption,
+            ]}
+            onPress = {()=>{setImportance(3)}}>
+            <Text style={styles.taskNumber}>3</Text>
+          </Pressable>
+          <Text style={styles.taskText}>Most important</Text>
+        </View>
+      </View>
 
 
-    </View>
+
+    </View >
   );
 }
 const styles = StyleSheet.create({
+  taskTypeDisplay: {
+    backgroundColor: "#b7babd",
+    textAlign: 'center',
+    borderRadius: 20,
+    marginBottom: 10,
+    marginLeft: 20,
+    marginRight: 20,
+    padding: 20,
+    alignItems: 'center',
+  },
+
+  label: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    padding: 8,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  taskNumberContainers: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+  },
+  jarHeader: {
+    flexDirection: 'row',
+  },
+
+  topBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 16,
+  },
+  activeText: {
+    color: 'blue',
+
+  },
+
+  textInput: {
+    borderColor: 'purple',
+    borderWidth: 2,
+    //height: 250,
+    //width: 200,
+    padding: 10,
+    borderRadius: 20,
+    fontSize: 18,
+    margin: 10
+  },
+  icon: {
+    //padding: 10,
+    // color: 'white',
+  },
+
+  curTask: {
+    display: 'flex',
+    alignItems: 'center',
+    marginTop: 14,
+    backgroundColor: 'rgb(182, 36, 255)',
+    opacity: 1,
+    color: 'rgb(240, 240, 240)',
+    borderLeft: 1,
+    boxShadow: 'rgb(182, 36, 255)',
+    padding: 16,
+    borderRadius: 28,
+    textShadow: 'rgba(240, 240, 240, 0.47)'
+  },
+
+  remainingTasksContainer: {
+    width: "100%",
+    padding: 16,
+    borderColor: "black",
+    borderWidth: 1,
+    borderRadius: 10,
+  },
+  header: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 8,
+  },
+  taskNumberContainers: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+  },
+  taskNumberContainer: {
+    alignItems: "center",
+    marginRight: 16,
+  },
+  minuteEllipse: {
+    width: 30,
+    height: 30,
+    backgroundColor: "rgba(255, 38, 246, 0.75)",
+    borderRadius: 15,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  hourEllipse: {
+    width: 30,
+    height: 30,
+    backgroundColor: "#9D6AF0",
+    borderRadius: 15,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  dayEllipse: {
+    width: 30,
+    height: 30,
+    backgroundColor: "#b1b3b5",
+    borderRadius: 15,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  activeOption:{
+    backgroundColor: "#8d82ed",
+  },
+  taskNumber: {
+    color: "black",
+    fontSize: 15,
+    fontWeight: "bold",
+  },
+  taskText: {
+    width: 70,
+    textAlign: "center",
+    color: "black",
+  },
+  arrowContainer: {
+    marginLeft: "auto",
+  },
+  finishedText: {
+    fontSize: 16,
+    textAlign: "center",
+    fontStyle: "italic",
+    marginTop: 20,
+  },
+
+  screen: {
+    //flex: 1,
+    backgroundColor: "#FFF",
+    //padding: 20,
+    //justifyContent: "center",
+  },
+
+  smallText: {
+    fontStyle: 'italic',
+    fontFamily: 'Avenir-Book',
+    marginBottom: 20,
+    fontSize: 18,
+    alignItems: 'center',
+    //color: 'white'
+  },
+  pressableContainer: {
+    backgroundColor: "#48249c",
+    textAlign: 'center',
+    borderRadius: 20,
+    marginBottom: 10,
+
+  },
+  welcomText: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 6,
+    fontSize: 70,
+    marginTop: 12,
+    marginLeft: 30,
+    marginRight: 30,
+    marginBottom: 50,
+    fontWeight: 'bold',
+    fontFamily: "Poppins",
+    textAlign: "center",
+    //color: 'white'
+  },
+  buttonText: {
+    display: 'flex',
+    alignItems: 'center',
+    // gap: 6,
+    fontSize: 30,
+    // marginTop: 12,
+    //  marginLeft: 8,
+    //   marginBottom: 5,
+    fontWeight: 'bold',
+    fontFamily: "Poppins",
+    textAlign: "center",
+    //color: 'white'
+  },
   container: {
     flex: 1,
     padding: 20,

@@ -35,8 +35,8 @@ export default function Activity() {
   const [hasRemaining, setHasRemaining] = useState(true);
   //const [hasDailyGoal, setDailyGoal] = useState(false);
 
-  const { todos, addTodo, removeTodo, toggleTodoCompleted } = useContext(TodoContext);
-  const { goal, goalExists, updateGoal, setCompleted } = useContext(GoalContext);
+  const { todos, addTodo, removeTodo, toggleTodoCompleted, goal, goalExists, updateGoal, setCompleted } = useContext(TodoContext);
+ // const {  goal, goalExists, updateGoal, setCompleted} = useContext(GoalContext);
 
   // Placeholder values
   // let streak = 3;
@@ -153,14 +153,14 @@ export default function Activity() {
 
 
           <Text style={styles.streakHeader}>Streak: </Text>
-
+        
           {
             !("streak" in goal) ?
               <Text style={styles.streakNumber}>0</Text> :
               !hasRemainingTasks() && !isToday(goal.last_day_completed) ?
                 <Text style={styles.streakNumber}>{goal.streak + 1}</Text> :
                 <Text style={styles.streakNumber}>{goal.streak}</Text>
-          }
+  }
 
           <MaterialCommunityIcons name="fire" size={30} color="black" />
         </View>
