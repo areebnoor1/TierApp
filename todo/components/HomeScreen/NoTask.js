@@ -9,13 +9,14 @@ import {
   Alert,
   TouchableOpacity,
 } from "react-native";
-import MintutesJar from "../SVGicons/MinutesJar";
+import MinutesJar from "../SVGicons/MinutesJar";
 import HoursJar from "../SVGicons/HoursJar";
 import DaysJar from "../SVGicons/DaysJar";
 import TaskSelectionModal from "./TaskSelectionModal";
 import RandomTask from "./RandomTask";
 import { TodoContext } from "../TodoContext";
 import { EvilIcons } from '@expo/vector-icons';
+
 export default function NoTask({ setModalVisible, setCurrentTask }) {
   const [jarModalVisible, setJarModalVisible] = useState(false);
   const [taskSelectionVisible, setTaskSelectionVisible] = useState(false);
@@ -23,25 +24,13 @@ export default function NoTask({ setModalVisible, setCurrentTask }) {
     useState(false);
   const [selectedJar, setSelectedJar] = useState(null);
 
-  const { todos, addTodo, removeTodo, toggleTodoCompleted } =
-    useContext(TodoContext);
-  /*useEffect(() => {
-    const fetchTodos = async () => {
-      const todos = await readTodos();
-      setTodos(todos.filter(todo => todo.completed === false));
-    };
-    fetchTodos();
-  }, [todos]);*/
+  const { todos } = useContext(TodoContext);
 
   const checkTodosExist = (taskType) => {
-    //console.log('checking', todos)
-    filteredTodos = todos.filter(
+    const filteredTodos = todos.filter(
       (todo) => todo.task_type === taskType && todo.completed === false
     );
-    //console.log('filteredtodos', filteredTodos)
-    if (filteredTodos.length === 0) {
-      return null;
-    }
+    return filteredTodos.length === 0 ? null : filteredTodos;
   };
 
   const openJarModal = (jar) => {
@@ -52,6 +41,10 @@ export default function NoTask({ setModalVisible, setCurrentTask }) {
   const closeModal = () => {
     setJarModalVisible(false);
     setSelectedJar(null); // Reset selectedJar when modal is closed
+  };
+
+  const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
   return (
@@ -73,15 +66,13 @@ export default function NoTask({ setModalVisible, setCurrentTask }) {
                 ]);
               } else {
                 openJarModal("minutes");
-                setSelectedJar("minutes");
-                setJarModalVisible(true);
               }
             }}
             style={({ pressed }) => [
               { opacity: pressed || selectedJar === "minutes" ? 0.6 : 1 },
             ]}
           >
-            <MintutesJar />
+            <MinutesJar />
           </Pressable>
         </View>
 
@@ -94,8 +85,6 @@ export default function NoTask({ setModalVisible, setCurrentTask }) {
                 ]);
               } else {
                 openJarModal("hours");
-                setSelectedJar("hours");
-                setJarModalVisible(true);
               }
             }}
             style={({ pressed }) => [
@@ -106,7 +95,6 @@ export default function NoTask({ setModalVisible, setCurrentTask }) {
           </Pressable>
         </View>
 
-        {/* Container for Days */}
         <View style={styles.jarContainer}>
           <Pressable
             onPress={() => {
@@ -116,8 +104,6 @@ export default function NoTask({ setModalVisible, setCurrentTask }) {
                 ]);
               } else {
                 openJarModal("days");
-                setSelectedJar("days");
-                setJarModalVisible(true);
               }
             }}
             style={({ pressed }) => [
@@ -129,58 +115,52 @@ export default function NoTask({ setModalVisible, setCurrentTask }) {
         </View>
       </View>
 
-      {/* Jar Selection Modal */}
       <Modal
+     animationType="fade"
         transparent={true}
         visible={jarModalVisible}
         onRequestClose={closeModal}
       >
         <View style={styles.modalView}>
           <View style={styles.modalContainer}>
-            <TouchableOpacity  onPress={closeModal}>
-             <EvilIcons name="close" size={24} color="black" />
-            </TouchableOpacity>
+            <View style={styles.closeModalIcon}>
+              <TouchableOpacity onPress={closeModal}>
+                <EvilIcons name="close" size={30} color="black" />
+              </TouchableOpacity>
+            </View>
 
-            {/* Display selected jar */}
-            <Text style={styles.selectedJarText}>
-              start {selectedJar} task
-            </Text>
+            {selectedJar && (
+              <Text style={styles.modalTitle}>
+                Start {capitalizeFirstLetter(selectedJar)} Task
+              </Text>
+            )}
 
-            {/* Choose Random Task Button */}
-                <TouchableOpacity>
-                              <Text>Choose Random Task</Text>
-                    </TouchableOpacity>
-            <Pressable
-              style={styles.pressableContainer}
+            <TouchableOpacity
+              style={styles.button}
               onPress={() => {
-                //  closeModal();
                 setRandomTaskSelectionVisible(true);
               }}
             >
-              <Text style={styles.buttonText}>Choose Random Task</Text>
-            </Pressable>
+              <Text style={styles.buttonText}>Random Task</Text>
+            </TouchableOpacity>
 
-            {/* Choose Task Button */}
-            <Pressable
-              style={styles.pressableContainer}
+            <TouchableOpacity
+              style={styles.button}
               onPress={() => {
-                // closeModal();
                 setTaskSelectionVisible(true);
               }}
             >
-              <Text style={styles.buttonText}>Choose task</Text>
-            </Pressable>
+              <Text style={styles.buttonText}>Choose Task</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
 
-      {/* Task Selection Modal */}
       <TaskSelectionModal
         taskSelectionVisible={taskSelectionVisible}
         setTaskSelectionVisible={setTaskSelectionVisible}
         taskType={selectedJar}
         setCurrentTask={setCurrentTask}
-        //todos = {todos}
       />
 
       <RandomTask
@@ -190,6 +170,7 @@ export default function NoTask({ setModalVisible, setCurrentTask }) {
         taskType={selectedJar}
         setCurrentTask={setCurrentTask}
       />
+
       <Pressable
         style={styles.addTaskButton}
         onPress={() => setModalVisible(true)}
@@ -259,41 +240,45 @@ const styles = StyleSheet.create({
     bottom: 20,
     right: 20,
   },
-
-  modalContainer: {
-    padding: 40,
-    backgroundColor: "white",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    borderRadius: 10,
-  },
-
   modalView: {
     flex: 1,
     backgroundColor: "rgba(0,0,0,0.7)",
     alignItems: "center",
     justifyContent: "center",
   },
-
-  pressableContainer: {
-    backgroundColor: "#48249c",
-    textAlign: "center",
-    borderRadius: 20,
-    marginBottom: 10,
+  modalContainer: {
+    padding: 40,
+    backgroundColor: "white",
     alignItems: "center",
-    padding: 10,
+    borderRadius: 10,
+    width: "80%",
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontFamily: "Poppins-Bold",
+    color: "#D9D9D9",
+    marginBottom: 20,
+    textAlign: "center",
+  },
+  closeModalIcon: {
+    position: "absolute",
+    top: 20,
+    left: 20,
+  },
+  button: {
+    backgroundColor: "black",
+    textAlign: "center",
+    borderRadius: 10,
+    marginBottom: 20,
+    marginTop: 20,
+    alignItems: "center",
+    padding: 20,
+    width: "100%",
   },
 
   buttonText: {
-    fontSize: 26,
-    fontWeight: "bold",
-    fontFamily: "Poppins",
-    color: "white",
-  },
-  selectedJarText: {
     fontSize: 20,
-    fontFamily: "Poppins",
-    color: "#48249c",
-    marginBottom: 20,
+    fontFamily: "Poppins-Bold",
+    color: "white",
   },
 });

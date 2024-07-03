@@ -14,10 +14,10 @@ export const TodoProvider = ({ children }) => {
   useEffect(() => {
     //DELETE YESTERDAYS TODOS ON INITIAL COMPONENT MOUNT IF COMPLETED AND COMPLETION DATE WAS YESTER
 
-    clearAsyncStorage();
+    //clearAsyncStorage();
 
-    // removeTodosCompletedBeforeToday()
-    // console.log('loaded todos', todos)
+    removeTodosCompletedBeforeToday()
+   
   }, []);
 
 

@@ -42,8 +42,11 @@ export default function TodoList(props) {
 						size={30}
 						color='black'
 						style={{
-							marginLeft: 10,
-							flex: 1,
+							marginLeft: 8,
+							marginTop: 8,
+							marginRight: 8,
+							marginBottom: 8,
+							//flex: 1,
 							flexDirection: 'row',
 							alignItems: 'center',
 							justifyContent: 'center'
@@ -64,7 +67,7 @@ export default function TodoList(props) {
 						<Text style={styles.listItem}>{props.text}</Text>
 
 						{"days_made_progress" in props.todo &&
-							<View>
+							<View style={styles.listItem}>
 								<Text> Last day made progress: {format(props.todo.most_recent_day_made_progress, "eeee, MMMM do")} </Text>
 								<Text> Number of progress sessions: {props.todo.days_made_progress} </Text>
 							</View>
@@ -73,14 +76,19 @@ export default function TodoList(props) {
 						{props.has_due_date &&
 							<Text style={styles.dateText}>{format(props.due_date, "eeee, MMMM do")}</Text>}
 					</View>
-					{/*<Icon
-				name="trash-bin"
-				size={25}
-				//color="red"
-				style={{ marginLeft: 'auto' }}
-				marginRight={30}
+					{<Icon
+				name="close-circle-outline"
+				size={30}
+				style={{ marginLeft: 'auto',
+				//marginLeft: 8,
+				marginTop: 8,
+				marginRight: 8,
+				marginBottom: 8,
+			
+			}}
+				marginRight={8}
 				onPress={props.deleteTodo}
-				/>*/}
+				/>}
 				</View>
 
 			</TouchableOpacity>
@@ -91,7 +99,8 @@ export default function TodoList(props) {
 
 const styles = StyleSheet.create({
 	listContainer: {
-		marginTop: '2%',
+		marginTop: '3%',
+		//margin
 		justifyContent: "flex-start",
 		borderWidth: 2,
 		borderRadius: 10,
@@ -105,10 +114,12 @@ const styles = StyleSheet.create({
 		minHeight: 30
 	},
 	listItem: {
-		paddingBottom: 5,
+		//paddingBottom: 5,
 		paddingHorizontal: 10,
 		right: 10,
-		marginTop: 6,
+		marginTop: 12,
+		marginBottom: 12,
+		marginRight: 70,
 		fontSize: 17,
 		fontWeight: 'bold',
 		color: 'black'
