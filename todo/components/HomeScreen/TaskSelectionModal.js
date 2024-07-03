@@ -2,20 +2,15 @@ import React, { useState, useEffect, useContext } from "react";
 import {
   Modal,
   StyleSheet,
-  View,
-  Text,
-  Pressable,
-  ScrollView,
+ View,
+ Text,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import TodoListButton from "../TodoListButton";
-import { createTodo, readTodos, updateTodo, deleteTodo } from '../TodosService';
-import  {TodoContext}  from '../TodoContext';
-import { useFocusEffect } from '@react-navigation/native';
-//import { db } from "../firebase";
-//import { ref, onValue, query, orderByChild, equalTo } from "firebase/database";
-
+import { TodoContext } from '../TodoContext';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function TaskSelectionModal({
   taskSelectionVisible,
@@ -23,20 +18,30 @@ export default function TaskSelectionModal({
   setCurrentTask,
   taskType,
 }) {
-  //const { todos, addTodo, removeTodo, toggleTodoCompleted } = useContext(TodoContext);
-const { todos } = useContext(TodoContext);
+  const { todos } = useContext(TodoContext);
 
- // Filter todos based on the taskType
+  // Filter todos based on the taskType
   const filteredTodos = todos.filter(todo => todo.task_type === taskType && !todo.completed);
 
+  const getTaskTypeMessage = (taskType) => {
+    switch (taskType) {
+      case 'minutes':
+        return 'Choose a Minutes Task';
+      case 'hours':
+        return 'Choose an Hours Task';
+      case 'days':
+        return 'Choose a Days Task';
+      default:
+        return 'Choose a Task';
+    }
+  };
 
   return (
     <Modal
-      animationType="slide"
+      animationType="fade"
       transparent={false}
       visible={taskSelectionVisible}
     >
-
       <View style={styles.listContainer}>
         <View style={styles.topBar}>
           <TouchableOpacity
@@ -45,47 +50,28 @@ const { todos } = useContext(TodoContext);
             }}
             style={styles.closeButton}
           >
-            <AntDesign name="close" size={20} />
+ {/*  <AntDesign name="close" size={20} /> */}
+            <Ionicons name="arrow-back-circle" size={30} color="black" />
           </TouchableOpacity>
-          <Text style={styles.topBarText}>Select a {taskType} task </Text>
+          <Text style={styles.topBarText}>{getTaskTypeMessage(taskType)}</Text>
           <View style={styles.placeholder} />
         </View>
 
-        <ScrollView >
-
+        <ScrollView style={styles.scrollView}>
           {filteredTodos.map(item => (
-                    <TouchableOpacity
-                      key={item.key}
-                      onPress={() => {
-                        setCurrentTask(item);
-                        setTaskSelectionVisible(false);
-                      }}
-
-                    >
-                      <TodoListButton
-                        text={item.text}
-                        todoItem={item}
-                      />
-                    </TouchableOpacity>
-                  ))}
-        {/*}
-          { todos.map(item => (
-              <Pressable key={item.key} onPress={() => {
-                setCurrentTask(item)
-                setTaskSelectionVisible(false)
-              }
-              }>
-                {!item.completed && item.task_type === taskType &&
-                  <TodoListButton
-                    text={item.text}
-                    key={item.key}
-                    todoItem={item.completed}
-                    setChecked={() => item.key}
-                    deleteTodo={() => deleteTodo(key)}
-                  />}
-              </Pressable>
-            ))
-          } */}
+            <TouchableOpacity
+              key={item.key}
+              onPress={() => {
+                setCurrentTask(item);
+                setTaskSelectionVisible(false);
+              }}
+            >
+              <TodoListButton
+                text={item.text}
+                todoItem={item}
+              />
+            </TouchableOpacity>
+          ))}
         </ScrollView>
       </View>
     </Modal>
@@ -107,22 +93,22 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   topBarText: {
-    fontSize: 18,
-    fontWeight: "bold",
+
+  //  fontWeight: "bold",
     flex: 1,
     textAlign: "center",
+        fontSize: 20,
+        fontFamily: "Poppins-Bold",
+        color: "#D9D9D9",
+      //  marginBottom: 20,
+        textAlign: "center",
   },
   placeholder: {
     width: 20,
+
   },
   scrollView: {
     flex: 1,
     marginTop: 10,
-  },
-  pressableContainer: {
-    backgroundColor: "#3d36a3",
- //   borderRadius: 20,
-   // padding: 15,
- //s   marginBottom: 10,
   },
 });
