@@ -28,7 +28,7 @@ import {
 import Entypo from "react-native-vector-icons/Entypo";
 import TodoList from "./TodoList";
 import EditTask from "./EditTask";
-import EditTaskModal from './EditTaskModal';
+import AddTaskModal from './HomeScreen/AddTaskModal';
 import { TodoContext } from "./TodoContext";
 import { createTodo, readTodos, updateTodo, deleteTodo } from "./TodosService";
 import { db } from "./firebase.js";
@@ -36,6 +36,7 @@ import { db } from "./firebase.js";
 export default function Minutes() {
   const [value, setValue] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
+  const [addModalVisible, setAddModalVisible] = useState(false);
   const [editingTask, setEditingTask] = useState({});
 
   const { todos, addTodo, removeTodo, toggleTodoCompleted } =
@@ -47,7 +48,7 @@ export default function Minutes() {
 
   return (
     <>
-      <TouchableOpacity style={styles.addTaskButton}>
+      <TouchableOpacity style={styles.addTaskButton} onPress={() => setAddModalVisible(true)}>
         <Ionicons name="add" size={30} color="black" />
       </TouchableOpacity>
       <View style={styles.container}>
@@ -78,13 +79,20 @@ export default function Minutes() {
             )}
         </ScrollView>
 
+        <AddTaskModal
+          modalVisible={addModalVisible}
+          setModalVisible={setAddModalVisible}
+          inputTaskType = {'minutes'}
+        //  todos = {todos.filter(todo => todo.completed===false)}
+        // setTodos = {setTodos}
+        />
 
         <Modal transparent={true} visible={modalVisible} style={styles.modalView}>
-            <View style={styles.modalContainer}>
-                <EditTask modalVisible={modalVisible} setModalVisible={setModalVisible} task={editingTask}
-                // {//deleteOldTodo={handleDeleteTodo(editingTask)}
-                />
-            </View>
+          <View style={styles.modalContainer}>
+            <EditTask modalVisible={modalVisible} setModalVisible={setModalVisible} task={editingTask}
+            // {//deleteOldTodo={handleDeleteTodo(editingTask)}
+            />
+          </View>
         </Modal>
       </View>
     </>
@@ -131,17 +139,17 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.7)",
     alignItems: "center",
     justifyContent: "center",
-    },
-      modalContainer: {
-        flex: 1,
-        justifyContent: "flex-end",
-        alignItems: "center",
-        backgroundColor: "rgba(0, 0, 0, 0.5)",
-        width: "100%",
-        height: "95%",
-        backgroundColor: "#EBEBEB",
-        borderRadius: 10,
-      },
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    width: "100%",
+    height: "95%",
+    backgroundColor: "#EBEBEB",
+    borderRadius: 10,
+  },
 
   addTaskButton: {
     position: "absolute",

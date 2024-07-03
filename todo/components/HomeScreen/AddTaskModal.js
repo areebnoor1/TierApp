@@ -1,19 +1,23 @@
 import React from "react";
 import { StyleSheet, View, Modal } from "react-native";
 import AddTask from "../AddTask.js";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-export default function AddTaskModal({ modalVisible, setModalVisible}) {
+export default function AddTaskModal({ modalVisible, setModalVisible, inputTaskType}) {
 
 
   return (
   <>
     <Modal transparent={true}  animationType="slide" visible={modalVisible} style={styles.modalView}>
-
+    <KeyboardAwareScrollView styles={{
+      flex:1
+    }}>
           <View style={styles.modalContainer}>
                               <View style={styles.modalContent}>
-                              <AddTask setModalVisible={setModalVisible} />
+                              <AddTask setModalVisible={setModalVisible} inputTaskType = {inputTaskType} />
                               </View>
                             </View>
+                            </KeyboardAwareScrollView>
     </Modal>
 {/*
             <Modal visible={true} animationType="slide" transparent={true}>
@@ -34,6 +38,7 @@ const styles = StyleSheet.create({
     //borderRadius: 20,
     //padding: 35,
     // alignItems: 'center',
+    //height: "100%",
     flex: 1,
     //backgroundColor: 'transparent',
     backgroundColor: "rgba(0,0,0,0.7)",

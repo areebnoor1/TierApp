@@ -18,8 +18,8 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 
 import { TodoContext } from "./TodoContext";
 
-export default function AddTask({ setModalVisible, setTodos }) {
-  const [taskType, setTaskType] = useState("");
+export default function AddTask({ setModalVisible, setTodos, inputTaskType }) {
+  const [taskType, setTaskType] = useState(inputTaskType);
   const [value, setValue] = useState("");
   const [date, setDate] = useState({});
   const [importance, setImportance] = useState(1);
@@ -133,7 +133,7 @@ export default function AddTask({ setModalVisible, setTodos }) {
       </View>
 
       <Text style={styles.smallText}>{getMessage()}</Text>
-     
+
 
 
 
@@ -195,16 +195,16 @@ export default function AddTask({ setModalVisible, setTodos }) {
       }
 
 
-<Text style={styles.header}>Importance:</Text>
+      <Text style={styles.header}>Importance:</Text>
       <View style={styles.taskNumberContainers}>
         <View style={styles.taskNumberContainer}>
-          <Pressable 
+          <Pressable
             style={[
               styles.dayEllipse,
               importance === 1 && styles.activeOption,
             ]}
-            onPress = {()=>{setImportance(1)}}
-            >
+            onPress={() => { setImportance(1) }}
+          >
             <Text style={
               styles.taskNumber}>1</Text>
           </Pressable>
@@ -212,20 +212,20 @@ export default function AddTask({ setModalVisible, setTodos }) {
         </View>
         <View style={styles.taskNumberContainer}>
           <Pressable style={[
-              styles.dayEllipse,
-              importance === 2 && styles.activeOption,
-            ]}
-            onPress = {()=>{setImportance(2)}}>
+            styles.dayEllipse,
+            importance === 2 && styles.activeOption,
+          ]}
+            onPress={() => { setImportance(2) }}>
             <Text style={styles.taskNumber}>2</Text>
           </Pressable>
           <Text style={styles.taskText}> </Text>
         </View>
         <View style={styles.taskNumberContainer}>
           <Pressable style={[
-              styles.dayEllipse,
-              importance === 3 && styles.activeOption,
-            ]}
-            onPress = {()=>{setImportance(3)}}>
+            styles.dayEllipse,
+            importance === 3 && styles.activeOption,
+          ]}
+            onPress={() => { setImportance(3) }}>
             <Text style={styles.taskNumber}>3</Text>
           </Pressable>
           <Text style={styles.taskText}>Most important</Text>
@@ -347,7 +347,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  activeOption:{
+  activeOption: {
     backgroundColor: "#8d82ed",
   },
   taskNumber: {
@@ -421,6 +421,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    height: 760,
     padding: 20,
     backgroundColor: "#F6F6F6",
     borderRadius: 10,
