@@ -23,7 +23,6 @@ export default function TodoListCompleted(props) {
         const formattedDate = date.toLocaleDateString('en-US', options);
     }
 
-
     return (
         <View styles={{
             justifyContent: "flex-end",
@@ -32,78 +31,72 @@ export default function TodoListCompleted(props) {
             flexDirection: "row",
             justifyContent: "space-between",
         }}>
-            <TouchableOpacity>
+            <View
+                style={props.todo.task_type === "minutes"
+                    ? styles.minutesTask
+                    : props.todo.task_type === "hours"
+                        ? styles.hoursTask
+                        : styles.daysTask}
 
-                <View 
-                
-                style = {props.todo.task_type === "minutes"
-                ? styles.minutesTask
-                : props.todo.task_type === "hours"
-                  ? styles.hoursTask
-                  : styles.daysTask}
-                
-                >
-                    {"days_made_progress" in props.todo ?
-                        <MaterialCommunityIcons name='progress-check' style=
+            >
+                {"days_made_progress" in props.todo ?
+                    <MaterialCommunityIcons name='progress-check' style=
 
-                            {{
-                                marginLeft: 8,
-                                marginTop: 8,
-                                marginRight: 8,
-                                marginBottom: 8,
-                                //flex: 1,
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                justifyContent: 'center'
+                        {{
+                            marginLeft: 8,
+                            marginTop: 8,
+                            marginRight: 8,
+                            marginBottom: 8,
+                            //flex: 1,
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'center'
 
-                            }}
+                        }}
+                        
 
-                            size={30} />
+                        size={30} />
 
-                        :
-                        <Icon
-                            name={'checkmark-circle-outline'}
-                            size={30}
-                            color='black'
+                    :
+                    <Icon
+                        name={'checkmark-circle-outline'}
+                        size={30}
+                        color='black'
 
-                            style={{
-                                marginLeft: 8,
-                                marginTop: 8,
-                                marginRight: 8,
-                                marginBottom: 8,
-                                //flex: 1,
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                            }}
-                        />
+                        style={{
+                            marginLeft: 8,
+                            marginTop: 8,
+                            marginRight: 8,
+                            marginBottom: 8,
+                            //flex: 1,
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}
+                        onPress={() => {
+							//ssetCompleted(!completed)
+							toggleTodoCompleted(props.the_key)
+						}}
+                    />
+                }
+                <View styles={{
+                    flex: 1,
+                    //flexDirection: 'row',
+                }} >
+                    <Text style={styles.listItem}
+                    >{props.text}</Text>
+
+                    {"days_made_progress" in props.todo &&
+                        <View style={styles.listItem}>
+                            <Text> Last day made progress: {format(props.todo.most_recent_day_made_progress, "eeee, MMMM do")} </Text>
+                            <Text> Number of progress sessions: {props.todo.days_made_progress} </Text>
+                        </View>
                     }
 
-
-                    <View styles={{
-                        flex: 1,
-                        //flexDirection: 'row',
-                    }} >
-
-                        <Text style={styles.listItem}
-
-
-                        >{props.text}</Text>
-
-                        {"days_made_progress" in props.todo &&
-                            <View style={styles.listItem}>
-                                <Text> Last day made progress: {format(props.todo.most_recent_day_made_progress, "eeee, MMMM do")} </Text>
-                                <Text> Number of progress sessions: {props.todo.days_made_progress} </Text>
-                            </View>
-                        }
-
-                        {props.has_due_date &&
-                            <Text style={styles.dateText}>{format(props.due_date, "eeee, MMMM do")}</Text>}
-                    </View>
-
+                    {props.has_due_date &&
+                        <Text style={styles.dateText}>{format(props.due_date, "eeee, MMMM do")}</Text>}
                 </View>
-
-            </TouchableOpacity>
+            </View>
         </View>
     )
 

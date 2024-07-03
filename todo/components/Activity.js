@@ -222,6 +222,7 @@ export default function Activity() {
                 <TodoListCompleted
                   text={item.text}
                   key={item.key}
+                  the_key={item.key}
                   todo={item}
                   not_editable={true}
                   due_date={item.due_date}
@@ -232,6 +233,7 @@ export default function Activity() {
             <TodoListCompleted
             text={item.text}
                   key={item.key}
+                  the_key={item.key}
                   todo={item}
                   not_editable={true}
                   due_date={item.due_date}

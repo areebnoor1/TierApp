@@ -27,6 +27,7 @@ import {
 import Entypo from 'react-native-vector-icons/Entypo';
 import TodoList from './TodoList';
 import EditTask from './EditTask';
+import EditTaskModal from './EditTaskModal';
 import { TodoContext } from './TodoContext';
 import { createTodo, readTodos, updateTodo, deleteTodo } from './TodosService';
 import { db } from "./firebase.js"
@@ -74,8 +75,8 @@ export default function Minutes() {
 
 
         <Modal transparent={true} visible={modalVisible} style={styles.modalView}>
-            <View>
-                <EditTask setModalVisible={setModalVisible} task={editingTask}
+            <View style={styles.modalContainer}>
+                <EditTask modalVisible={modalVisible} setModalVisible={setModalVisible} task={editingTask}
                 // {//deleteOldTodo={handleDeleteTodo(editingTask)}
                 />
             </View>
@@ -130,5 +131,15 @@ const styles = StyleSheet.create({
         backgroundColor: "rgba(0,0,0,0.7)",
         alignItems: "center",
         justifyContent: "center",
-    },
+      },
+      modalContainer: {
+        flex: 1,
+        justifyContent: "flex-end",
+        alignItems: "center",
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        width: "100%",
+        height: "95%",
+        backgroundColor: "#EBEBEB",
+        borderRadius: 10,
+      },
 });
