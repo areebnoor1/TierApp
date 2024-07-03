@@ -88,13 +88,13 @@ export default function Minutes() {
 
 const styles = StyleSheet.create({
     scroll: {
-        width: '100%',
+        //width: '100%',
     },
     container: {
         //flex: 1,
         // justifyContent: 'flex-start',
         //alignItems: 'center',
-        backgroundColor: '#F5FCFF',
+        //backgroundColor: '#F5FCFF',
     },
     header: {
         marginTop: '15%',

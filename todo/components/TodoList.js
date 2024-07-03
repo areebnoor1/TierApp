@@ -67,7 +67,7 @@ export default function TodoList(props) {
 						<Text style={styles.listItem}>{props.text}</Text>
 
 						{"days_made_progress" in props.todo &&
-							<View>
+							<View style={styles.listItem}>
 								<Text> Last day made progress: {format(props.todo.most_recent_day_made_progress, "eeee, MMMM do")} </Text>
 								<Text> Number of progress sessions: {props.todo.days_made_progress} </Text>
 							</View>

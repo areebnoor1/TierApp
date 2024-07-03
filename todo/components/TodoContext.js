@@ -17,7 +17,7 @@ export const TodoProvider = ({ children }) => {
     //clearAsyncStorage();
 
     removeTodosCompletedBeforeToday()
-    // console.log('loaded todos', todos)
+   
   }, []);
 
 

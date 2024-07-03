@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Animated, Dimensions, Modal, ScrollView } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { AntDesign } from "@expo/vector-icons";
-import { updateTodo } from '../TodosService';
 import { useNavigation } from "@react-navigation/native";
 import VerticalLine from "../SVGicons/VerticalLine";
 import { TodoContext } from '../TodoContext';
@@ -11,10 +10,12 @@ const windowHeight = Dimensions.get('window').height;
 
 export default function CurrentTask({ visible, currentTask, setCurrentTask }) {
   const navigation = useNavigation();
-  const { toggleTodoCompleted } = useContext(TodoContext);
+  //const { toggleTodoCompleted } = useContext(TodoContext);
   const [modalVisible, setModalVisible] = useState(false);
   const translateY = useState(new Animated.Value(-windowHeight))[0];
   const opacity = useState(new Animated.Value(0))[0];
+
+  const { todos, addTodo, removeTodo, toggleTodoCompleted, updateTodo } = useContext(TodoContext);
 
   const openModal = () => {
     setModalVisible(true);

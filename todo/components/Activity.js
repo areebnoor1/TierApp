@@ -16,6 +16,7 @@ import { TodoContext } from './TodoContext';
 
 import { GoalContext } from "./DailyGoalContext";
 import { GoalProvider } from "./DailyGoalContext";
+import TodoListCompleted from "./TodoListCompleted";
 
 export default function Activity() {
   const [currentDate, setCurrentDate] = useState("");
@@ -89,7 +90,7 @@ export default function Activity() {
 
 
   const minutesTasksLeft = () => {
-    //console.log('minutes left', goal.minutes_tasks - todos.filter(todo => todo.completed === true && todo.task_type === 'minutes').length)
+    console.log(goal)
     return goal.minutes_tasks - todos.filter(todo => todo.completed === true && todo.task_type === 'minutes').length
   };
   const hoursTasksLeft = () => {
@@ -216,15 +217,9 @@ export default function Activity() {
             item.completed ? (
               <View
                 key={item.key}
-                style={
-                  item.taskType === "minutes"
-                    ? styles.minutesTask
-                    : item.taskType === "hours"
-                      ? styles.hoursTask
-                      : styles.daysTask
-                }
+               
               >
-                <TodoList
+                <TodoListCompleted
                   text={item.text}
                   key={item.key}
                   todo={item}
@@ -233,7 +228,16 @@ export default function Activity() {
                   todoItem={item.completed}
                 />
               </View>
-            ) : null
+            ) : 'days_made_progress' in item &&  isToday(item.most_recent_day_made_progress)  ? 
+            <TodoListCompleted
+            text={item.text}
+                  key={item.key}
+                  todo={item}
+                  not_editable={true}
+                  due_date={item.due_date}
+                  todoItem={item.completed}
+            />
+            : null
           )}
         </View>
         <GoalModal
