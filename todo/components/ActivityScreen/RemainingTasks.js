@@ -5,8 +5,6 @@ import { AntDesign } from "@expo/vector-icons";
 import { GoalContext } from "../DailyGoalContext";
 import { TodoContext } from "../TodoContext";
 
-
-
 export default function RemainingTasks({ remaining, minutesTasksLeft, hoursTasksLeft, daysTasksLeft }) {
 
   // Check if any tasks are left
@@ -87,7 +85,6 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderWidth: 1,
     borderRadius: 10,
-    //  alignItems: "center",
   },
   remainingTasksContainer: {
     width: "100%",
