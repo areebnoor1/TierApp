@@ -6,7 +6,6 @@ import {
   Pressable,
   Image,
   Modal,
-  Alert,
   TouchableOpacity,
 } from "react-native";
 import MinutesJar from "../SVGicons/MinutesJar";
@@ -20,9 +19,10 @@ import { EvilIcons } from '@expo/vector-icons';
 export default function NoTask({ setModalVisible, setCurrentTask }) {
   const [jarModalVisible, setJarModalVisible] = useState(false);
   const [taskSelectionVisible, setTaskSelectionVisible] = useState(false);
-  const [randomTaskSelectionVisible, setRandomTaskSelectionVisible] =
-    useState(false);
+  const [randomTaskSelectionVisible, setRandomTaskSelectionVisible] = useState(false);
   const [selectedJar, setSelectedJar] = useState(null);
+  const [noTasksModalVisible, setNoTasksModalVisible] = useState(false);
+  const [noTasksJar, setNoTasksJar] = useState(null);
 
   const { todos } = useContext(TodoContext);
 
@@ -30,7 +30,12 @@ export default function NoTask({ setModalVisible, setCurrentTask }) {
     const filteredTodos = todos.filter(
       (todo) => todo.task_type === taskType && todo.completed === false
     );
-    return filteredTodos.length === 0 ? null : filteredTodos;
+    if (filteredTodos.length === 0) {
+      setNoTasksJar(taskType);
+      setNoTasksModalVisible(true);
+      return null;
+    }
+    return filteredTodos;
   };
 
   const openJarModal = (jar) => {
@@ -43,10 +48,16 @@ export default function NoTask({ setModalVisible, setCurrentTask }) {
     setSelectedJar(null); // Reset selectedJar when modal is closed
   };
 
-  const capitalizeFirstLetter = (string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+  const closeNoTasksModal = () => {
+    setNoTasksModalVisible(false);
+    setNoTasksJar(null);
   };
 
+
+const capitalizeFirstLetter = (string) => {
+  if (!string) return ""; // Handle null or undefined case
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
   return (
     <View style={styles.screen}>
       <View style={styles.welcomeTextContainer}>
@@ -61,12 +72,9 @@ export default function NoTask({ setModalVisible, setCurrentTask }) {
           <Pressable
             onPress={() => {
               if (checkTodosExist("minutes") === null) {
-                Alert.alert("", "No todos in this category", [
-                  { text: "OK", onPress: () => console.log("OK Pressed") },
-                ]);
-              } else {
-                openJarModal("minutes");
+                return;
               }
+              openJarModal("minutes");
             }}
             style={({ pressed }) => [
               { opacity: pressed || selectedJar === "minutes" ? 0.6 : 1 },
@@ -80,12 +88,9 @@ export default function NoTask({ setModalVisible, setCurrentTask }) {
           <Pressable
             onPress={() => {
               if (checkTodosExist("hours") === null) {
-                Alert.alert("", "No todos in this category", [
-                  { text: "OK", onPress: () => console.log("OK Pressed") },
-                ]);
-              } else {
-                openJarModal("hours");
+                return;
               }
+              openJarModal("hours");
             }}
             style={({ pressed }) => [
               { opacity: pressed || selectedJar === "hours" ? 0.6 : 1 },
@@ -99,12 +104,9 @@ export default function NoTask({ setModalVisible, setCurrentTask }) {
           <Pressable
             onPress={() => {
               if (checkTodosExist("days") === null) {
-                Alert.alert("", "No todos in this category", [
-                  { text: "OK", onPress: () => console.log("OK Pressed") },
-                ]);
-              } else {
-                openJarModal("days");
+                return;
               }
+              openJarModal("days");
             }}
             style={({ pressed }) => [
               { opacity: pressed || selectedJar === "days" ? 0.6 : 1 },
@@ -116,7 +118,7 @@ export default function NoTask({ setModalVisible, setCurrentTask }) {
       </View>
 
       <Modal
-     animationType="fade"
+        animationType="fade"
         transparent={true}
         visible={jarModalVisible}
         onRequestClose={closeModal}
@@ -180,6 +182,37 @@ export default function NoTask({ setModalVisible, setCurrentTask }) {
           source={require("../../assets/addButton.png")}
         />
       </Pressable>
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={noTasksModalVisible}
+        onRequestClose={closeNoTasksModal}
+      >
+        <View style={styles.modalView}>
+          <View style={styles.modalContainer}>
+            <View style={styles.closeModalIcon}>
+              <TouchableOpacity onPress={closeNoTasksModal}>
+                <EvilIcons name="close" size={30} color="black" />
+              </TouchableOpacity>
+            </View>
+            <Text style={styles.noTasksModal}>
+              No tasks in {capitalizeFirstLetter(noTasksJar)} jar.
+            </Text>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+                closeNoTasksModal();
+                setModalVisible(true);
+              }}
+            >
+              <Text style={styles.buttonText}>
+                Add new {capitalizeFirstLetter(noTasksJar)} task
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -191,7 +224,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     margin: 10,
   },
-
   welcomeTextContainer: {
     alignItems: "center",
     justifyContent: "center", // Center content horizontally and vertically
@@ -205,7 +237,6 @@ const styles = StyleSheet.create({
     elevation: 5,
     marginBottom: 180, // Adjust this value as needed
   },
-
   welcomeTextTitle: {
     fontSize: 36,
     fontFamily: "Poppins-Bold",
@@ -214,7 +245,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     color: "#48249c",
   },
-
   welcomeTextHeader: {
     marginTop: 20,
     fontSize: 24,
@@ -222,7 +252,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#6a1b9a",
   },
-
   jarsContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -230,11 +259,9 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 130,
   },
-
   jarContainer: {
     alignItems: "center",
   },
-
   addTaskButton: {
     position: "absolute",
     bottom: 20,
@@ -260,6 +287,14 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: "center",
   },
+    noTasksModal: {
+      fontSize: 20,
+      fontFamily: "Poppins-Bold",
+      color: "black",
+      //marginBottom: 20,
+      textAlign: "center",
+    },
+
   closeModalIcon: {
     position: "absolute",
     top: 20,
@@ -275,7 +310,6 @@ const styles = StyleSheet.create({
     padding: 20,
     width: "100%",
   },
-
   buttonText: {
     fontSize: 20,
     fontFamily: "Poppins-Bold",
