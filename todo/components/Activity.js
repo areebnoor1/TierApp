@@ -147,12 +147,9 @@ export default function Activity() {
     <View style={styles.container}>
       <Text style={styles.dateText}>{currentDate}</Text>
       <ScrollView style={styles.scroll}>
-        <View style={styles.streakContainer}>
-          {/* If streak is null or 0, display "Set task or complete daily goal to begin streak" */}
-
-
-          <Text style={styles.streakHeader}>Streak: </Text>
-
+ {/*Different Streak Appearence:  */}
+<View style={styles.streakContainer}>
+ <View style={styles.streakHeader}>
           {
             !("streak" in goal) ?
               <Text style={styles.streakNumber}>0</Text> :
@@ -160,10 +157,10 @@ export default function Activity() {
                 <Text style={styles.streakNumber}>{goal.streak + 1}</Text> :
                 <Text style={styles.streakNumber}>{goal.streak}</Text>
           }
-
           <MaterialCommunityIcons name="fire" size={30} color="black" />
         </View>
-        {/* If none, display "reached daily goal"... If daily goal not set, just don't have... */}
+           <Text style={styles.streakText}>Day Streak!</Text>
+          </View>
 
         <View style={styles.dailyGoalContainer}>
           <Text style={styles.summary}>Daily Goal</Text>
@@ -260,22 +257,28 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   streakContainer: {
-    flexDirection: "row",
+  //  flexDirection: "row",
     alignItems: "center",
-    width: "100%",
+   // width: "100%",
     //justifyContent: "flex-end",
   },
   streakHeader: {
-    fontFamily: "Inter",
-    color: "black",
-    fontSize: 20,
+       flexDirection: "row",
+       alignItems: "center",
   },
   streakNumber: {
+      fontFamily: "Inter",
+      color: "black",
+      fontSize: 24,
+      fontWeight: "bold",
+  },
+  streakText: {
     fontFamily: "Inter",
     color: "black",
-    fontSize: 24,
+    fontSize: 12,
     fontWeight: "bold",
   },
+
   dailyGoalContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
