@@ -36,6 +36,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
+import DailyGoal from './components/ActivityScreen/DailyGoal';
 
 
 
@@ -57,6 +58,7 @@ export const HomeScreen = () => {
     >
       <Stack.Screen component={HomeScreen} name="HomeScreen" options={{ title: "HomeScreen" }} />
       <Stack.Screen component={AddTask} name="AddTask" options={{ title: "AddTask" }} />
+       <Stack.Screen name="DailyGoal" component={DailyGoal} />
     </Stack.Navigator>
   )
 }
