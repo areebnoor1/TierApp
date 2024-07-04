@@ -93,21 +93,27 @@ export default function Jars() {
                 <View style={styles.topBar}>
                     <Text style={styles.buttonText}>My Tasks</Text>
                 </View>
+
+
+
                 <TouchableOpacity style={styles.jarHeader} onPress={() => setTaskType('minutes')}>
                     <Entypo name='stopwatch' style={[styles.icon, taskType === 'minutes' && styles.activeText]} size={40} />
                     <Text style={styles.label}>Minutes</Text>
                     <Entypo name='chevron-right' style={styles.icon} size={30} />
                 </TouchableOpacity>
-                <View style={styles.taskTypeDisplay}>
+
+
+
+                <View style={styles.minutesTaskTypeDisplay}>
                     
 
 
                 <View style={styles.taskNumberContainers}>
                         <View style={styles.taskNumberContainer}>
-                            <View style={styles.dayEllipse}>
-                                <Text style={styles.taskNumber}>{todos.filter(todo => todo.task_type === 'minutes'&& todo.completed === false).length}</Text>
+                            <View style={styles.inJarEllipse}>
+                                <Text style={styles.inJarNumber}>{todos.filter(todo => todo.task_type === 'minutes'&& todo.completed === false).length}</Text>
                             </View>
-                            <Text style={styles.taskText}>Tasks in jar</Text>
+                            <Text style={styles.inJarText}>Tasks in jar</Text>
                         </View>
                         <View style={styles.taskNumberContainer}>
                             <View style={styles.dayEllipse}>
@@ -131,7 +137,7 @@ export default function Jars() {
                     <Text style={styles.label} >Hours</Text>
                     <Entypo name='chevron-right' style={styles.icon} size={30} />
                 </TouchableOpacity>
-                <View style={styles.taskTypeDisplay}>
+                <View style={styles.hoursTaskTypeDisplay}>
 
                     <View style={styles.taskNumberContainers}>
                         <View style={styles.taskNumberContainer}>
@@ -160,7 +166,7 @@ export default function Jars() {
                     <Text style={styles.label}>Days</Text>
                     <Entypo name='chevron-right' style={styles.icon} size={30} />
                 </TouchableOpacity>
-                <View style={styles.taskTypeDisplay}>
+                <View style={styles.daysTaskTypeDisplay}>
                     
 
 
@@ -245,6 +251,22 @@ export default function Jars() {
 }
 
 const styles = StyleSheet.create({
+
+    label: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        padding: 8,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+        jarHeader: {
+            flexDirection: 'row',
+         //   backgroundColor: 'red',
+            alignItems: "center",
+           // justifyContent:
+            marginLeft: 20,
+        },
+
     taskTypeDisplay: {
         backgroundColor: "#b7babd",
         textAlign: 'center',
@@ -255,21 +277,50 @@ const styles = StyleSheet.create({
         padding: 20,
         alignItems: 'center',
     },
+        minutesTaskTypeDisplay: {
+            backgroundColor: "rgba(255, 38, 246, 0.75)",
+            textAlign: 'center',
+            borderRadius: 20,
+            marginBottom: 10,
+            marginLeft: 20,
+            marginRight: 20,
+            padding: 20,
+            alignItems: 'center',
+           borderWidth: 2,
+           borderColor: "black",
+        },
+       hoursTaskTypeDisplay: {
+                backgroundColor: "#E7DAFB",
+                   // backgroundColor: "#9D6AF0",
+                    textAlign: 'center',
+                    borderRadius: 20,
+                    marginBottom: 10,
+                    marginLeft: 20,
+                    marginRight: 20,
+                    padding: 20,
+                    alignItems: 'center',
+                },
+    daysTaskTypeDisplay: {
+                        //backgroundColor: "#7DA1FD",
+                        backgroundColor: "#DEE7FF",
 
-    label: {
-        fontSize: 25,
-        fontWeight: 'bold',
-        padding: 8,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
+                        textAlign: 'center',
+                        borderRadius: 20,
+                        marginBottom: 10,
+                        marginLeft: 20,
+                        marginRight: 20,
+                        padding: 10,
+                        alignItems: 'center',
+                        borderWidth: 2,
+                        //borderColor: "#7DA1FD",
+                        borderColor: "black",
+                    },
+
     taskNumberContainers: {
         flexDirection: "row",
         justifyContent: "flex-start",
     },
-    jarHeader: {
-        flexDirection: 'row',
-    },
+
 
     topBar: {
         flexDirection: 'row',
@@ -278,7 +329,6 @@ const styles = StyleSheet.create({
     },
     activeText: {
         color: 'blue',
-
     },
 
     textInput: {
@@ -295,28 +345,6 @@ const styles = StyleSheet.create({
         //padding: 10,
         // color: 'white',
     },
-
-    curTask: {
-        display: 'flex',
-        alignItems: 'center',
-        marginTop: 14,
-        backgroundColor: 'rgb(182, 36, 255)',
-        opacity: 1,
-        color: 'rgb(240, 240, 240)',
-        borderLeft: 1,
-        boxShadow: 'rgb(182, 36, 255)',
-        padding: 16,
-        borderRadius: 28,
-        textShadow: 'rgba(240, 240, 240, 0.47)'
-    },
-
-    remainingTasksContainer: {
-        width: "100%",
-        padding: 16,
-        borderColor: "black",
-        borderWidth: 1,
-        borderRadius: 10,
-    },
     header: {
         fontSize: 16,
         fontWeight: "bold",
@@ -330,6 +358,27 @@ const styles = StyleSheet.create({
         alignItems: "center",
         marginRight: 16,
     },
+    inJarEllipse: {
+            width: 46,
+            height: 46,
+            backgroundColor: "black",
+            borderRadius: 23,
+            justifyContent: "center",
+            alignItems: "center",
+    },
+    inJarText: {
+               width: 70,
+                textAlign: "center",
+                color: "white",
+                fontSize: 12,
+                 fontWeight: "bold",
+    },
+        inJarNumber: {
+            color: "white",
+            fontSize: 24,
+            fontWeight: "bold",
+
+        },
     minuteEllipse: {
         width: 44,
         height: 44,
@@ -337,6 +386,7 @@ const styles = StyleSheet.create({
         borderRadius: 22,
         justifyContent: "center",
         alignItems: "center",
+        //outline: AF1AA8
     },
     hourEllipse: {
         width: 44,
@@ -347,22 +397,28 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     dayEllipse: {
-        width: 44,
-        height: 44,
-        backgroundColor: "#7DA1FD",
-        borderRadius: 22,
+        width: 46,
+        height: 46,
+        //outline?: "#7DA1FD",
+        backgroundColor: "#F0F2F8",
+        borderRadius: 23,
         justifyContent: "center",
         alignItems: "center",
+        //7DA1FD
+
     },
     taskNumber: {
         color: "black",
         fontSize: 24,
         fontWeight: "bold",
+
     },
     taskText: {
         width: 70,
         textAlign: "center",
         color: "black",
+        fontSize: 10,
+       //  fontSize: '50',
     },
     arrowContainer: {
         marginLeft: "auto",
@@ -395,20 +451,6 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         marginBottom: 10,
 
-    },
-    welcomText: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: 6,
-        fontSize: 70,
-        marginTop: 12,
-        marginLeft: 30,
-        marginRight: 30,
-        marginBottom: 50,
-        fontWeight: 'bold',
-        fontFamily: "Poppins",
-        textAlign: "center",
-        //color: 'white'
     },
     buttonText: {
         display: 'flex',
