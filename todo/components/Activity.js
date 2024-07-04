@@ -42,8 +42,17 @@ export default function Activity() {
   const [hasRemaining, setHasRemaining] = useState(true);
   //const [hasDailyGoal, setDailyGoal] = useState(false);
 
-  const { todos, addTodo, removeTodo, toggleTodoCompleted, goal, goalExists, updateGoal, setCompleted } = useContext(TodoContext);
- // const {  goal, goalExists, updateGoal, setCompleted} = useContext(GoalContext);
+  const {
+    todos,
+    addTodo,
+    removeTodo,
+    toggleTodoCompleted,
+    goal,
+    goalExists,
+    updateGoal,
+    setCompleted,
+  } = useContext(TodoContext);
+  // const {  goal, goalExists, updateGoal, setCompleted} = useContext(GoalContext);
 
   // Placeholder values
   // let streak = 3;
@@ -58,8 +67,6 @@ export default function Activity() {
     const comparison = new Date(d.setHours(0, 0, 0, 0));
     return today.getTime() == comparison.getTime();
   };
-
-
 
   function isDateInThisWeek(date) {
     const todayObj = new Date();
@@ -196,48 +203,40 @@ export default function Activity() {
   //<GoalProvider>
   return (
     <View>
-    <ScrollView style={styles.scroll}>
-      <View style={styles.topBar}>
-        <Text style={styles.dateText}>{currentDate}</Text>
-        {/*Streak Appearence-- Make so only visible once daily goal is set  */}
-        <View style={styles.streakContainer}>
-          <View style={styles.streakHeader}>
-            {!("streak" in goal) ? (
-              <Text style={styles.streakNumber}>0</Text>
-            ) : !hasRemainingTasks() && !isToday(goal.last_day_completed) ? (
-              <Text style={styles.streakNumber}>{goal.streak + 1}</Text>
-            ) : (
-              <Text style={styles.streakNumber}>{goal.streak}</Text>
-            )}
-            <MaterialCommunityIcons name="fire" size={30} color="black" />
-          </View>
-          <Text style={styles.streakText}>Day Streak!</Text>
+      <ScrollView style={styles.scroll}>
+        <View style={styles.topBar}>
+          <Text style={styles.dateText}>{currentDate}</Text>
+          {/*Streak Appearence-- Make so only visible once daily goal is set  */}
+
+          {goalExists() && (
+            <View style={styles.streakContainer}>
+              <View style={styles.streakHeader}>
+                {!("streak" in goal) ? (
+                  <Text style={styles.streakNumber}>0</Text>
+                ) : !hasRemainingTasks() &&
+                  !isToday(goal.last_day_completed) ? (
+                  <Text style={styles.streakNumber}>{goal.streak + 1}</Text>
+                ) : (
+                  <Text style={styles.streakNumber}>{goal.streak}</Text>
+                )}
+                <MaterialCommunityIcons name="fire" size={30} color="black" />
+              </View>
+              <Text style={styles.streakText}>Day Streak!</Text>
+            </View>
+          )}
         </View>
-      </View>
-
-      <View style={styles.container}>
-
-
+        <View style={styles.container}>
           <View style={styles.dailyGoalContainer}>
             <Text style={styles.summary}>Daily Goal</Text>
-              {goalExists() &&
-                           <TouchableOpacity   onPress={() => openGoalModal("edit")}>
-                             <Text style={styles.editGoalText}>Edit Goal</Text>
-                            </TouchableOpacity>
-                      }
+            {goalExists() && (
+              <TouchableOpacity onPress={() => openGoalModal("edit")}>
+                <Text style={styles.editGoalText}>Edit Goal</Text>
+              </TouchableOpacity>
+            )}
 
             {/* If none, display "reached daily goal"... If daily goal not set, just don't have... */}
           </View>
-{/* If have daily goal, show "edit goal"
-    <div>
-      <h1>Hello!</h1>
-      {unreadMessages.length > 0 &&
-        <h2>
-          You have {unreadMessages.length} unread messages.
-        </h2>
-      }
-
-*/}
+          {/* If have daily goal, show "edit goal"*/}
 
           <View style={styles.container}>
             {!goalExists() ? (
@@ -253,10 +252,6 @@ export default function Activity() {
               </View>
             ) : (
               <View>
-                <Button
-                  onPress={() => openGoalModal("edit")}
-                  title="Edit daily goal"
-                />
                 <RemainingTasks
                   remaining={hasRemainingTasks()}
                   minutesTasksLeft={minutesTasksLeft()}
@@ -285,7 +280,7 @@ export default function Activity() {
                     text={item.text}
                     key={item.key}
                     the_key={item.key}
-                  todo={item}
+                    todo={item}
                     not_editable={true}
                     due_date={item.due_date}
                     todoItem={item.completed}
@@ -312,20 +307,19 @@ export default function Activity() {
             initialMode={goalExists() ? "initialMode" : "set"}
             initialGoals={initialGoals}
           />
-
-      </View>
-      {/*</GoalProvider>*/}
-       </ScrollView>
+        </View>
+        {/*</GoalProvider>*/}
+      </ScrollView>
     </View>
   );
 }
 const styles = StyleSheet.create({
   container: {
- //   flex: 1,
+    //   flex: 1,
     padding: 16,
     justifyContent: "space-between",
   },
- /* topBar: {
+  /* topBar: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 10,
@@ -347,7 +341,7 @@ const styles = StyleSheet.create({
     // width: "100%",
     //justifyContent: "flex-end",
     //position: "absolute",
-   // top: 0,
+    // top: 0,
     //right: 0,
   },
   streakHeader: {
