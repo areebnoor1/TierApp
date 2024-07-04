@@ -79,7 +79,7 @@ export default function AddTask({ setModalVisible, setTodos, inputTaskType }) {
       </View>
 
 <View style={styles.container}>
-      <Text style={styles.header}>Select Task Type</Text>
+      <Text style={styles.header}> Task Type</Text>
       <View style={styles.taskTypeContainer}>
         <TouchableOpacity
           style={[
@@ -151,6 +151,7 @@ export default function AddTask({ setModalVisible, setTodos, inputTaskType }) {
       </ScrollView>
 */}
 
+{/*
       <View style={styles.dueDateContainer2}>
       <View style={styles.dueDateContainer}>
         <View>
@@ -178,9 +179,42 @@ export default function AddTask({ setModalVisible, setTodos, inputTaskType }) {
                               <Text style={styles.optionalText}>N/A</Text>
                             ) : (
                               <Text >{date.toDateString()}</Text>
-                            )} */}
+                            )}
 
  </View>
+
+*/}
+
+      <View style={styles.dueDateContainer}>
+       <View style={styles.dueDateContainer3}>
+          <Text style={styles.optionalHeader}>Due Date</Text>
+
+
+           {showDate &&
+                      <Text style={styles.optionalText}>{date.toDateString()}</Text>}
+           {/* {!(showDate) ? (
+                              <Text style={styles.optionalText}>N/A</Text>
+                            ) : (
+                              <Text >{date.toDateString()}</Text>
+                            )} */}
+        </View>
+        <Switch
+          trackColor={{ false: "#767577", true: "#81b0ff" }}
+          style={{ transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }] }}
+
+          onValueChange={() => {
+
+            setShowDate(!showDate);
+            if (!showDatePicker && !showDate) {
+              setShowDatePicker(true)
+            }
+
+            setDate(showDate ? {} : new Date());
+          }}
+          value={showDate}
+        />
+
+    </View>
       {
         showDatePicker &&
         <DateTimePicker
@@ -390,6 +424,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   header: {
+  paddingHorizontal: 20,
     fontSize: 18,
     marginBottom: 10,
   },
@@ -427,12 +462,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
  //   alignItems: "center",
     justifyContent: "space-between",
-  // padding: 10,
+padding: 10,
     //paddingVertical: 15,
     //paddingHorizontal: 20,
-    //backgroundColor: "red",
+    backgroundColor: "white",
     borderRadius: 5,
    // marginBottom: 20,
+
   },
     dueDateContainer2: {
   //    flexDirection: "row",
@@ -444,5 +480,12 @@ const styles = StyleSheet.create({
       backgroundColor: "white",
       borderRadius: 5,
       marginBottom: 20,
+    },
+    dueDateContainer3: {
+      flexDirection: "column",
+      alignItems: "flex-start",
+     // height: "100%",
+    // backgroundColor: "red",
+
     },
 });
