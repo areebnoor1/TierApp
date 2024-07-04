@@ -66,7 +66,8 @@ export default function AddTask({ setModalVisible, setTodos, inputTaskType }) {
   };
 
   return (
-    <View style={styles.container}>
+  <View>
+
       <View style={styles.topBar}>
         <TouchableOpacity onPress={() => setModalVisible(false)}>
           <AntDesign name="close" size={30} />
@@ -77,6 +78,7 @@ export default function AddTask({ setModalVisible, setTodos, inputTaskType }) {
         </TouchableOpacity>
       </View>
 
+<View style={styles.container}>
       <Text style={styles.header}>Select Task Type</Text>
       <View style={styles.taskTypeContainer}>
         <TouchableOpacity
@@ -135,8 +137,7 @@ export default function AddTask({ setModalVisible, setTodos, inputTaskType }) {
       <Text style={styles.smallText}>{getMessage()}</Text>
 
 
-
-
+{/*
       <ScrollView>
         <TextInput
           style={styles.textInput}
@@ -148,19 +149,17 @@ export default function AddTask({ setModalVisible, setTodos, inputTaskType }) {
           onChangeText={setValue}
         />
       </ScrollView>
+*/}
 
-
-
+      <View style={styles.dueDateContainer2}>
       <View style={styles.dueDateContainer}>
-        <View
-          style={{ flexDirection: 'column' }}>
-
-          <Text style={styles.header}>Add Due Date</Text>
-          {showDate &&
-            <Text style={styles.header}>Date selected: {date.toDateString()}</Text>}
+        <View>
+          <Text style={styles.optionalHeader}>Due Date</Text>
         </View>
         <Switch
           trackColor={{ false: "#767577", true: "#81b0ff" }}
+          style={{ transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }] }}
+
           onValueChange={() => {
 
             setShowDate(!showDate);
@@ -172,13 +171,16 @@ export default function AddTask({ setModalVisible, setTodos, inputTaskType }) {
           }}
           value={showDate}
         />
+          </View>
+           {showDate &&
+                      <Text style={styles.optionalText}>{date.toDateString()}</Text>}
+           {/* {!(showDate) ? (
+                              <Text style={styles.optionalText}>N/A</Text>
+                            ) : (
+                              <Text >{date.toDateString()}</Text>
+                            )} */}
 
-
-
-
-
-      </View>
-
+ </View>
       {
         showDatePicker &&
         <DateTimePicker
@@ -233,41 +235,29 @@ export default function AddTask({ setModalVisible, setTodos, inputTaskType }) {
       </View>
 
 
+      <ScrollView>
+        <TextInput
+          style={styles.textInput}
+          multiline
+          numberOfLines={4}
+          placeholder="Description"
+         // placeholderTextColor="#abbabb"
+          value={value}
+          onChangeText={setValue}
+        />
+      </ScrollView>
+</View >
 
     </View >
   );
 }
 const styles = StyleSheet.create({
-  taskTypeDisplay: {
-    backgroundColor: "#b7babd",
-    textAlign: 'center',
-    borderRadius: 20,
-    marginBottom: 10,
-    marginLeft: 20,
-    marginRight: 20,
-    padding: 20,
-    alignItems: 'center',
-  },
-
-  label: {
-    fontSize: 25,
-    fontWeight: 'bold',
-    padding: 8,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
   taskNumberContainers: {
     flexDirection: "row",
     justifyContent: "flex-start",
   },
   jarHeader: {
     flexDirection: 'row',
-  },
-
-  topBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 16,
   },
   activeText: {
     color: 'blue',
@@ -284,37 +274,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     margin: 10
   },
-  icon: {
-    //padding: 10,
-    // color: 'white',
-  },
 
-  curTask: {
-    display: 'flex',
-    alignItems: 'center',
-    marginTop: 14,
-    backgroundColor: 'rgb(182, 36, 255)',
-    opacity: 1,
-    color: 'rgb(240, 240, 240)',
-    borderLeft: 1,
-    boxShadow: 'rgb(182, 36, 255)',
-    padding: 16,
-    borderRadius: 28,
-    textShadow: 'rgba(240, 240, 240, 0.47)'
-  },
 
-  remainingTasksContainer: {
-    width: "100%",
-    padding: 16,
-    borderColor: "black",
-    borderWidth: 1,
-    borderRadius: 10,
-  },
-  header: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 8,
-  },
   taskNumberContainers: {
     flexDirection: "row",
     justifyContent: "flex-start",
@@ -377,35 +338,23 @@ const styles = StyleSheet.create({
     //justifyContent: "center",
   },
 
-  smallText: {
-    fontStyle: 'italic',
-    fontFamily: 'Avenir-Book',
-    marginBottom: 20,
-    fontSize: 18,
-    alignItems: 'center',
-    //color: 'white'
-  },
-  pressableContainer: {
-    backgroundColor: "#48249c",
-    textAlign: 'center',
-    borderRadius: 20,
-    marginBottom: 10,
+    smallText: {
+      fontSize: 14,
+      fontStyle: "italic",
+      textAlign: "center",
+   //   marginBottom: 20,
+    },
+        optionalText: {
+          fontSize: 14,
+      fontStyle: "italic",
+        //  textAlign: "center",
+          alignItems: "center",
+         color: "gray",
+      //  color: "purple",
+       // fontWeight: 'bold',
+       //   marginBottom: 20,
+        },
 
-  },
-  welcomText: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 6,
-    fontSize: 70,
-    marginTop: 12,
-    marginLeft: 30,
-    marginRight: 30,
-    marginBottom: 50,
-    fontWeight: 'bold',
-    fontFamily: "Poppins",
-    textAlign: "center",
-    //color: 'white'
-  },
   buttonText: {
     display: 'flex',
     alignItems: 'center',
@@ -430,7 +379,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingVertical: 16,
+   // paddingVertical: 16,
+     padding: 16,
   },
   title: {
     fontSize: 26,
@@ -443,12 +393,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 10,
   },
-  smallText: {
-    fontSize: 14,
-    fontStyle: "italic",
-    textAlign: "center",
-    marginBottom: 20,
-  },
+    optionalHeader: {
+      fontSize: 18,
+     // fontWeight: "bold",
+      //marginBottom: 8,
+    },
   taskTypeContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
@@ -470,18 +419,30 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     fontSize: 18,
-    height: 120,
-    marginBottom: 20,
+ //   height: 120,
+   // marginBottom: 20,
     textAlignVertical: "top", // Align text at the top left
   },
   dueDateContainer: {
     flexDirection: "row",
-    alignItems: "center",
+ //   alignItems: "center",
     justifyContent: "space-between",
-    paddingVertical: 15,
-    paddingHorizontal: 10,
-    backgroundColor: "white",
+  // padding: 10,
+    //paddingVertical: 15,
+    //paddingHorizontal: 20,
+    //backgroundColor: "red",
     borderRadius: 5,
-    marginBottom: 20,
+   // marginBottom: 20,
   },
+    dueDateContainer2: {
+  //    flexDirection: "row",
+   //   alignItems: "center",
+      justifyContent: "space-between",
+      padding: 10,
+      //paddingVertical: 15,
+      //paddingHorizontal: 20,
+      backgroundColor: "white",
+      borderRadius: 5,
+      marginBottom: 20,
+    },
 });
