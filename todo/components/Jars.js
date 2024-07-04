@@ -89,15 +89,19 @@ export default function Jars() {
 
     if (Object.keys(taskType).length === 0) {
         return (
+  <View>
+   <View style={styles.topBar2}>
+            <Text style={styles.dateText}>My Tasks</Text>
+            </View>
+
             <View style={styles.screen}>
-                <View style={styles.topBar}>
-                    <Text style={styles.buttonText}>My Tasks</Text>
-                </View>
-
-
 
                 <TouchableOpacity style={styles.jarHeader} onPress={() => setTaskType('minutes')}>
-                    <Entypo name='stopwatch' style={[styles.icon, taskType === 'minutes' && styles.activeText]} size={40} />
+
+                <View style={styles.iconBox}  >
+                    <Entypo name='stopwatch' style={[styles.icon, taskType === 'minutes' && styles.activeText]} size={24} />
+                </View>
+                 {/*<Entypo name='stopwatch' style={[styles.icon, taskType === 'minutes' && styles.activeText]} size={40} /> */}
                     <Text style={styles.label}>Minutes</Text>
                     <Entypo name='chevron-right' style={styles.icon} size={30} />
                 </TouchableOpacity>
@@ -113,19 +117,19 @@ export default function Jars() {
                             <View style={styles.inJarEllipse}>
                                 <Text style={styles.inJarNumber}>{todos.filter(todo => todo.task_type === 'minutes'&& todo.completed === false).length}</Text>
                             </View>
-                            <Text style={styles.inJarText}>Tasks in jar</Text>
+                            <Text style={styles.inJarText}>Tasks in Jar</Text>
                         </View>
                         <View style={styles.taskNumberContainer}>
                             <View style={styles.dayEllipse}>
                                 <Text style={styles.taskNumber}>{getDueToday( 'minutes')}</Text>
                             </View>
-                            <Text style={styles.taskText}>Tasks due today</Text>
+                            <Text style={styles.taskText}>Tasks Due Today</Text>
                         </View>
                         <View style={styles.taskNumberContainer}>
                             <View style={styles.dayEllipse}>
                                 <Text style={styles.taskNumber}>{getTodosDueThisWeek('minutes')}</Text>
                             </View>
-                            <Text style={styles.taskText}>Tasks due this week</Text>
+                            <Text style={styles.taskText}>Tasks Due This Week</Text>
                         </View>
                     </View>
 
@@ -133,7 +137,10 @@ export default function Jars() {
 
                 </View>
                 <TouchableOpacity style={styles.jarHeader} onPress={() => setTaskType('hours')}>
-                    <Ionicons name='hourglass-outline' style={[styles.icon, taskType === 'hours' && styles.activeText]} size={40} />
+                                <View style={styles.iconBox}  >
+                                     <Ionicons name='hourglass-outline' style={[styles.icon, taskType === 'hours' && styles.activeText]} size={24} />
+                                </View>
+                 {/*  <Ionicons name='hourglass-outline' style={[styles.icon, taskType === 'hours' && styles.activeText]} size={40} /> */}
                     <Text style={styles.label} >Hours</Text>
                     <Entypo name='chevron-right' style={styles.icon} size={30} />
                 </TouchableOpacity>
@@ -141,28 +148,36 @@ export default function Jars() {
 
                     <View style={styles.taskNumberContainers}>
                         <View style={styles.taskNumberContainer}>
-                            <View style={styles.dayEllipse}>
+                         {/*   <View style={styles.dayEllipse}>
                                 <Text style={styles.taskNumber}>{todos.filter(todo => todo.task_type === 'hours' && todo.completed === false).length}</Text>
-                            </View>
-                            <Text style={styles.taskText}>Tasks in jar</Text>
+                                 <Text style={styles.taskText}>Tasks in jar</Text>
+                            </View> */}
+                                                        <View style={styles.inJarEllipse}>
+                                                            <Text style={styles.inJarNumber}>{todos.filter(todo => todo.task_type === 'hours'&& todo.completed === false).length}</Text>
+                                                        </View>
+                            <Text style={styles.inJarText}>Tasks in Jar</Text>
+
                         </View>
                         <View style={styles.taskNumberContainer}>
                             <View style={styles.dayEllipse}>
                                 <Text style={styles.taskNumber}>{getDueToday('hours')}</Text>
                             </View>
-                            <Text style={styles.taskText}>Tasks due today</Text>
+                            <Text style={styles.taskText}>Tasks Due Today</Text>
                         </View>
                         <View style={styles.taskNumberContainer}>
                             <View style={styles.dayEllipse}>
                                 <Text style={styles.taskNumber}>{getTodosDueThisWeek('hours')}</Text>
                             </View>
-                            <Text style={styles.taskText}>Tasks due this week</Text>
+                            <Text style={styles.taskText}>Due This Week</Text>
                         </View>
                     </View>
 
                 </View>
                 <TouchableOpacity style={styles.jarHeader} onPress={() => setTaskType('days')}>
-                    <Entypo name='calendar' style={[styles.icon, taskType === 'days' && styles.activeText]} size={40} />
+                             <View style={styles.iconBox}  >
+                                   <Entypo name='calendar' style={[styles.icon, taskType === 'days' && styles.activeText]} size={24} />
+                           </View>
+                  {/*  <Entypo name='calendar' style={[styles.icon, taskType === 'days' && styles.activeText]} size={40} />*/}
                     <Text style={styles.label}>Days</Text>
                     <Entypo name='chevron-right' style={styles.icon} size={30} />
                 </TouchableOpacity>
@@ -172,26 +187,30 @@ export default function Jars() {
 
                 <View style={styles.taskNumberContainers}>
                         <View style={styles.taskNumberContainer}>
-                            <View style={styles.dayEllipse}>
+                {/*            <View style={styles.dayEllipse}>
                                 <Text style={styles.taskNumber}>{todos.filter(todo => todo.task_type === 'days' && todo.completed === false).length}</Text>
                             </View>
-                            <Text style={styles.taskText}>Tasks in jar</Text>
+                            <Text style={styles.taskText}>Tasks in jar</Text> */}
+                            <View style={styles.inJarEllipse}>
+                                <Text style={styles.inJarNumber}>{todos.filter(todo => todo.task_type === 'days'&& todo.completed === false).length}</Text>
+                            </View>
+                            <Text style={styles.inJarText}>Tasks in Jar</Text>
                         </View>
                         <View style={styles.taskNumberContainer}>
                             <View style={styles.dayEllipse}>
                                 <Text style={styles.taskNumber}>{getDueToday( 'days')}</Text>
                             </View>
-                            <Text style={styles.taskText}>Tasks due today</Text>
+                            <Text style={styles.taskText}>Tasks Due Today</Text>
                         </View>
                         <View style={styles.taskNumberContainer}>
                             <View style={styles.dayEllipse}>
                                 <Text style={styles.taskNumber}>{getTodosDueThisWeek('days')}</Text>
                             </View>
-                            <Text style={styles.taskText}>Tasks due this week</Text>
+                            <Text style={styles.taskText}>Due This Week</Text>
                         </View>
                     </View>
 
-
+     </View>
 
                 </View>
             </View>
@@ -204,8 +223,7 @@ export default function Jars() {
                         <Entypo name='chevron-left' size={30} />
                     </TouchableOpacity>
 
-                    <Text style={styles.buttonText}>Minutes Jar
-                    </Text>
+                    <Text style={styles.buttonText}>Minutes Jar</Text>
 
 
                     <Text style={styles.buttonText}></Text>
@@ -251,113 +269,108 @@ export default function Jars() {
 }
 
 const styles = StyleSheet.create({
-
+  topBar2: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 16,
+    alignItems: "center",
+  },
+  dateText: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 8,
+  },
+    screen: {
+        //flex: 1,
+        backgroundColor: "#FFF",
+        padding: 20,
+        //padding: 20,
+        justifyContent: "space-between",
+    },
+    title: {
+        justifyContent: "center",
+       alignItems: "center",
+      //= backgroundColor: "pink",
+    },
+    titleText: {
+        fontSize: 30,
+        fontWeight: 'bold',
+         color:"black",
+       // color:"#A5A5A5",
+    },
+    iconBox: {
+      borderRadius: 7,
+      padding: 3,
+      //borderColor: "black",
+      borderColor: "#D9D9D9",
+      borderWidth: 1,
+    },
+    jarHeader: {
+            flexDirection: 'row',
+            alignItems: "center",
+      //      marginLeft: 20,
+        },
     label: {
-        fontSize: 25,
+        fontSize: 24,
         fontWeight: 'bold',
         padding: 8,
         justifyContent: 'center',
         alignItems: 'center'
     },
-        jarHeader: {
-            flexDirection: 'row',
-         //   backgroundColor: 'red',
-            alignItems: "center",
-           // justifyContent:
-            marginLeft: 20,
-        },
-
-    taskTypeDisplay: {
-        backgroundColor: "#b7babd",
-        textAlign: 'center',
-        borderRadius: 20,
-        marginBottom: 10,
-        marginLeft: 20,
-        marginRight: 20,
-        padding: 20,
-        alignItems: 'center',
-    },
-        minutesTaskTypeDisplay: {
+   minutesTaskTypeDisplay: {
             backgroundColor: "rgba(255, 38, 246, 0.75)",
-            textAlign: 'center',
+            borderWidth: 2,
+            borderColor: "black",
             borderRadius: 20,
-            marginBottom: 10,
-            marginLeft: 20,
-            marginRight: 20,
-            padding: 20,
+            //marginBottom: 10,
+            //padding: 15,
             alignItems: 'center',
-           borderWidth: 2,
-           borderColor: "black",
         },
        hoursTaskTypeDisplay: {
-                backgroundColor: "#E7DAFB",
-                   // backgroundColor: "#9D6AF0",
-                    textAlign: 'center',
-                    borderRadius: 20,
-                    marginBottom: 10,
-                    marginLeft: 20,
-                    marginRight: 20,
-                    padding: 20,
-                    alignItems: 'center',
+                   backgroundColor: "#9D6AF0",
+                   borderWidth: 2,
+                   borderColor: "black",
+                   borderRadius: 20,
+                   //marginBottom: 10,
+                   //padding: 15,
+                   alignItems: 'center',
                 },
     daysTaskTypeDisplay: {
-                        //backgroundColor: "#7DA1FD",
-                        backgroundColor: "#DEE7FF",
+                   backgroundColor: "#7DA1FD",
+                   borderWidth: 2,
+                   borderColor: "black",
+                   borderRadius: 20,
+                   //marginBottom: 10,
+                   //padding: 15,
+                   alignItems: 'center',
+                   },
 
-                        textAlign: 'center',
-                        borderRadius: 20,
-                        marginBottom: 10,
-                        marginLeft: 20,
-                        marginRight: 20,
-                        padding: 10,
-                        alignItems: 'center',
-                        borderWidth: 2,
-                        //borderColor: "#7DA1FD",
-                        borderColor: "black",
-                    },
-
-    taskNumberContainers: {
-        flexDirection: "row",
-        justifyContent: "flex-start",
-    },
-
-
-    topBar: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        padding: 16,
-    },
-    activeText: {
-        color: 'blue',
-    },
-
-    textInput: {
-        borderColor: 'purple',
-        borderWidth: 2,
-        //height: 250,
-        //width: 200,
-        padding: 10,
-        borderRadius: 20,
-        fontSize: 18,
-        margin: 10
-    },
-    icon: {
-        //padding: 10,
-        // color: 'white',
-    },
-    header: {
-        fontSize: 16,
-        fontWeight: "bold",
-        marginBottom: 8,
-    },
-    taskNumberContainers: {
-        flexDirection: "row",
-        justifyContent: "flex-start",
-    },
+//holds the 3 circle info
+   taskNumberContainers: {
+         flexDirection: "row",
+         ///   alignItems: "space-between",
+       justifyContent: "space-around",
+          width: "100%",
+          padding: 10,
+        },
+//holds individual circle, num, and text
     taskNumberContainer: {
         alignItems: "center",
-        marginRight: 16,
     },
+    taskNumber: {
+            color: "black",
+            fontSize: 24,
+            //fontWeight: "bold",
+        },
+    taskText: {
+            width: 70,
+            textAlign: "center",
+            color: "black",
+            fontSize: 12,
+            fontWeight: "bold",
+            marginTop: 5,
+           //  fontSize: '50',
+     },
     inJarEllipse: {
             width: 46,
             height: 46,
@@ -367,17 +380,17 @@ const styles = StyleSheet.create({
             alignItems: "center",
     },
     inJarText: {
-               width: 70,
+               width: 60,
                 textAlign: "center",
-                color: "white",
-                fontSize: 12,
-                 fontWeight: "bold",
+            color: "black",
+            fontSize: 12,
+            fontWeight: "bold",
+                  marginTop: 5,
     },
         inJarNumber: {
             color: "white",
             fontSize: 24,
-            fontWeight: "bold",
-
+       //z     fontWeight: "bold",
         },
     minuteEllipse: {
         width: 44,
@@ -404,59 +417,14 @@ const styles = StyleSheet.create({
         borderRadius: 23,
         justifyContent: "center",
         alignItems: "center",
-        //7DA1FD
-
-    },
-    taskNumber: {
-        color: "black",
-        fontSize: 24,
-        fontWeight: "bold",
-
-    },
-    taskText: {
-        width: 70,
-        textAlign: "center",
-        color: "black",
-        fontSize: 10,
-       //  fontSize: '50',
-    },
-    arrowContainer: {
-        marginLeft: "auto",
-    },
-    finishedText: {
-        fontSize: 16,
-        textAlign: "center",
-        fontStyle: "italic",
-        marginTop: 20,
     },
 
-    screen: {
-        //flex: 1,
-        backgroundColor: "#FFF",
-        //padding: 20,
-        //justifyContent: "center",
-    },
 
-    smallText: {
-        fontStyle: 'italic',
-        fontFamily: 'Avenir-Book',
-        marginBottom: 20,
-        fontSize: 18,
-        alignItems: 'center',
-        //color: 'white'
-    },
-    pressableContainer: {
-        backgroundColor: "#48249c",
-        textAlign: 'center',
-        borderRadius: 20,
-        marginBottom: 10,
-
-    },
     buttonText: {
-        display: 'flex',
-        alignItems: 'center',
+   //     display: 'flex',
+   //     alignItems: 'center',
         // gap: 6,
-        fontSize: 30,
+        fontSize: 24,
         // marginTop: 12,
         //  marginLeft: 8,
         //   marginBottom: 5,
@@ -464,5 +432,18 @@ const styles = StyleSheet.create({
         fontFamily: "Poppins",
         textAlign: "center",
         //color: 'white'
-    }
+    },
+    topBar: {
+        flexDirection: 'row',
+        //justifyContent: 'space-between',
+        padding: 16,
+        alignItems: "flex-end",
+    },
+    activeText: {
+        color: 'blue',
+    },
+    icon: {
+        //padding: 10,
+        // color: 'white',
+    },
 });
