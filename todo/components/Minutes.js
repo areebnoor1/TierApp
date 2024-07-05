@@ -27,7 +27,7 @@ import {
 } from "react-native";
 import Entypo from "react-native-vector-icons/Entypo";
 import TodoList from "./TodoList";
-import EditTask from "./EditTask";
+import EditTaskModal from "./EditTaskModal";
 import AddTaskModal from './HomeScreen/AddTaskModal';
 import { TodoContext } from "./TodoContext";
 import { createTodo, readTodos, updateTodo, deleteTodo } from "./TodosService";
@@ -86,13 +86,13 @@ export default function Minutes() {
    
         />
 
-        <Modal transparent={true} visible={modalVisible} style={styles.modalView}>
-          <View style={styles.modalContainer}>
-            <EditTask modalVisible={modalVisible} setModalVisible={setModalVisible} task={editingTask}
-            // {//deleteOldTodo={handleDeleteTodo(editingTask)}
+      
+       
+            <EditTaskModal modalVisible={modalVisible} setModalVisible={setModalVisible} task={editingTask}
+           
             />
-          </View>
-        </Modal>
+        
+     
       </View>
     </>
   );

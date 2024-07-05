@@ -25,21 +25,6 @@ import NoTask from "./HomeScreen/NoTask";
 import  {TodoContext}  from './TodoContext';
 
 const styles = StyleSheet.create({
-  curTask: {
-    display: "flex",
-    alignItems: "center",
-    marginTop: 14,
-    backgroundColor: "rgb(182, 36, 255)",
-    opacity: 1,
-    color: "rgb(240, 240, 240)",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    borderLeft: 1,
-    boxShadow: "rgb(182, 36, 255)",
-    padding: 16,
-    borderRadius: 28,
-    textShadow: "rgba(240, 240, 240, 0.47)",
-  },
-
   addButton: {
     position: "absolute",
     bottom: 20,
@@ -60,24 +45,6 @@ const styles = StyleSheet.create({
     color: "white",
   },
 
-  pressableContainer: {
-    backgroundColor: "#48249c",
-    textAlign: "center",
-    borderRadius: 20,
-    marginBottom: 10,
-    alignItems: "center",
-  },
-  modalView: {
-    //margin: 20,
-    //borderRadius: 20,
-    //padding: 35,
-    // alignItems: 'center',
-    flex: 1,
-    //backgroundColor: 'transparent',
-    backgroundColor: "rgba(0,0,0,0.7)",
-    alignItems: "center",
-    justifyContent: "center",
-  },
   welcomText: {
     display: "flex",
     alignItems: "center",

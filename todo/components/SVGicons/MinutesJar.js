@@ -1,14 +1,5 @@
 import * as React from "react";
 import Svg, { G, Path, Text, TSpan } from "react-native-svg";
-import {
-  StyleSheet,
-  View,
-  Pressable,
-  Image,
-  Modal,
-  TouchableOpacity,
-} from "react-native";
-import LottieView from 'lottie-react-native';
 
 const SvgComponent = (props) => (
   <Svg
@@ -22,43 +13,16 @@ const SvgComponent = (props) => (
         fill="#000"
         d="M83.797 28.474a19.007 19.007 0 0 1-4.24-7.129c-.431.054-.87.082-1.316.082H11.759c-.458 0-.908-.03-1.35-.087a18.999 18.999 0 0 1-4.227 7.132l-.009.01C2.193 32.727 0 38.246 0 44.02v76.42c0 12.888 10.666 23.374 23.775 23.374h42.45c13.11 0 23.775-10.486 23.775-23.374V44.043c0-5.79-2.203-11.32-6.203-15.57M82.577 10.659c0 2.686-2.085 4.894-4.725 5.098a4.642 4.642 0 0 1-.4.016h-65.83a5.05 5.05 0 0 1-.443-.02c-2.62-.223-4.684-2.422-4.684-5.094V5.115C6.495 2.295 8.794 0 11.62 0h65.83c2.826 0 5.126 2.295 5.126 5.115v5.544Z"
       />
-
-
-
-<View>
-        <LottieView
-          source={require('/Users/mashamolchanova/TierApp/todo/assets/Animation - 1720127471017 (1).json')}
-          // autoPlay
-          progress={0.6}
-
-          style={{
-            width: 120,
-            marginLeft: -15,
-            height: 100,
-          //  position: 'relative',
-            marginTop: 35,
-             //flex: 1,
-            //aspectRatio: 0.25,
-            //resizeMode: 'contain',
-          }}
-        ></LottieView>
-  
-
       <Text
         fill="#FFF"
         fontFamily="AppleSDGothicNeo-Regular, Apple SD Gothic Neo"
         fontSize={21}
         textAnchor="middle"
-        style={{
-          //flex: 1,
-          position: 'absolute'
-        }}
       >
         <TSpan x="45" y="80.335">
           {"Minutes"}
         </TSpan>
       </Text>
-      </View>
     </G>
   </Svg>
 );

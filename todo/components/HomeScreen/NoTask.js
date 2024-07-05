@@ -61,14 +61,14 @@ export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskTy
   };
   return (
     <View style={styles.screen}>
+     
       <View style={styles.welcomeTextContainer}>
         <Text style={styles.welcomeTextTitle}>No tasks active.</Text>
         <Text style={styles.welcomeTextHeader}>
           Select a jar to get started!
         </Text>
+        
       </View>
-
-
 
 
       <View style={styles.jarsContainer}>
@@ -85,12 +85,11 @@ export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskTy
               { opacity: pressed || selectedJar === "minutes" ? 0.6 : 1 },
             ]}
           >
-            <MinutesJar styles={{
-
-            }}
+            <MinutesJar
             />
+            
 
-           {/* */ }
+            {/* */}
 
           </Pressable>
         </View>

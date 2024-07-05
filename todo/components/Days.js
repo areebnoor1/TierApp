@@ -3,6 +3,7 @@ import * as SecureStore from "expo-secure-store";
 import { initializeApp } from "firebase/app";
 import { getDatabase } from "firebase/database";
 import { useFocusEffect } from "@react-navigation/native";
+import EditTaskModal from "./EditTaskModal";
 import { Ionicons } from "@expo/vector-icons";
 import AddTaskModal from './HomeScreen/AddTaskModal';
 import {
@@ -82,23 +83,13 @@ export default function Minutes() {
         <AddTaskModal
           modalVisible={addModalVisible}
           setModalVisible={setAddModalVisible}
-          inputTaskType = {'days'}
-   
+          inputTaskType={'days'}
+
         />
 
-        <Modal
-          transparent={true}
-          visible={modalVisible}
-          style={styles.modalView}
-        >
-          <View>
-            <EditTask
-              setModalVisible={setModalVisible}
-              task={editingTask}
-              // {//deleteOldTodo={handleDeleteTodo(editingTask)}
-            />
-          </View>
-        </Modal>
+        <EditTaskModal modalVisible={modalVisible} setModalVisible={setModalVisible} task={editingTask}
+
+        />
       </View>
     </>
   );

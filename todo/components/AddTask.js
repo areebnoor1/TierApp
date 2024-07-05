@@ -10,7 +10,7 @@ import {
   Switch,
   ScrollView,
   Alert,
-  Pressable
+  Pressable,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Entypo from "react-native-vector-icons/Entypo";
@@ -38,14 +38,15 @@ export default function AddTask({ setModalVisible, setTodos, inputTaskType }) {
       case "hours":
         return "Task takes an hour or more to complete";
       case "days":
-        return "Task takes an hour or more to complete broken up over several days";
+        return "Task is broken up into sessions that span several days";
       default:
         return "";
     }
   };
 
   const addTodoWrapper = async () => {
-    if (taskType == null) {
+    console.log('task type', taskType)
+    if (taskType == "") {
       Alert.alert("", "Please specify a task type (Minutes, Hours, Days).", [
         { text: "OK", onPress: () => console.log("OK Pressed") },
       ]);
@@ -68,9 +69,8 @@ export default function AddTask({ setModalVisible, setTodos, inputTaskType }) {
       setModalVisible(false);
     }
   };
-
-  return (
-    <View style={styles.container}>
+return (
+    <View>
       <View style={styles.topBar}>
         <TouchableOpacity onPress={() => setModalVisible(false)}>
           <AntDesign name="close" size={30} />
@@ -84,361 +84,181 @@ export default function AddTask({ setModalVisible, setTodos, inputTaskType }) {
           <Text style={styles.doneButton}>Done</Text>
         </TouchableOpacity>
       </View>
+        {/******task type ***********/}
+        <View style={styles.taskType}>
 
-      <Text style={styles.header}>Select Task Type</Text>
-      <View style={styles.taskTypeContainer}>
-        <TouchableOpacity
-          style={[
-            styles.taskTypeSelection,
-            taskType === "minutes" && styles.selectedButton,
-          ]}
-          onPress={() => setTaskType("minutes")}
-        >
-          <Entypo
-            name="stopwatch"
+        <Text style={styles.header}>Task Type</Text>
+        <View style={styles.taskTypeContainer}>
+          <TouchableOpacity
             style={[
-              styles.icon,
-              taskType === "minutes" && styles.activeText,
+              styles.taskTypeSelection,
+              taskType === "minutes" && styles.selectedButton,
             ]}
-            size={40}
-          />
-          <Text>Minutes</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.taskTypeSelection,
-            taskType === "hours" && styles.selectedButton,
-          ]}
-          onPress={() => setTaskType("hours")}
-        >
-          <Ionicons
-            name="hourglass-outline"
+            onPress={() => setTaskType("minutes")}
+          >
+            <Entypo
+              name="stopwatch"
+              style={[styles.icon, taskType === "minutes" && styles.activeText]}
+              size={40}
+            />
+            <Text>Minutes</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
             style={[
-              styles.icon,
-              taskType === "hours" && styles.activeText,
+              styles.taskTypeSelection,
+              taskType === "hours" && styles.selectedButton,
             ]}
-            size={40}
-          />
-          <Text>Hours</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.taskTypeSelection,
-            taskType === "days" && styles.selectedButton,
-          ]}
-          onPress={() => setTaskType("days")}
-        >
-          <Entypo
-            name="calendar"
+            onPress={() => setTaskType("hours")}
+          >
+            <Ionicons
+              name="hourglass-outline"
+              style={[styles.icon, taskType === "hours" && styles.activeText]}
+              size={40}
+            />
+            <Text>Hours</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
             style={[
-              styles.icon,
-              taskType === "days" && styles.activeText,
+              styles.taskTypeSelection,
+              taskType === "days" && styles.selectedButton,
             ]}
-            size={40}
-          />
-          <Text>Days</Text>
-        </TouchableOpacity>
+            onPress={() => setTaskType("days")}
+          >
+            <Entypo
+              name="calendar"
+              style={[styles.icon, taskType === "days" && styles.activeText]}
+              size={40}
+            />
+            <Text>Days</Text>
+          </TouchableOpacity>
+        </View>
+
+        <Text style={styles.smallText}>{getMessage()}</Text>
       </View>
 
-      <Text style={styles.smallText}>{getMessage()}</Text>
-
-
-
-
+ <View style={styles.taskDescription}>
       <ScrollView>
         <TextInput
           style={styles.textInput}
           multiline
           numberOfLines={4}
           placeholder="Description"
-          placeholderTextColor="#abbabb"
+          placeholderTextColor="#BEBEBE"
           value={value}
           onChangeText={setValue}
-        />
+    scrollEnabled
+          />
       </ScrollView>
+</View>
 
+{/******Importance ***********/}
+ <View style={styles.importanceSection}>
+        <View style={styles.selectionContainer}>
+          <View style={styles.selectionContainerText}>
+            <Text style={styles.optionalHeader}>Importance</Text>
+          </View>
 
-
-      <View style={styles.dueDateContainer}>
-        <View
-          style={{ flexDirection: 'column' }}>
-
-          <Text style={styles.header}>Add Due Date</Text>
-          {showDate &&
-            <Text style={styles.header}>Date selected: {date.toDateString()}</Text>}
+          <View style={styles.importanceContainers}>
+            <View style={styles.importanceContainer}>
+              <Pressable
+                style={[
+                  styles.importanceBox,
+                  importance === 1 && styles.activeOption,
+                ]}
+                onPress={() => {
+                  setImportance(1);
+                }}
+              >
+                <Text style={styles.importanceNum}>1</Text>
+              </Pressable>
+              <Text style={styles.importanceText}>Low</Text>
+            </View>
+            <View style={styles.importanceContainer}>
+              <Pressable
+                style={[
+                  styles.importanceBox,
+                  importance === 2 && styles.activeOption,
+                ]}
+                onPress={() => {
+                  setImportance(2);
+                }}
+              >
+                <Text style={styles.importanceNum}>2</Text>
+              </Pressable>
+              <Text style={styles.importanceText}>Medium</Text>
+            </View>
+            <View style={styles.importanceContainer}>
+              <Pressable
+                style={[
+                  styles.importanceBox,
+                  importance === 3 && styles.activeOption,
+                ]}
+                onPress={() => {
+                  setImportance(3);
+                }}
+              >
+                <Text style={styles.importanceNum}>3</Text>
+              </Pressable>
+              <Text style={styles.importanceText}>High</Text>
+            </View>
+          </View>
         </View>
-        <Switch
-          trackColor={{ false: "#767577", true: "#81b0ff" }}
-          onValueChange={() => {
-
-            setShowDate(!showDate);
-            if (!showDatePicker && !showDate) {
-              setShowDatePicker(true)
+</View>
+        {/*****************/}
+ <View style={styles.importanceSection}>
+        {/******Due date 2***********/}
+        <View style={styles.selectionContainer}>
+          <View style={styles.selectionContainerText}>
+            <Text style={styles.optionalHeader}>Due Date</Text>
+            {showDate && (
+              <Text style={styles.dateText}>{date.toDateString()}</Text>
+            )}
+          </View>
+          <Switch
+            trackColor={{ false: "#767577", true: "#81b0ff" }}
+            style={{ transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }] }}
+            onValueChange={() => {
+              setShowDate(!showDate);
+              if (!showDatePicker && !showDate) {
+                setShowDatePicker(true);
+              }
+              setDate(showDate ? {} : new Date());
+            }}
+            value={showDate}
+          />
+        </View>
+        {showDatePicker && (
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={date}
+            mode={"date"}
+            is24Hour={true}
+            onChange={
+              (onChange = (event, selectedDate) => {
+                const currentDate = selectedDate;
+                setShowDatePicker(false);
+                setDate(currentDate);
+              })
             }
+          />
+        )}
+        {/*****************/}
+ </View>
+  {/******** Description *********/}
 
-            setDate(showDate ? {} : new Date());
-          }}
-          value={showDate}
-        />
-
-
-
-
-
-      </View>
-
-      {
-        showDatePicker &&
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={date}
-          mode={'date'}
-          is24Hour={true}
-          onChange={onChange = (event, selectedDate) => {
-            const currentDate = selectedDate;
-            setShowDatePicker(false)
-            setDate(currentDate);
-          }}
-        />
-      }
+    {/******** stretch a certain num of lines before it scrolls.... *********/}
 
 
-      <Text style={styles.header}>Importance:</Text>
-      <View style={styles.taskNumberContainers}>
-        <View style={styles.taskNumberContainer}>
-          <Pressable
-            style={[
-              styles.dayEllipse,
-              importance === 1 && styles.activeOption,
-            ]}
-            onPress={() => { setImportance(1) }}
-          >
-            <Text style={
-              styles.taskNumber}>1</Text>
-          </Pressable>
-          <Text style={styles.taskText}>Least important</Text>
-        </View>
-        <View style={styles.taskNumberContainer}>
-          <Pressable style={[
-            styles.dayEllipse,
-            importance === 2 && styles.activeOption,
-          ]}
-            onPress={() => { setImportance(2) }}>
-            <Text style={styles.taskNumber}>2</Text>
-          </Pressable>
-          <Text style={styles.taskText}> </Text>
-        </View>
-        <View style={styles.taskNumberContainer}>
-          <Pressable style={[
-            styles.dayEllipse,
-            importance === 3 && styles.activeOption,
-          ]}
-            onPress={() => { setImportance(3) }}>
-            <Text style={styles.taskNumber}>3</Text>
-          </Pressable>
-          <Text style={styles.taskText}>Most important</Text>
-        </View>
-      </View>
-
-
-
-    </View >
+    </View>
   );
 }
 const styles = StyleSheet.create({
-  taskTypeDisplay: {
-    backgroundColor: "#b7babd",
-    textAlign: 'center',
-    borderRadius: 20,
-    marginBottom: 10,
-    marginLeft: 20,
-    marginRight: 20,
-    padding: 20,
-    alignItems: 'center',
-  },
-
-  label: {
-    fontSize: 25,
-    fontWeight: 'bold',
-    padding: 8,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  taskNumberContainers: {
-    flexDirection: "row",
-    justifyContent: "flex-start",
-  },
-  jarHeader: {
-    flexDirection: 'row',
-  },
-
-  topBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 16,
-  },
-  activeText: {
-    color: 'blue',
-
-  },
-
-  textInput: {
-    borderColor: 'purple',
-    borderWidth: 2,
-    //height: 250,
-    //width: 200,
-    padding: 10,
-    borderRadius: 20,
-    fontSize: 18,
-    margin: 10
-  },
-  icon: {
-    //padding: 10,
-    // color: 'white',
-  },
-
-  curTask: {
-    display: 'flex',
-    alignItems: 'center',
-    marginTop: 14,
-    backgroundColor: 'rgb(182, 36, 255)',
-    opacity: 1,
-    color: 'rgb(240, 240, 240)',
-    borderLeft: 1,
-    boxShadow: 'rgb(182, 36, 255)',
-    padding: 16,
-    borderRadius: 28,
-    textShadow: 'rgba(240, 240, 240, 0.47)'
-  },
-
-  remainingTasksContainer: {
-    width: "100%",
-    padding: 16,
-    borderColor: "black",
-    borderWidth: 1,
-    borderRadius: 10,
-  },
-  header: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 8,
-  },
-  taskNumberContainers: {
-    flexDirection: "row",
-    justifyContent: "flex-start",
-  },
-  taskNumberContainer: {
-    alignItems: "center",
-    marginRight: 16,
-  },
-  minuteEllipse: {
-    width: 30,
-    height: 30,
-    backgroundColor: "rgba(255, 38, 246, 0.75)",
-    borderRadius: 15,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  hourEllipse: {
-    width: 30,
-    height: 30,
-    backgroundColor: "#9D6AF0",
-    borderRadius: 15,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  dayEllipse: {
-    width: 30,
-    height: 30,
-    backgroundColor: "#b1b3b5",
-    borderRadius: 15,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  activeOption: {
-    backgroundColor: "#8d82ed",
-  },
-  taskNumber: {
-    color: "black",
-    fontSize: 15,
-    fontWeight: "bold",
-  },
-  taskText: {
-    width: 70,
-    textAlign: "center",
-    color: "black",
-  },
-  arrowContainer: {
-    marginLeft: "auto",
-  },
-  finishedText: {
-    fontSize: 16,
-    textAlign: "center",
-    fontStyle: "italic",
-    marginTop: 20,
-  },
-
-  screen: {
-    //flex: 1,
-    backgroundColor: "#FFF",
-    //padding: 20,
-    //justifyContent: "center",
-  },
-
-  smallText: {
-    fontStyle: 'italic',
-    fontFamily: 'Avenir-Book',
-    marginBottom: 20,
-    fontSize: 18,
-    alignItems: 'center',
-    //color: 'white'
-  },
-  pressableContainer: {
-    backgroundColor: "#48249c",
-    textAlign: 'center',
-    borderRadius: 20,
-    marginBottom: 10,
-
-  },
-  welcomText: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 6,
-    fontSize: 70,
-    marginTop: 12,
-    marginLeft: 30,
-    marginRight: 30,
-    marginBottom: 50,
-    fontWeight: 'bold',
-    fontFamily: "Poppins",
-    textAlign: "center",
-    //color: 'white'
-  },
-  buttonText: {
-    display: 'flex',
-    alignItems: 'center',
-    // gap: 6,
-    fontSize: 30,
-    // marginTop: 12,
-    //  marginLeft: 8,
-    //   marginBottom: 5,
-    fontWeight: 'bold',
-    fontFamily: "Poppins",
-    textAlign: "center",
-    //color: 'white'
-  },
-  container: {
-    flex: 1,
-    //height: 760,
-    padding: 20,
-    backgroundColor: "#F6F6F6",
-    borderRadius: 10,
-  },
-  topBar: {
+ topBar: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingVertical: 16,
+    // paddingVertical: 16,
+    padding: 16,
   },
   title: {
     fontSize: 26,
@@ -447,49 +267,155 @@ const styles = StyleSheet.create({
   doneButton: {
     fontSize: 18,
   },
+
   header: {
+    //paddingHorizontal: 20,
     fontSize: 18,
-    marginBottom: 10,
+    marginBottom: 5,
   },
+taskType: {
+    paddingHorizontal: 20,
+    justifyContent: "flex-start",
+    //marginBottom: 20
+   // backgroundColor: "yellow",
+},
+ taskTypeContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginBottom: 10,
+   // borderColor: "black",
+   // borderWidth: 2,
+   backgroundColor: "#F6F6F6",
+    borderRadius: 10,
+  },
+
+    taskTypeSelection: {
+      alignItems: "center",
+      paddingVertical: 10,
+      borderRadius: 10,
+      width: 100, // Fixed width for each selection
+    },
+    selectedButton: {
+     // backgroundColor: "#D9D9D9",
+      // backgroundColor: "#9D6AF0",
+      // color: "#9D6AF0",
+      width: 100, // Fixed width for selected button
+          backgroundColor: '#F6F6F6',
+        //  shadowColor: '#000',
+          elevation: 4,
+          borderRadius: 14,
+    },
+    activeText: {
+      // color: "#9D6AF0",
+    },
   smallText: {
     fontSize: 14,
     fontStyle: "italic",
     textAlign: "center",
-    marginBottom: 20,
+    color: "gray",
   },
-  taskTypeContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    marginBottom: 20,
+    taskDescription: {
+      padding: 20,
+    },
+  descriptionContainer: {
+   paddingHorizontal: 10,
+   borderWidth: 1,
+   borderColor: "gray",
+   backgroundColor: "#F6F6F6",
+
   },
-  taskTypeSelection: {
-    alignItems: "center",
-    paddingVertical: 10,
-    borderRadius: 10,
-    width: 100, // Fixed width for each selection
-  },
-  selectedButton: {
-    backgroundColor: "#D9D9D9",
-    width: 100, // Fixed width for selected button
-  },
-  icon: {},
   textInput: {
-    backgroundColor: "white",
-    borderRadius: 5,
-    padding: 10,
     fontSize: 18,
-    height: 120,
-    marginBottom: 20,
-    textAlignVertical: "top", // Align text at the top left
+    borderColor: "#E0E0E0",
+    borderWidth: 2,
+    borderRadius: 10,
+    padding: 10,
+    backgroundColor: "#FFFFFF",
+    maxHeight: 100,
+    textAlignVertical: "top", // Ensures placeholder is at the top left
   },
-  dueDateContainer: {
+
+importanceSection: {
+    justifyContent: "flex-end",
+   // backgroundColor: "red",
+  //  paddingHorizontal: 10,
+   // height: "68%",
+//    alignItems: "space-between",
+  //  bottom: 0,
+   //  borderColor: "black",
+   //   borderWidth: 2,
+       padding: 20,
+},
+  importanceContainers: {
     flexDirection: "row",
+  },
+  importanceContainer: {
     alignItems: "center",
+  },
+    importanceNum: {
+      color: "black",
+      fontSize: 15,
+      fontWeight: "bold",
+    },
+    importanceText: {
+      width: 70,
+      textAlign: "center",
+      color: "black",
+    },
+      activeOption: {
+        backgroundColor: "#81b0ff",
+      },
+  importanceBox: {
+    padding: 15,
+    borderRadius: 12,
+    paddingHorizontal: 20,
+    //  width: 30,
+    //    height: 30,
+    backgroundColor: "#F6F6F6",
+    //   borderRadius: 15,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  dateText: {
+    fontSize: 14,
+    fontStyle: "italic",
+    alignItems: "center",
+    color: "gray",
+  },
+
+  optionalHeader: {
+    fontSize: 18,
+    //fontWeight: "bold",
+    //marginBottom: 8,
+  },
+  optionalHeader2: {
+    fontSize: 18,
+    //  fontWeight: "bold",
+    color: "blue",
+  },
+
+  selectionContainer: {
+    flexDirection: "row",
+    //   alignItems: "center",
     justifyContent: "space-between",
-    paddingVertical: 15,
-    paddingHorizontal: 10,
+    padding: 10,
+    //paddingVertical: 15,
+    //paddingHorizontal: 20,
     backgroundColor: "white",
-    borderRadius: 5,
-    marginBottom: 20,
+    borderRadius: 10,
+    // marginBottom: 20,
+    borderColor: "#F6F6F6",
+
+        borderWidth: 2,
+        backgroundColor: "#F6F6F6",
+  },
+
+  selectionContainerText: {
+    flexDirection: "column",
+    alignItems: "flex-start",
+    // height: "100%",
+    // backgroundColor: "red",
   },
 });
+
