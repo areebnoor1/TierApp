@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useRef, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -12,6 +12,7 @@ import MinutesJar from "../SVGicons/MinutesJar";
 import HoursJar from "../SVGicons/HoursJar";
 import DaysJar from "../SVGicons/DaysJar";
 import TaskSelectionModal from "./TaskSelectionModal";
+import { useIsFocused } from '@react-navigation/native';
 import RandomTask from "./RandomTask";
 import { TodoContext } from "../TodoContext";
 import LottieView from 'lottie-react-native';
@@ -25,7 +26,10 @@ export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskTy
   const [noTasksModalVisible, setNoTasksModalVisible] = useState(false);
   const [noTasksJar, setNoTasksJar] = useState(null);
 
-  const { todos } = useContext(TodoContext);
+  const { todos, goal } = useContext(TodoContext);
+
+
+
 
   const checkTodosExist = (taskType) => {
     const filteredTodos = todos.filter(
@@ -54,6 +58,27 @@ export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskTy
     setNoTasksJar(null);
   };
 
+  const minutesTasksLeft = () => {
+    //og(goal);
+
+    let remaining = goal.minutes_tasks -
+      todos.filter(
+        (todo) => todo.completed === true && todo.task_type === "minutes"
+      ).length
+    if(remaining !== 0){
+   return remaining }else{
+   
+   
+    return 0;}
+  };
+
+  const minutesProgress = () => {
+    console.log('remianin', minutesTasksLeft())
+    console.log('goal', goal.minutes_tasks)
+    let prog = 1- minutesTasksLeft() / goal.minutes_tasks+0.2
+    console.log('prog',prog)
+    return prog
+  }
 
   const capitalizeFirstLetter = (string) => {
     if (!string) return ""; // Handle null or undefined case
@@ -61,13 +86,13 @@ export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskTy
   };
   return (
     <View style={styles.screen}>
-     
+
       <View style={styles.welcomeTextContainer}>
         <Text style={styles.welcomeTextTitle}>No tasks active.</Text>
         <Text style={styles.welcomeTextHeader}>
           Select a jar to get started!
         </Text>
-        
+
       </View>
 
 
@@ -77,8 +102,10 @@ export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskTy
           <Pressable
             onPress={() => {
               if (checkTodosExist("minutes") === null) {
+
                 return;
               }
+              console.log(minutesProgress())
               openJarModal("minutes");
             }}
             style={({ pressed }) => [
@@ -86,8 +113,9 @@ export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskTy
             ]}
           >
             <MinutesJar
+              progress={minutesProgress()}
             />
-            
+
 
             {/* */}
 

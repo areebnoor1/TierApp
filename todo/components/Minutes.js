@@ -51,6 +51,7 @@ export default function Minutes() {
       <TouchableOpacity style={styles.addTaskButton} onPress={() => setAddModalVisible(true)}>
         <Ionicons name="add" size={30} color="black" />
       </TouchableOpacity>
+
       <View style={styles.container}>
         <ScrollView style={styles.scroll}>
           {todos
@@ -79,28 +80,33 @@ export default function Minutes() {
             )}
         </ScrollView>
 
+       
         <AddTaskModal
           modalVisible={addModalVisible}
           setModalVisible={setAddModalVisible}
-          inputTaskType = {'minutes'}
-   
+          inputTaskType={'hours'}
+        //  todos = {todos.filter(todo => todo.completed===false)}
+        // setTodos = {setTodos}
         />
 
-      
-       
-            <EditTaskModal modalVisible={modalVisible} setModalVisible={setModalVisible} task={editingTask}
-           
-            />
-        
-     
+        <EditTaskModal modalVisible={modalVisible} setModalVisible={setModalVisible} task={editingTask}
+
+        />
       </View>
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  scroll: {},
-  container: {},
+  scroll: {
+    //  width: '100%',
+  },
+  container: {
+    //flex: 1,
+    // justifyContent: 'flex-start',
+    //alignItems: 'center',
+    //  backgroundColor: '#F5FCFF',
+  },
   header: {
     marginTop: "15%",
     fontSize: 20,
@@ -139,17 +145,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  modalContainer: {
-    flex: 1,
-    justifyContent: "flex-end",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    width: "100%",
-    height: "95%",
-    backgroundColor: "#EBEBEB",
-    borderRadius: 10,
-  },
-
   addTaskButton: {
     position: "absolute",
     top: 20,
