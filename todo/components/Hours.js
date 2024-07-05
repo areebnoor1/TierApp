@@ -4,6 +4,7 @@ import { initializeApp } from "firebase/app";
 import { getDatabase } from "firebase/database";
 import { useFocusEffect } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
+import AddTaskModal from './HomeScreen/AddTaskModal';
 
 import {
   ref,
@@ -37,6 +38,7 @@ export default function Minutes() {
   const [value, setValue] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [editingTask, setEditingTask] = useState({});
+  const [addModalVisible, setAddModalVisible] = useState(false);
 
   const { todos, addTodo, removeTodo, toggleTodoCompleted } =
     useContext(TodoContext);
@@ -47,7 +49,7 @@ export default function Minutes() {
 
   return (
     <>
-      <TouchableOpacity style={styles.addTaskButton}>
+      <TouchableOpacity style={styles.addTaskButton} onPress={() => setAddModalVisible(true)}>
         <Ionicons name="add" size={30} color="black" />
       </TouchableOpacity>
       <View style={styles.container}>
@@ -77,6 +79,14 @@ export default function Minutes() {
                 )
             )}
         </ScrollView>
+
+        <AddTaskModal
+          modalVisible={addModalVisible}
+          setModalVisible={setAddModalVisible}
+          inputTaskType = {'hours'}
+        //  todos = {todos.filter(todo => todo.completed===false)}
+        // setTodos = {setTodos}
+        />
 
         <Modal
           transparent={true}

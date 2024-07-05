@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Button,
+  Pressable,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import TodoList from "./TodoList";
@@ -29,7 +30,7 @@ export default function Activity() {
   const [currentDate, setCurrentDate] = useState("");
   const [goalModalVisible, setGoalModalVisible] = useState(false); // Add state for modal visibility
   //const [goalMode, setGoalMode] = useState("set"); // Add state for goal mode
-
+  const [viewOption, setViewOption] = useState('today')
   const [initialGoals, setInitialGoals] = useState({
     minutesGoal: "3",
     hoursGoal: "1",
@@ -42,8 +43,8 @@ export default function Activity() {
   const [hasRemaining, setHasRemaining] = useState(true);
   //const [hasDailyGoal, setDailyGoal] = useState(false);
 
-  const { todos, addTodo, removeTodo, toggleTodoCompleted, goal, goalExists, updateGoal, setCompleted } = useContext(TodoContext);
- // const {  goal, goalExists, updateGoal, setCompleted} = useContext(GoalContext);
+  const { todos, addTodo, removeTodo, toggleTodoCompleted,completedThisWeek, goal, goalExists, updateGoal, setCompleted } = useContext(TodoContext);
+  // const {  goal, goalExists, updateGoal, setCompleted} = useContext(GoalContext);
 
   // Placeholder values
   // let streak = 3;
@@ -105,7 +106,7 @@ export default function Activity() {
   };
 
   const minutesTasksLeft = () => {
-    console.log(goal);
+    //og(goal);
     return (
       goal.minutes_tasks -
       todos.filter(
@@ -196,39 +197,39 @@ export default function Activity() {
   //<GoalProvider>
   return (
     <View>
-    <ScrollView style={styles.scroll}>
-      <View style={styles.topBar}>
-        <Text style={styles.dateText}>{currentDate}</Text>
-        {/*Streak Appearence-- Make so only visible once daily goal is set  */}
-        <View style={styles.streakContainer}>
-          <View style={styles.streakHeader}>
-            {!("streak" in goal) ? (
-              <Text style={styles.streakNumber}>0</Text>
-            ) : !hasRemainingTasks() && !isToday(goal.last_day_completed) ? (
-              <Text style={styles.streakNumber}>{goal.streak + 1}</Text>
-            ) : (
-              <Text style={styles.streakNumber}>{goal.streak}</Text>
-            )}
-            <MaterialCommunityIcons name="fire" size={30} color="black" />
+      <ScrollView style={styles.scroll}>
+        <View style={styles.topBar}>
+          <Text style={styles.dateText}>{currentDate}</Text>
+          {/*Streak Appearence-- Make so only visible once daily goal is set  */}
+          <View style={styles.streakContainer}>
+            <View style={styles.streakHeader}>
+              {!("streak" in goal) ? (
+                <Text style={styles.streakNumber}>0</Text>
+              ) : !hasRemainingTasks() && !isToday(goal.last_day_completed) ? (
+                <Text style={styles.streakNumber}>{goal.streak + 1}</Text>
+              ) : (
+                <Text style={styles.streakNumber}>{goal.streak}</Text>
+              )}
+              <MaterialCommunityIcons name="fire" size={30} color="black" />
+            </View>
+            <Text style={styles.streakText}>Day Streak!</Text>
           </View>
-          <Text style={styles.streakText}>Day Streak!</Text>
         </View>
-      </View>
 
-      <View style={styles.container}>
+        <View style={styles.container}>
 
 
           <View style={styles.dailyGoalContainer}>
             <Text style={styles.summary}>Daily Goal</Text>
-              {goalExists() &&
-                           <TouchableOpacity   onPress={() => openGoalModal("edit")}>
-                             <Text style={styles.editGoalText}>Edit Goal</Text>
-                            </TouchableOpacity>
-                      }
+            {goalExists() &&
+              <TouchableOpacity onPress={() => openGoalModal("edit")}>
+                <Text style={styles.editGoalText}>Edit Goal</Text>
+              </TouchableOpacity>
+            }
 
             {/* If none, display "reached daily goal"... If daily goal not set, just don't have... */}
           </View>
-{/* If have daily goal, show "edit goal"
+          {/* If have daily goal, show "edit goal"
     <div>
       <h1>Hello!</h1>
       {unreadMessages.length > 0 &&
@@ -276,7 +277,25 @@ export default function Activity() {
           />
 
           {/* if streak is null or 0,  display,  set task or complete daily goal to begin streak   */}
-          <Text style={styles.summary}>Today's Progress</Text>
+          <View styles={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "flex-end",
+          }}>
+            <Pressable onPress = {()=>{
+              setViewOption('today')
+            }
+
+            }>
+              <Text style={[styles.taskOptions, viewOption === "today" && styles.selected]}>Today's Progress</Text>
+            </Pressable>
+            <Pressable onPress = {()=>{
+              setViewOption('week')
+            } }>
+              <Text style={[styles.taskOptions, viewOption === "week" && styles.selected]}>Weekly Progress</Text>
+            </Pressable>
+          </View>
+          {viewOption === "today"?
           <View>
             {todos.map((item) =>
               item.completed ? (
@@ -285,7 +304,7 @@ export default function Activity() {
                     text={item.text}
                     key={item.key}
                     the_key={item.key}
-                  todo={item}
+                    todo={item}
                     not_editable={true}
                     due_date={item.due_date}
                     todoItem={item.completed}
@@ -304,7 +323,35 @@ export default function Activity() {
                 />
               ) : null
             )}
-          </View>
+          </View>:
+          <View>
+           {completedThisWeek.map((item) =>
+            item.completed ? (
+              <View key={item.key}>
+                <TodoListCompleted
+                  text={item.text}
+                  key={item.key}
+                  the_key={item.key}
+                  todo={item}
+                  not_editable={true}
+                  due_date={item.due_date}
+                  todoItem={item.completed}
+                />
+              </View>
+            ) : "days_made_progress" in item &&
+              isToday(item.most_recent_day_made_progress) ? (
+              <TodoListCompleted
+                text={item.text}
+                key={item.key}
+                the_key={item.key}
+                todo={item}
+                not_editable={true}
+                due_date={item.due_date}
+                todoItem={item.completed}
+              />
+            ) : null
+          )}
+        </View>}
           <GoalModal
             visible={goalModalVisible}
             onClose={closeGoalModal}
@@ -313,23 +360,27 @@ export default function Activity() {
             initialGoals={initialGoals}
           />
 
-      </View>
-      {/*</GoalProvider>*/}
-       </ScrollView>
+        </View>
+        {/*</GoalProvider>*/}
+      </ScrollView>
     </View>
   );
 }
 const styles = StyleSheet.create({
+  selected: {
+    borderRadius: 10,
+    backgroundColor: "#828282"
+  },
   container: {
- //   flex: 1,
+    //   flex: 1,
     padding: 16,
     justifyContent: "space-between",
   },
- /* topBar: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 10,
-  },*/
+  /* topBar: {
+     flexDirection: "row",
+     alignItems: "center",
+     marginBottom: 10,
+   },*/
   topBar: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -347,7 +398,7 @@ const styles = StyleSheet.create({
     // width: "100%",
     //justifyContent: "flex-end",
     //position: "absolute",
-   // top: 0,
+    // top: 0,
     //right: 0,
   },
   streakHeader: {
@@ -409,6 +460,13 @@ const styles = StyleSheet.create({
     color: "#A5A5A5",
     fontSize: 24,
     justifyContent: "flex-end",
+  },
+  taskOptions: {
+    fontFamily: "Inter",
+    color: "#A5A5A5",
+    fontSize: 20,
+    flex: 1
+    // justifyContent: "flex-end",
   },
   minutesTask: {
     backgroundColor: "rgba(255, 38, 246, 0.75)",

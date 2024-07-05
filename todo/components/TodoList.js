@@ -125,6 +125,7 @@ const styles = StyleSheet.create({
 		color: 'black'
 	},
 	dateText: {
+		borderRadius: 10,
 		marginBottom: 10,
 		fontStyle: 'italic',
 	}

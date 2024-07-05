@@ -1,4 +1,6 @@
 import React, { useState, useContext } from "react";
+import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
+
 import {
   StyleSheet,
   View,
@@ -15,6 +17,7 @@ import Entypo from "react-native-vector-icons/Entypo";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import DatePicker from "react-native-date-picker";
 import DateTimePicker from '@react-native-community/datetimepicker';
+
 
 import { TodoContext } from "./TodoContext";
 
@@ -42,7 +45,7 @@ export default function AddTask({ setModalVisible, setTodos, inputTaskType }) {
   };
 
   const addTodoWrapper = async () => {
-    if (taskType === "") {
+    if (taskType == null) {
       Alert.alert("", "Please specify a task type (Minutes, Hours, Days).", [
         { text: "OK", onPress: () => console.log("OK Pressed") },
       ]);
@@ -58,6 +61,7 @@ export default function AddTask({ setModalVisible, setTodos, inputTaskType }) {
         task_type: taskType,
         due_date: date,
         has_due_date: showDate,
+        importance: importance
       });
 
       setValue("");
@@ -72,7 +76,11 @@ export default function AddTask({ setModalVisible, setTodos, inputTaskType }) {
           <AntDesign name="close" size={30} />
         </TouchableOpacity>
         <Text style={styles.title}>Add Task</Text>
-        <TouchableOpacity onPress={addTodoWrapper}>
+        <TouchableOpacity onPress={() => {
+          addTodoWrapper()
+         
+        }
+        }>
           <Text style={styles.doneButton}>Done</Text>
         </TouchableOpacity>
       </View>
@@ -421,7 +429,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    height: 760,
+    //height: 760,
     padding: 20,
     backgroundColor: "#F6F6F6",
     borderRadius: 10,

@@ -14,9 +14,10 @@ import DaysJar from "../SVGicons/DaysJar";
 import TaskSelectionModal from "./TaskSelectionModal";
 import RandomTask from "./RandomTask";
 import { TodoContext } from "../TodoContext";
+import LottieView from 'lottie-react-native';
 import { EvilIcons } from '@expo/vector-icons';
 
-export default function NoTask({ setModalVisible, setCurrentTask }) {
+export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskType }) {
   const [jarModalVisible, setJarModalVisible] = useState(false);
   const [taskSelectionVisible, setTaskSelectionVisible] = useState(false);
   const [randomTaskSelectionVisible, setRandomTaskSelectionVisible] = useState(false);
@@ -54,10 +55,10 @@ export default function NoTask({ setModalVisible, setCurrentTask }) {
   };
 
 
-const capitalizeFirstLetter = (string) => {
-  if (!string) return ""; // Handle null or undefined case
-  return string.charAt(0).toUpperCase() + string.slice(1);
-};
+  const capitalizeFirstLetter = (string) => {
+    if (!string) return ""; // Handle null or undefined case
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
   return (
     <View style={styles.screen}>
       <View style={styles.welcomeTextContainer}>
@@ -67,7 +68,11 @@ const capitalizeFirstLetter = (string) => {
         </Text>
       </View>
 
+
+
+
       <View style={styles.jarsContainer}>
+
         <View style={styles.jarContainer}>
           <Pressable
             onPress={() => {
@@ -80,7 +85,13 @@ const capitalizeFirstLetter = (string) => {
               { opacity: pressed || selectedJar === "minutes" ? 0.6 : 1 },
             ]}
           >
-            <MinutesJar />
+            <MinutesJar styles={{
+
+            }}
+            />
+
+           {/* */ }
+
           </Pressable>
         </View>
 
@@ -204,6 +215,7 @@ const capitalizeFirstLetter = (string) => {
               onPress={() => {
                 closeNoTasksModal();
                 setModalVisible(true);
+                setInputTaskType(noTasksJar)
               }}
             >
               <Text style={styles.buttonText}>
@@ -287,13 +299,13 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: "center",
   },
-    noTasksModal: {
-      fontSize: 20,
-      fontFamily: "Poppins-Bold",
-      color: "black",
-      //marginBottom: 20,
-      textAlign: "center",
-    },
+  noTasksModal: {
+    fontSize: 20,
+    fontFamily: "Poppins-Bold",
+    color: "black",
+    //marginBottom: 20,
+    textAlign: "center",
+  },
 
   closeModalIcon: {
     position: "absolute",

@@ -4,6 +4,7 @@ import { initializeApp } from 'firebase/app';
 import { getDatabase } from 'firebase/database';
 import { NavigationContainer } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
 import {
   ref,
   onValue,
@@ -29,7 +30,7 @@ import TodoList from './components/TodoList';
 import ToDoApp from './components/ToDoApp';
 import AddTask from './components/AddTask';
 import TabNavigator from './components/TabNavigator';
-import  {TodoProvider}  from './components/TodoContext';
+import { TodoProvider } from './components/TodoContext';
 import LoadingScreen from './components/LoadingScreen';
 import Minutes from './components/Minutes';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -58,7 +59,7 @@ export const HomeScreen = () => {
     >
       <Stack.Screen component={HomeScreen} name="HomeScreen" options={{ title: "HomeScreen" }} />
       <Stack.Screen component={AddTask} name="AddTask" options={{ title: "AddTask" }} />
-       <Stack.Screen name="DailyGoal" component={DailyGoal} />
+      <Stack.Screen name="DailyGoal" component={DailyGoal} />
     </Stack.Navigator>
   )
 }
@@ -74,10 +75,10 @@ export default function App() {
 
 
   useEffect(() => {
-    
+
     //SHOULD BE REPLACED WITH RETRIEVEING THE TODOS
 
-    setTimeout (()=>{clearAsyncStorage()},2000)
+    //setTimeout(() => { clearAsyncStorage() }, 2000)
   }, []);
 
   const clearAsyncStorage = async () => {
@@ -133,11 +134,13 @@ export default function App() {
   //   );
   // } else {
   return (
-    <TodoProvider>
-      <NavigationContainer>
-        <TabNavigator />
-      </NavigationContainer>
-    </TodoProvider>
+    
+      <TodoProvider>
+        <NavigationContainer>
+          <TabNavigator />
+        </NavigationContainer>
+      </TodoProvider>
+    
   );
   // }
 }

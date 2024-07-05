@@ -3,23 +3,26 @@ import { StyleSheet, View, Modal } from "react-native";
 import AddTask from "../AddTask.js";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-export default function AddTaskModal({ modalVisible, setModalVisible, inputTaskType}) {
+export default function AddTaskModal({ modalVisible, setModalVisible, inputTaskType }) {
 
 
   return (
-  <>
-    <Modal transparent={true}  animationType="slide" visible={modalVisible} style={styles.modalView}>
-    <KeyboardAwareScrollView styles={{
-      flex:1
-    }}>
-          <View style={styles.modalContainer}>
-                              <View style={styles.modalContent}>
-                              <AddTask setModalVisible={setModalVisible} inputTaskType = {inputTaskType} />
-                              </View>
-                            </View>
-                            </KeyboardAwareScrollView>
-    </Modal>
-{/*
+    <>
+
+      <Modal transparent={true} animationType="slide" visible={modalVisible} style={styles.modalView}>
+        <KeyboardAwareScrollView styles={{
+          //width: '100%'
+          //flex:1
+        }}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <AddTask setModalVisible={setModalVisible} inputTaskType={inputTaskType} />
+          </View>
+        </View>
+      </KeyboardAwareScrollView>
+    </Modal >
+
+    {/*
             <Modal visible={true} animationType="slide" transparent={true}>
                       <View style={styles.modalContainer}>
                         <View style={styles.modalContent}>
@@ -45,17 +48,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-    modalContainer: {
-      flex: 1,
-      justifyContent: "flex-end",
-      alignItems: "center",
-      backgroundColor: "rgba(0, 0, 0, 0.5)",
-    },
-    modalContent: {
-      width: "95%",
-      height: "95%",
-      backgroundColor: "#EBEBEB",
-      borderRadius: 10,
-//      padding: 20,
-    },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    width: "95%",
+    height: "95%",
+    backgroundColor: "#EBEBEB",
+    borderRadius: 10,
+    //      padding: 20,
+  },
 });
