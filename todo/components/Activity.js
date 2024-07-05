@@ -291,7 +291,7 @@ export default function Activity() {
                     key={item.key}
                     the_key={item.key}
                     todo={item}
-                    todo={item}
+                   
                     not_editable={true}
                     due_date={item.due_date}
                     todoItem={item.completed}

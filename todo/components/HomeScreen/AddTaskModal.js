@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     //  backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContainer: {
-    flex: 1,
+    //flex: 1,
     justifyContent: "flex-end",
     alignItems: "center",
     //backgroundColor: "rgba(0, 0, 0, 0.5)",

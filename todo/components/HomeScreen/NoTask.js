@@ -13,29 +13,30 @@ import HoursJar from "../SVGicons/HoursJar";
 import DaysJar from "../SVGicons/DaysJar";
 import JarIcon from "../SVGicons/WhiteJarIcon.js";
 import TaskSelectionModal from "./TaskSelectionModal";
+import { useIsFocused } from '@react-navigation/native';
 import RandomTask from "./RandomTask";
 import { TodoContext } from "../TodoContext";
+import LottieView from 'lottie-react-native';
+import { EvilIcons } from '@expo/vector-icons';
 import { EvilIcons } from "@expo/vector-icons";
 import { FontAwesome6 } from "@expo/vector-icons";
 
-export default function NoTask({
-  setModalVisible,
-  setCurrentTask,
-  setInputTaskType,
-}) {
+export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskType }) {
   const [jarModalVisible, setJarModalVisible] = useState(false);
   const [taskSelectionVisible, setTaskSelectionVisible] = useState(false);
-  const [randomTaskSelectionVisible, setRandomTaskSelectionVisible] =
-    useState(false);
+  const [randomTaskSelectionVisible, setRandomTaskSelectionVisible] = useState(false);
   const [selectedJar, setSelectedJar] = useState(null);
   const [noTasksModalVisible, setNoTasksModalVisible] = useState(false);
   const [noTasksJar, setNoTasksJar] = useState(null);
 
-  const { todos } = useContext(TodoContext);
+  const { todos, goal } = useContext(TodoContext);
+
+
+
 
   const checkTodosExist = (taskType) => {
     const filteredTodos = todos.filter(
-      (todo) => todo.task_type === taskType && !todo.completed
+      (todo) => todo.task_type === taskType && todo.completed === false
     );
     if (filteredTodos.length === 0) {
       setNoTasksJar(taskType);
@@ -44,7 +45,13 @@ export default function NoTask({
     }
     return filteredTodos;
   };
-
+  const isToday = (date) => {
+    const d = new Date(date);
+    const t = new Date();
+    const today = new Date(t.setHours(0, 0, 0, 0));
+    const comparison = new Date(d.setHours(0, 0, 0, 0));
+    return today.getTime() == comparison.getTime();
+  };
   const openJarModal = (jar) => {
     setSelectedJar(jar);
     setJarModalVisible(true);
@@ -52,7 +59,7 @@ export default function NoTask({
 
   const closeModal = () => {
     setJarModalVisible(false);
-    setSelectedJar(null);
+    setSelectedJar(null); // Reset selectedJar when modal is closed
   };
 
   const closeNoTasksModal = () => {
@@ -60,8 +67,81 @@ export default function NoTask({
     setNoTasksJar(null);
   };
 
+  const minutesTasksLeft = () => {
+    //og(goal);
+
+    let remaining = goal.minutes_tasks -
+      todos.filter(
+        (todo) => todo.completed === true && todo.task_type === "minutes"
+      ).length
+    if(remaining !== 0){
+   return remaining }else{
+
+
+    return 0;}
+  };
+
+  const minutesProgress = () => {
+    console.log('remianin', minutesTasksLeft())
+    console.log('goal', goal.minutes_tasks)
+    let prog = 0.6*(1- minutesTasksLeft() / goal.minutes_tasks)+0.25
+    console.log('prog',prog)
+    if(isNaN(prog)){
+    return 0
+    }
+    return prog
+  }
+
+  const hoursTasksLeft = () => {
+    //og(goal);
+    let remaining = goal.hours_tasks -
+      todos.filter(
+        (todo) => todo.completed === true && todo.task_type === "hours"
+      ).length
+    if(remaining !== 0){
+   return remaining }else{
+    return 0;}
+  };
+
+
+
+  const hoursProgress = () => {
+    console.log('remianin', hoursTasksLeft())
+    console.log('goal', goal.hours_tasks)
+    let prog = 0.6*(1- hoursTasksLeft() / goal.hours_tasks)+0.25
+    console.log('prog',prog)
+    if(isNaN(prog)){
+    return 0
+    }
+    return prog
+  }
+
+
+  const daysTasksLeft = () => {
+    return (
+      goal.days_tasks -
+      todos.filter(
+        (todo) =>
+          todo.task_type === "days" &&
+          (todo.completed === true ||
+            isToday(todo.most_recent_day_made_progress))
+      ).length
+    );
+  };
+  const daysProgress = () => {
+    console.log('remianin', daysTasksLeft())
+    console.log('goal', goal.days_tasks)
+    let prog = 0.6*(1- daysTasksLeft() / goal.days_tasks)+0.25
+    console.log('prog',prog)
+    if(isNaN(prog)){
+    return 0
+    }
+    return prog
+  }
+
+
   const capitalizeFirstLetter = (string) => {
-    if (!string) return "";
+    if (!string) return ""; // Handle null or undefined case
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
@@ -78,45 +158,62 @@ export default function NoTask({
         <View style={styles.jarContainer}>
           <Pressable
             onPress={() => {
-              if (checkTodosExist("minutes") === null) return;
+            {/*
+               if (checkTodosExist("minutes") === null) return;
+                          openJarModal("minutes");
+            */}
+              if (checkTodosExist("minutes") === null) {
+
+                return;
+              }
+              console.log(minutesProgress())
               openJarModal("minutes");
             }}
             style={({ pressed }) => [
               { opacity: pressed || selectedJar === "minutes" ? 0.6 : 1 },
             ]}
           >
-            <JarIcon />
-            <Text style={styles.jarText}>Minutes</Text>
+
+            <JarIcon  progress={minutesProgress()}
+                                 />
+                        <Text style={styles.jarText}>Minutes</Text>
           </Pressable>
         </View>
 
         <View style={styles.jarContainer}>
           <Pressable
             onPress={() => {
-              if (checkTodosExist("hours") === null) return;
+              if (checkTodosExist("hours") === null) {
+                return;
+              }
               openJarModal("hours");
             }}
             style={({ pressed }) => [
               { opacity: pressed || selectedJar === "hours" ? 0.6 : 1 },
             ]}
           >
-            <JarIcon />
-            <Text style={styles.jarText}>Hours</Text>
+                  <JarIcon  progress={hoursProgress()}
+                                       />
+                              <Text style={styles.jarText}>Hours</Text>
           </Pressable>
         </View>
 
         <View style={styles.jarContainer}>
           <Pressable
             onPress={() => {
-              if (checkTodosExist("days") === null) return;
+              if (checkTodosExist("days") === null) {
+                return;
+              }
               openJarModal("days");
             }}
             style={({ pressed }) => [
               { opacity: pressed || selectedJar === "days" ? 0.6 : 1 },
             ]}
           >
-            <JarIcon />
-            <Text style={styles.jarText}>Days</Text>
+            <JarIcon
+            progress={daysProgress()}
+            />
+             <Text style={styles.jarText}>Days</Text>
           </Pressable>
         </View>
       </View>
