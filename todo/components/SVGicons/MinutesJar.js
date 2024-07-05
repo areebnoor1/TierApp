@@ -30,7 +30,7 @@ const SvgComponent = (props) => (
     
   }}>
         <LottieView
-          source={require('/Users/mashamolchanova/TierApp/todo/assets/Animation - 1720127471017 (1).json')}
+          source={require('../../assets/Animation - 1720127471017 (1).json')}
           
            progress={props.progress}
 
@@ -52,7 +52,7 @@ const SvgComponent = (props) => (
         ></LottieView>
 </View>
 
-      {/*<Text
+      {<Text
         fill="#FFF"
         fontFamily="AppleSDGothicNeo-Regular, Apple SD Gothic Neo"
         fontSize={21}
@@ -62,10 +62,10 @@ const SvgComponent = (props) => (
           position: 'absolute'
         }}
       >
-        <TSpan x="45" y="80.335">
+        <TSpan x="45" y="170.335">
           {"Minutes"}
         </TSpan>
-      </Text>*/}
+      </Text>}
       </View>
     </G>
   </Svg>

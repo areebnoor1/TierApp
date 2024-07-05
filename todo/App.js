@@ -78,7 +78,7 @@ export default function App() {
 
     //SHOULD BE REPLACED WITH RETRIEVEING THE TODOS
 
-    //setTimeout(() => { clearAsyncStorage() }, 2000)
+    setTimeout(() => { ()=>{} }, 2000)
   }, []);
 
   const clearAsyncStorage = async () => {

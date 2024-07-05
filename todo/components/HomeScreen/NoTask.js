@@ -42,7 +42,13 @@ export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskTy
     }
     return filteredTodos;
   };
-
+  const isToday = (date) => {
+    const d = new Date(date);
+    const t = new Date();
+    const today = new Date(t.setHours(0, 0, 0, 0));
+    const comparison = new Date(d.setHours(0, 0, 0, 0));
+    return today.getTime() == comparison.getTime();
+  };
   const openJarModal = (jar) => {
     setSelectedJar(jar);
     setJarModalVisible(true);
@@ -75,10 +81,61 @@ export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskTy
   const minutesProgress = () => {
     console.log('remianin', minutesTasksLeft())
     console.log('goal', goal.minutes_tasks)
-    let prog = 1- minutesTasksLeft() / goal.minutes_tasks+0.2
+    let prog = 0.6*(1- minutesTasksLeft() / goal.minutes_tasks)+0.25
     console.log('prog',prog)
+    if(isNaN(prog)){
+    return 0
+    }
     return prog
   }
+
+  const hoursTasksLeft = () => {
+    //og(goal);
+    let remaining = goal.hours_tasks -
+      todos.filter(
+        (todo) => todo.completed === true && todo.task_type === "hours"
+      ).length
+    if(remaining !== 0){
+   return remaining }else{
+    return 0;}
+  };
+
+
+
+  const hoursProgress = () => {
+    console.log('remianin', hoursTasksLeft())
+    console.log('goal', goal.hours_tasks)
+    let prog = 0.6*(1- hoursTasksLeft() / goal.hours_tasks)+0.25
+    console.log('prog',prog)
+    if(isNaN(prog)){
+    return 0
+    }
+    return prog
+  }
+
+
+  const daysTasksLeft = () => {
+    return (
+      goal.days_tasks -
+      todos.filter(
+        (todo) =>
+          todo.task_type === "days" &&
+          (todo.completed === true ||
+            isToday(todo.most_recent_day_made_progress))
+      ).length
+    );
+  };
+  const daysProgress = () => {
+    console.log('remianin', daysTasksLeft())
+    console.log('goal', goal.days_tasks)
+    let prog = 0.6*(1- daysTasksLeft() / goal.days_tasks)+0.25
+    console.log('prog',prog)
+    if(isNaN(prog)){
+    return 0
+    }
+    return prog
+  }
+
 
   const capitalizeFirstLetter = (string) => {
     if (!string) return ""; // Handle null or undefined case
@@ -117,7 +174,10 @@ export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskTy
             />
 
 
-            {/* */}
+            <Text
+            styles = {{
+            }}
+            >Minutes</Text>
 
           </Pressable>
         </View>
@@ -134,7 +194,9 @@ export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskTy
               { opacity: pressed || selectedJar === "hours" ? 0.6 : 1 },
             ]}
           >
-            <HoursJar />
+            <HoursJar 
+            progress={hoursProgress()}
+            />
           </Pressable>
         </View>
 
@@ -150,7 +212,9 @@ export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskTy
               { opacity: pressed || selectedJar === "days" ? 0.6 : 1 },
             ]}
           >
-            <DaysJar />
+            <DaysJar 
+            progress={daysProgress()}
+            />
           </Pressable>
         </View>
       </View>
