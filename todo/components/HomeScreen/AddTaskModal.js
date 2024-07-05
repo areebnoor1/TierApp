@@ -1,33 +1,30 @@
 import React from "react";
 import { StyleSheet, View, Modal } from "react-native";
 import AddTask from "../AddTask.js";
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-export default function AddTaskModal({ modalVisible, setModalVisible, inputTaskType}) {
-
-
+export default function AddTaskModal({
+  modalVisible,
+  setModalVisible,
+  inputTaskType,
+}) {
   return (
-  <>
-    <Modal transparent={true}  animationType="slide" visible={modalVisible} style={styles.modalView}>
-    <KeyboardAwareScrollView styles={{
-      flex:1
-    }}>
-          <View style={styles.modalContainer}>
-                              <View style={styles.modalContent}>
-                              <AddTask setModalVisible={setModalVisible} inputTaskType = {inputTaskType} />
-                              </View>
-                            </View>
-                            </KeyboardAwareScrollView>
-    </Modal>
-{/*
-            <Modal visible={true} animationType="slide" transparent={true}>
-                      <View style={styles.modalContainer}>
-                        <View style={styles.modalContent}>
-                        </View>
-                      </View>
-                    </Modal>
-
-*/}
+    <>
+      <Modal
+        transparent={true}
+        animationType="slide"
+        visible={modalVisible}
+        style={styles.modalView}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <AddTask
+              setModalVisible={setModalVisible}
+              inputTaskType={inputTaskType}
+            />
+          </View>
+        </View>
+      </Modal>
     </>
   );
 }
@@ -46,19 +43,19 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     //  backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
-    modalContainer: {
-      flex: 1,
-      justifyContent: "flex-end",
-      alignItems: "center",
+  modalContainer: {
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "center",
     //backgroundColor: "rgba(0, 0, 0, 0.5)",
-    },
-    modalContent: {
-      width: "99%",
-      height: "99%",
-      elevation: 1,
+  },
+  modalContent: {
+    width: "99%",
+    height: "99%",
+    elevation: 1,
     //  backgroundColor: "#EBEBEB",
-      borderRadius: 20,
- backgroundColor: "white",
-//      padding: 20,
-    },
+    borderRadius: 20,
+    backgroundColor: "white",
+    //      padding: 20,
+  },
 });
