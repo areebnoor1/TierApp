@@ -16,7 +16,7 @@ import RandomTask from "./RandomTask";
 import { TodoContext } from "../TodoContext";
 import LottieView from 'lottie-react-native';
 import { EvilIcons } from '@expo/vector-icons';
-
+import { FontAwesome6 } from '@expo/vector-icons';
 export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskType }) {
   const [jarModalVisible, setJarModalVisible] = useState(false);
   const [taskSelectionVisible, setTaskSelectionVisible] = useState(false);
@@ -61,15 +61,14 @@ export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskTy
   };
   return (
     <View style={styles.screen}>
-     
+
       <View style={styles.welcomeTextContainer}>
         <Text style={styles.welcomeTextTitle}>No tasks active.</Text>
         <Text style={styles.welcomeTextHeader}>
           Select a jar to get started!
         </Text>
-        
-      </View>
 
+      </View>
 
       <View style={styles.jarsContainer}>
 
@@ -87,7 +86,7 @@ export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskTy
           >
             <MinutesJar
             />
-            
+
 
             {/* */}
 
@@ -183,6 +182,7 @@ export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskTy
         setCurrentTask={setCurrentTask}
       />
 
+{/*
       <Pressable
         style={styles.addTaskButton}
         onPress={() => setModalVisible(true)}
@@ -192,6 +192,31 @@ export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskTy
           source={require("../../assets/addButton.png")}
         />
       </Pressable>
+*/}
+ <View style={styles.addTaskButtonContainer}>
+            <FontAwesome6 name="add" size={24} color="white" />
+               <TouchableOpacity onPress={() => setModalVisible(true)}>
+              <Text style={styles.addTaskButtonText}>Add a task</Text>
+            </TouchableOpacity>
+ </View>
+
+
+
+      <TouchableOpacity onPress={() => setModalVisible(true)}>
+        <Text>Add a task</Text>
+      </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => {
+                     setModalVisible(true);
+                    }}
+                  >
+                   <View style={styles.buttonTextIconRow}>
+                   <FontAwesome6 name="add" size={24} color="white" />
+                    <Text style={styles.buttonText}>Add a task</Text>
+                     </View>
+                  </TouchableOpacity>
 
       <Modal
         animationType="fade"
@@ -241,12 +266,13 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 20,
     borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+   // shadowColor: "#000",
+    //shadowOffset: { width: 0, height: 2 },
+   // shadowOpacity: 0.25,
+   // shadowRadius: 3.84,
+    elevation: 1,
     marginBottom: 180, // Adjust this value as needed
+
   },
   welcomeTextTitle: {
     fontSize: 36,
@@ -263,15 +289,19 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#6a1b9a",
   },
+
   jarsContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     width: "88%",
     position: "absolute",
     bottom: 130,
+        backgroundColor: "red",
+
   },
   jarContainer: {
     alignItems: "center",
+
   },
   addTaskButton: {
     position: "absolute",
@@ -325,5 +355,31 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: "Poppins-Bold",
     color: "white",
+  },
+  addTaskButtonText: {
+   // padding: 10,
+    paddingHorizontal: 10,
+    fontSize: 20,
+    color: "white",
+  },
+  addTaskButtonContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    position: "absolute",
+    bottom: 20,
+    backgroundColor: "black",
+      borderRadius: 10,
+      marginBottom: 20,
+      marginTop: 20,
+      alignItems: "center",
+      padding: 20,
+      width: "100%",
+
+  },
+  buttonTextIconRow: {
+      flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+
   },
 });
