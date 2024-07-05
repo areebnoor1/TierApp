@@ -11,16 +11,22 @@ import {
 import MinutesJar from "../SVGicons/MinutesJar";
 import HoursJar from "../SVGicons/HoursJar";
 import DaysJar from "../SVGicons/DaysJar";
+import JarIcon from "../SVGicons/WhiteJarIcon.js";
 import TaskSelectionModal from "./TaskSelectionModal";
 import RandomTask from "./RandomTask";
 import { TodoContext } from "../TodoContext";
-import LottieView from 'lottie-react-native';
-import { EvilIcons } from '@expo/vector-icons';
-import { FontAwesome6 } from '@expo/vector-icons';
-export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskType }) {
+import { EvilIcons } from "@expo/vector-icons";
+import { FontAwesome6 } from "@expo/vector-icons";
+
+export default function NoTask({
+  setModalVisible,
+  setCurrentTask,
+  setInputTaskType,
+}) {
   const [jarModalVisible, setJarModalVisible] = useState(false);
   const [taskSelectionVisible, setTaskSelectionVisible] = useState(false);
-  const [randomTaskSelectionVisible, setRandomTaskSelectionVisible] = useState(false);
+  const [randomTaskSelectionVisible, setRandomTaskSelectionVisible] =
+    useState(false);
   const [selectedJar, setSelectedJar] = useState(null);
   const [noTasksModalVisible, setNoTasksModalVisible] = useState(false);
   const [noTasksJar, setNoTasksJar] = useState(null);
@@ -29,7 +35,7 @@ export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskTy
 
   const checkTodosExist = (taskType) => {
     const filteredTodos = todos.filter(
-      (todo) => todo.task_type === taskType && todo.completed === false
+      (todo) => todo.task_type === taskType && !todo.completed
     );
     if (filteredTodos.length === 0) {
       setNoTasksJar(taskType);
@@ -46,7 +52,7 @@ export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskTy
 
   const closeModal = () => {
     setJarModalVisible(false);
-    setSelectedJar(null); // Reset selectedJar when modal is closed
+    setSelectedJar(null);
   };
 
   const closeNoTasksModal = () => {
@@ -54,74 +60,63 @@ export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskTy
     setNoTasksJar(null);
   };
 
-
   const capitalizeFirstLetter = (string) => {
-    if (!string) return ""; // Handle null or undefined case
+    if (!string) return "";
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
+
   return (
     <View style={styles.screen}>
-
       <View style={styles.welcomeTextContainer}>
         <Text style={styles.welcomeTextTitle}>No tasks active.</Text>
         <Text style={styles.welcomeTextHeader}>
           Select a jar to get started!
         </Text>
-
       </View>
 
       <View style={styles.jarsContainer}>
-
         <View style={styles.jarContainer}>
           <Pressable
             onPress={() => {
-              if (checkTodosExist("minutes") === null) {
-                return;
-              }
+              if (checkTodosExist("minutes") === null) return;
               openJarModal("minutes");
             }}
             style={({ pressed }) => [
               { opacity: pressed || selectedJar === "minutes" ? 0.6 : 1 },
             ]}
           >
-            <MinutesJar
-            />
-
-
-            {/* */}
-
+            <JarIcon />
+            <Text style={styles.jarText}>Minutes</Text>
           </Pressable>
         </View>
 
         <View style={styles.jarContainer}>
           <Pressable
             onPress={() => {
-              if (checkTodosExist("hours") === null) {
-                return;
-              }
+              if (checkTodosExist("hours") === null) return;
               openJarModal("hours");
             }}
             style={({ pressed }) => [
               { opacity: pressed || selectedJar === "hours" ? 0.6 : 1 },
             ]}
           >
-            <HoursJar />
+            <JarIcon />
+            <Text style={styles.jarText}>Hours</Text>
           </Pressable>
         </View>
 
         <View style={styles.jarContainer}>
           <Pressable
             onPress={() => {
-              if (checkTodosExist("days") === null) {
-                return;
-              }
+              if (checkTodosExist("days") === null) return;
               openJarModal("days");
             }}
             style={({ pressed }) => [
               { opacity: pressed || selectedJar === "days" ? 0.6 : 1 },
             ]}
           >
-            <DaysJar />
+            <JarIcon />
+            <Text style={styles.jarText}>Days</Text>
           </Pressable>
         </View>
       </View>
@@ -182,41 +177,13 @@ export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskTy
         setCurrentTask={setCurrentTask}
       />
 
-{/*
-      <Pressable
-        style={styles.addTaskButton}
+      <TouchableOpacity
+        style={styles.addButton}
         onPress={() => setModalVisible(true)}
       >
-        <Image
-          style={{ width: 90, height: 90 }}
-          source={require("../../assets/addButton.png")}
-        />
-      </Pressable>
-*/}
- <View style={styles.addTaskButtonContainer}>
-            <FontAwesome6 name="add" size={24} color="white" />
-               <TouchableOpacity onPress={() => setModalVisible(true)}>
-              <Text style={styles.addTaskButtonText}>Add a task</Text>
-            </TouchableOpacity>
- </View>
-
-
-
-      <TouchableOpacity onPress={() => setModalVisible(true)}>
-        <Text>Add a task</Text>
+        <FontAwesome6 name="add" size={24} color="white" />
+        <Text style={styles.addButtonText}>Add a Task</Text>
       </TouchableOpacity>
-
-                  <TouchableOpacity
-                    style={styles.button}
-                    onPress={() => {
-                     setModalVisible(true);
-                    }}
-                  >
-                   <View style={styles.buttonTextIconRow}>
-                   <FontAwesome6 name="add" size={24} color="white" />
-                    <Text style={styles.buttonText}>Add a task</Text>
-                     </View>
-                  </TouchableOpacity>
 
       <Modal
         animationType="fade"
@@ -239,7 +206,7 @@ export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskTy
               onPress={() => {
                 closeNoTasksModal();
                 setModalVisible(true);
-                setInputTaskType(noTasksJar)
+                setInputTaskType(noTasksJar);
               }}
             >
               <Text style={styles.buttonText}>
@@ -256,57 +223,92 @@ export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskTy
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    justifyContent: "center", // Center content vertically
+    justifyContent: "space-around",
     alignItems: "center",
-    margin: 10,
+    padding: 20,
   },
   welcomeTextContainer: {
-    alignItems: "center",
-    justifyContent: "center", // Center content horizontally and vertically
-    backgroundColor: "white",
+    //alignItems: "center",
+    //justifyContent: "center",
+    // backgroundColor: "white",
     padding: 20,
-    borderRadius: 10,
-   // shadowColor: "#000",
-    //shadowOffset: { width: 0, height: 2 },
-   // shadowOpacity: 0.25,
-   // shadowRadius: 3.84,
-    elevation: 1,
-    marginBottom: 180, // Adjust this value as needed
-
+    // borderRadius: 10,
+    // elevation: 1,
   },
   welcomeTextTitle: {
     fontSize: 36,
-    fontFamily: "Poppins-Bold",
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 10,
-    color: "#48249c",
+    color: "black",
+    //color: "#48249c",
   },
   welcomeTextHeader: {
     marginTop: 20,
     fontSize: 24,
-    fontFamily: "Poppins-Regular",
     textAlign: "center",
-    color: "#6a1b9a",
+    // color: "#6a1b9a",
+    color: "black",
   },
-
   jarsContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    width: "88%",
-    position: "absolute",
-    bottom: 130,
-        backgroundColor: "red",
-
+    width: "100%",
+    marginTop: 20,
   },
+
   jarContainer: {
-    alignItems: "center",
-
+    backgroundColor: "white",
+    padding: 15,
+    elevation: 5,
+    textAlign: "center",
+    borderRadius: 10,
+    alignItems: "center", // Center horizontally
+    justifyContent: "center", // Center vertically
   },
-  addTaskButton: {
-    position: "absolute",
-    bottom: 20,
-    right: 20,
+
+  jarText: {
+    fontWeight: "bold",
+    // marginTop: 10,
+    alignContent: "center",
+    justifyContent: "center",
+    fontWeight: "bold",
+  },
+
+  addButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "black",
+    borderRadius: 10,
+    padding: 15,
+    marginTop: 20,
+    width: "100%",
+  },
+  addButtonText: {
+    fontSize: 20,
+    color: "white",
+    marginLeft: 10,
+  },
+  button: {
+    backgroundColor: "black",
+    borderRadius: 10,
+    marginBottom: 20,
+    marginTop: 20,
+    alignItems: "center",
+    padding: 20,
+    width: "100%",
+
+    //backgroundColor: "#6a1b9a",
+    /*paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    marginTop: 10, */
+  },
+  buttonText: {
+    fontSize: 20,
+    fontFamily: "Poppins-Bold",
+    color: "white",
   },
   modalView: {
     flex: 1,
@@ -323,63 +325,36 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: 20,
-    fontFamily: "Poppins-Bold",
     color: "#D9D9D9",
     marginBottom: 20,
     textAlign: "center",
   },
   noTasksModal: {
     fontSize: 20,
-    fontFamily: "Poppins-Bold",
     color: "black",
-    //marginBottom: 20,
     textAlign: "center",
   },
-
   closeModalIcon: {
     position: "absolute",
     top: 20,
     left: 20,
   },
-  button: {
-    backgroundColor: "black",
-    textAlign: "center",
-    borderRadius: 10,
-    marginBottom: 20,
-    marginTop: 20,
-    alignItems: "center",
-    padding: 20,
-    width: "100%",
-  },
-  buttonText: {
-    fontSize: 20,
-    fontFamily: "Poppins-Bold",
-    color: "white",
-  },
-  addTaskButtonText: {
-   // padding: 10,
-    paddingHorizontal: 10,
-    fontSize: 20,
-    color: "white",
-  },
-  addTaskButtonContainer: {
-    flexDirection: "row",
+  modalBackground: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.7)",
     justifyContent: "center",
-    position: "absolute",
-    bottom: 20,
-    backgroundColor: "black",
-      borderRadius: 10,
-      marginBottom: 20,
-      marginTop: 20,
-      alignItems: "center",
-      padding: 20,
-      width: "100%",
-
+    alignItems: "center",
   },
-  buttonTextIconRow: {
-      flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-
+  modalContainer: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 20,
+    width: "80%",
+    alignItems: "center",
+  },
+  closeButton: {
+    position: "absolute",
+    top: 10,
+    right: 10,
   },
 });
