@@ -31,17 +31,9 @@ export default function EditTaskModal({
 
 const styles = StyleSheet.create({
   modalView: {
-    //margin: 20,
-    //borderRadius: 20,
-    //padding: 35,
-    // alignItems: 'center',
-    //height: "100%",
     flex: 1,
-    //backgroundColor: 'transparent',
-    //backgroundColor: "rgba(0,0,0,0.7)",
     alignItems: "center",
     justifyContent: "center",
-    //  backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContainer: {
     flex: 1,
