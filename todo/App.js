@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import * as SecureStore from 'expo-secure-store';
-import { initializeApp } from 'firebase/app';
 import { getDatabase } from 'firebase/database';
 import { NavigationContainer } from '@react-navigation/native';
+import { signInWithEmailAndPassword } from "firebase/auth";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
 import {
@@ -10,7 +10,8 @@ import {
   onValue,
   push,
   update,
-  remove
+  remove,
+  
 } from 'firebase/database';
 //import * as firebaseApp from 'firebase';
 
@@ -20,6 +21,7 @@ import {
   View,
   TouchableOpacity,
   TextInput,
+  Button,
   ScrollView,
   Pressable
 } from 'react-native';
@@ -38,33 +40,15 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import DailyGoal from './components/ActivityScreen/DailyGoal';
+import firebase from "firebase/app";
+import "firebase/auth";
+import SignUp from "./components/SignUp"
 
-
-
-/*GoogleSignin.configure({
-  webClientId: '248488614748-698jn115oljro87m61oo3btad1vu5fud.apps.googleusercontent.com',
-  iosClientId: '248488614748-nluheprsmq0kt501hoa8np8vb5mh1vm4.apps.googleusercontent.com',
-  androidClientId: '248488614748-qj7corr2qet7tuvv1rvkqqr8vmmctmbm.apps.googleusercontent.com',
-  scopes: ['profile', 'email'],
-});*/
-const GoogleLogin = async () => {
-  await GoogleSignin.hasPlayServices();
-  const userInfo = await GoogleSignin.signIn();
-  return userInfo;
-};
-export const Stack = createStackNavigator();
-export const HomeScreen = () => {
-  return (
-    <Stack.Navigator
-    >
-      <Stack.Screen component={HomeScreen} name="HomeScreen" options={{ title: "HomeScreen" }} />
-      <Stack.Screen component={AddTask} name="AddTask" options={{ title: "AddTask" }} />
-      <Stack.Screen name="DailyGoal" component={DailyGoal} />
-    </Stack.Navigator>
-  )
-}
+import "./components/firebase";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 export default function App() {
+  
 
   const Tab = createBottomTabNavigator();
   const [token, setToken] = useState(null);
@@ -72,14 +56,29 @@ export default function App() {
   const [todos, setTodos] = useState([]);
   const [error, setError] = useState('');
   var [uid, setuid] = useState(null);
-
+  const [email, onChangeEmail] = React.useState("");
+  const [password, onChangePassword] = React.useState("");
+ 
 
   useEffect(() => {
 
     //SHOULD BE REPLACED WITH RETRIEVEING THE TODOS
 
-   // setTimeout( ()=>{clearAsyncStorage() }, 2000)
+    // setTimeout( ()=>{clearAsyncStorage() }, 2000)
   }, []);
+
+  const auth = getAuth();
+  const createUser = () => {
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        onChangeLoggedInUser(user.email);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+      });
+  };
 
   const clearAsyncStorage = async () => {
     try {
@@ -90,97 +89,89 @@ export default function App() {
     }
   };
 
-  // Call the function wherever you need to clear AsyncStorage
-
-
-  const saveTokenToSecureStorage = async (token) => {
-    SecureStore.setItemAsync("token", token)
-  }
-  const checkForToken = async () => {
-    console.log('loading', loading)
-    let stored_token = await SecureStore.getItemAsync('token')
-    setToken(stored_token)
-    console.log('loading', loading)
-    setLoading(false)
-  }
-  const handleGoogleLogin = async () => {
-    try {
-      const response = await GoogleLogin();
-      const { idToken, user } = response;
-      console.log('token', idToken);
-
-      if (idToken) {
-        setToken(idToken);
-        saveTokenToSecureStorage(idToken);
-      }
-    } catch (apiError) {
-      setError(
-        apiError?.response?.data?.error?.message || 'Something went wrong'
-      );
-    } finally {
-      setLoading(false);
-      console.log("loading", loading)
-    }
+  const firebaseConfig = {
+    apiKey: "AIzaSyBNYrjkuW86Gvn4CO9qMUf9YiDoTFAUYyo",
+    authDomain: "prettylib.firebaseapp.com",
+    databaseURL: "https://prettylib-default-rtdb.firebaseio.com",
+    projectId: "prettylib",
+    storageBucket: "prettylib.appspot.com",
+    messagingSenderId: "248488614748",
+    appId: "1:248488614748:web:2520b043a65333fb56ff99",
+    measurementId: "G-W2S4558058"
   };
 
-  // if(loading === true){
-  //   return(<LoadingScreen/>);
-  // }
-  // if (token === null) {
-  //<Pressable onPress={handleGoogleLogin}><Text style={styles.text}>Continue with Google</Text></Pressable>
-  //   return (
-  //     <View style={styles.container}>
-  //        </View>
-  //   );
-  // } else {
-  return (
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+
+  //Checking if firebase has been initialized
+
+
+  const login = () => {
+    signInWithEmailAndPassword(auth, email, password)
+      .then(async (userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        onChangeLoggedInUser(user.email);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+      });
+  };
+
+
+
+  if (!isLoggedIn) {
     
+    return (
+      <View style={styles.container}>
+        <Text>Email</Text>
+        <TextInput
+          style={styles.input}
+          onChangeText={onChangeEmail}
+          value={email}
+        ></TextInput>
+        <Text>Password</Text>
+        <TextInput
+          style={styles.input}
+          onChangeText={onChangePassword}
+          value={password}
+          secureTextEntry={true}
+        ></TextInput>
+        <Button title="Sign Up!" onPress={() => {createUser()
+        setIsLoggedIn(true)}
+        } />
+        <Button title="Log in!" onPress={() => {login()
+        setIsLoggedIn(true)}
+        } />
+      </View>
+    );
+  } else {
+    return (
+
       <TodoProvider>
         <NavigationContainer>
           <TabNavigator />
         </NavigationContainer>
       </TodoProvider>
-    
-  );
-  // }
+
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-  scroll: {
-    width: '100%',
-    height: '100%'
-  },
   container: {
     flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    // backgroundColor: '#F5FCFF',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center"
   },
-  header: {
-    marginTop: '15%',
-    fontSize: 20,
-    color: 'red',
-    paddingBottom: 10,
-  },
-  textInputContainer: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
-    borderColor: 'black',
-    borderBottomWidth: 1,
-    paddingRight: 10,
-    paddingBottom: 10,
-  },
-  text: {
-    fontSize: 40,
-    paddingTop: 70,
-  },
-  textInput: {
-    flex: 1,
-    height: 20,
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: 'black',
-    paddingLeft: 10,
-    minHeight: '3%',
-  },
+  input: {
+    height: 40,
+    width: 200,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10
+  }
 });
