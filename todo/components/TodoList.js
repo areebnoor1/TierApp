@@ -8,65 +8,62 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import { TodoContext } from './TodoContext';
 import { format } from "date-fns";
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { Ionicons } from '@expo/vector-icons';
 import StartTask from "./StartTask"; // Import StartTask modal component
 
 export default function TodoList(props) {
-  const { todos, toggleTodoCompleted } = useContext(TodoContext);
+  const { toggleTodoCompleted } = useContext(TodoContext);
+  const [completed, setCompleted] = useState(false);
   const [taskSelectionVisible, setTaskSelectionVisible] = useState(false);
   const [currentTask, setCurrentTask] = useState(null);
 
-  const handleTaskPress = (task) => {
-    setCurrentTask(task);
+  const handleTaskPress = () => {
+    setCurrentTask(props.todo);
     setTaskSelectionVisible(true);
-  };
-
-  const handleEditTask = (task) => {
-    // Handle editing task
-    props.editMe(); // Assuming editMe is passed as a prop
-  };
-
-  const handleCompleteTask = (taskKey) => {
-    toggleTodoCompleted(taskKey);
   };
 
   return (
     <View style={styles.container}>
-      {todos.map((todo, index) => (
-        <TouchableOpacity key={index} onPress={() => handleTaskPress(todo)}>
-          <View style={styles.listContainer}>
-            <Icon
-              name={'ellipse-outline'}
-              size={30}
-              color='black'
-              style={styles.icon}
-              onPress={() => handleCompleteTask(todo.key)}
-            />
-            <View style={styles.textContainer}>
-              <Text style={styles.listItem}>{todo.text}</Text>
-              {"days_made_progress" in todo && (
-                <View style={styles.progressContainer}>
-                  <Text>Last day made progress: {format(todo.most_recent_day_made_progress, "eeee, MMMM do")}</Text>
-                  <Text>Number of progress sessions: {todo.days_made_progress}</Text>
-                </View>
-              )}
-              {todo.has_due_date && (
-                <Text style={styles.dateText}>{format(todo.due_date, "eeee, MMMM do")}</Text>
-              )}
-            </View>
-            <Ionicons
-              name="ellipsis-horizontal-circle"
-              size={30}
-              style={styles.moreIcon}
-              onPress={() => handleEditTask(todo)}
-            />
+      <TouchableOpacity onPress={handleTaskPress}>
+        <View style={styles.listContainer}>
+          <Icon
+            name={'ellipse-outline'}
+            size={30}
+            color='black'
+            style={styles.icon}
+            onPress={() => {
+              setCompleted(!completed);
+              toggleTodoCompleted(props.the_key);
+            }}
+          />
+          <View style={styles.textContainer}>
+            <Text style={styles.listItem}>{props.text}</Text>
+            {"days_made_progress" in props.todo && (
+              <View>
+                <Text style={styles.listItem}>
+                  Last day made progress: {format(props.todo.most_recent_day_made_progress, "eeee, MMMM do")}
+                </Text>
+                <Text style={styles.listItem}>
+                  Number of progress sessions: {props.todo.days_made_progress}
+                </Text>
+              </View>
+            )}
+            {props.has_due_date && (
+              <Text style={styles.dateText}>{format(props.due_date, "eeee, MMMM do")}</Text>
+            )}
           </View>
-        </TouchableOpacity>
-      ))}
+          <Ionicons
+            name="ellipsis-horizontal-circle"
+            size={30}
+            style={styles.moreIcon}
+            onPress={props.editMe}
+          />
+        </View>
+      </TouchableOpacity>
       <StartTask
         currentTask={currentTask}
-        setTaskSelectionVisible={setTaskSelectionVisible}
         taskSelectionVisible={taskSelectionVisible}
+        setTaskSelectionVisible={setTaskSelectionVisible}
         setCurrentTask={setCurrentTask}
       />
     </View>
@@ -76,7 +73,9 @@ export default function TodoList(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    paddingHorizontal: 16,
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   listContainer: {
     marginTop: '3%',
@@ -101,17 +100,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   listItem: {
-    paddingHorizontal: 10,
-    right: 10,
-    marginTop: 12,
-    marginBottom: 12,
-    marginRight: 70,
-    fontSize: 17,
-    fontWeight: 'bold',
-    color: 'black',
-  },
-  progressContainer: {
-    marginTop: 5,
+	//paddingBottom: 5,
+		paddingHorizontal: 10,
+		right: 10,
+		marginTop: 12,
+		marginBottom: 12,
+		marginRight: 70,
+		fontSize: 17,
+		fontWeight: 'bold',
+		color: 'black'
   },
   dateText: {
     borderRadius: 10,
