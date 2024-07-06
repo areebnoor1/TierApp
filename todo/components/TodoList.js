@@ -73,7 +73,6 @@ export default function TodoList(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 16,
     flexDirection: "row",
     justifyContent: "space-between",
   },
