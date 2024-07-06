@@ -1,16 +1,16 @@
 import * as React from "react";
 import Svg, { Defs, Path, G, Mask, Polygon, Use } from "react-native-svg";
 import { View } from "react-native";
-import LottieView from 'lottie-react-native';
+import LottieView from "lottie-react-native";
 
 const SvgComponent = (props) => (
-  <View style={{ position: 'relative', width: 71, height: 113 }}>
+  <View style={{ position: "relative", width: 71, height: 113 }}>
     <Svg
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
       width={71}
       height={113}
-      style={{ position: 'absolute', zIndex: 1 }}
+      style={{ position: "absolute", zIndex: 1 }}
       {...props}
     >
       <Defs>
@@ -51,15 +51,17 @@ const SvgComponent = (props) => (
         </G>
       </G>
     </Svg>
-    <View style={{
-      width: 71,
-      height: 113,
-      position: 'absolute',
-      zIndex: 0,
-      overflow: 'hidden'
-    }}>
+    <View
+      style={{
+        width: 71,
+        height: 113,
+        position: "absolute",
+        zIndex: 0,
+        overflow: "hidden",
+      }}
+    >
       <LottieView
-          source={require('../../assets/Animation - 1720127471017 (1).json')}
+        source={require("../../assets/MinutesJarAnimation")}
         progress={props.progress}
         style={{
           width: 71,
@@ -72,13 +74,24 @@ const SvgComponent = (props) => (
         height="101.000826px"
         viewBox="0 0 68.2620765 101.000826"
         style={{
-          position: 'absolute',
+          position: "absolute",
           top: 0,
           left: 0,
         }}
       >
-        <G id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-          <G id="Hours-Jar" transform="translate(0.5, -171.4992)" fill="#9D6AF0" stroke="#979797">
+        <G
+          id="Page-1"
+          stroke="none"
+          strokeWidth="1"
+          fill="none"
+          fillRule="evenodd"
+        >
+          <G
+            id="Hours-Jar"
+            transform="translate(0.5, -171.4992)"
+            fill="#9D6AF0"
+            stroke="#979797"
+          >
             <Polygon
               id="Path"
               points="8.56403161 172 54.8160807 172.088375 58.015399 172.088375 61.4435323 183.571202 67.2620765 190.875649 67.2620765 258.619405 61.4435323 268.447249 48.7013805 272 14.1366925 272 4.86997313 267.273081 0 258.619405 0 195.467444 3 186.633976 7.22345121 181.151895"

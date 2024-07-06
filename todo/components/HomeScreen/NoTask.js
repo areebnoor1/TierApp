@@ -14,25 +14,27 @@ import HoursJar from "../SVGicons/HoursJar";
 import DaysJar from "../SVGicons/DaysJar";
 import JarIcon from "../SVGicons/WhiteJarIcon.js";
 import TaskSelectionModal from "./TaskSelectionModal";
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused } from "@react-navigation/native";
 import RandomTask from "./RandomTask";
 import { TodoContext } from "../TodoContext";
-import LottieView from 'lottie-react-native';
-import { EvilIcons } from '@expo/vector-icons';
+import LottieView from "lottie-react-native";
+import { EvilIcons } from "@expo/vector-icons";
 import { FontAwesome6 } from "@expo/vector-icons";
 
-export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskType }) {
+export default function NoTask({
+  setModalVisible,
+  setCurrentTask,
+  setInputTaskType,
+}) {
   const [jarModalVisible, setJarModalVisible] = useState(false);
   const [taskSelectionVisible, setTaskSelectionVisible] = useState(false);
-  const [randomTaskSelectionVisible, setRandomTaskSelectionVisible] = useState(false);
+  const [randomTaskSelectionVisible, setRandomTaskSelectionVisible] =
+    useState(false);
   const [selectedJar, setSelectedJar] = useState(null);
   const [noTasksModalVisible, setNoTasksModalVisible] = useState(false);
   const [noTasksJar, setNoTasksJar] = useState(null);
 
   const { todos, goal } = useContext(TodoContext);
-
-
-
 
   const checkTodosExist = (taskType) => {
     const filteredTodos = todos.filter(
@@ -67,45 +69,45 @@ export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskTy
     setNoTasksJar(null);
   };
 
-const minutesTasksLeft = () => {
-  let remaining = goal.minutes_tasks -
-    todos.filter(
-      (todo) => todo.completed === true && todo.task_type === "minutes"
-    ).length;
-  return Math.max(remaining, 0); // Ensure it doesn't go below 0
-};
+  const minutesTasksLeft = () => {
+    let remaining =
+      goal.minutes_tasks -
+      todos.filter(
+        (todo) => todo.completed === true && todo.task_type === "minutes"
+      ).length;
+    return Math.max(remaining, 0); // Ensure it doesn't go below 0
+  };
 
-const minutesProgress = () => {
-  const remaining = minutesTasksLeft();
-  const progress = 0.6 * (1 - remaining / goal.minutes_tasks) + 0.25;
-  return isNaN(progress) ? 0 : progress;
-};
-
+  const minutesProgress = () => {
+    const remaining = minutesTasksLeft();
+    const progress = 0.6 * (1 - remaining / goal.minutes_tasks) + 0.25;
+    return isNaN(progress) ? 0 : progress;
+  };
 
   const hoursTasksLeft = () => {
     //og(goal);
-    let remaining = goal.hours_tasks -
+    let remaining =
+      goal.hours_tasks -
       todos.filter(
         (todo) => todo.completed === true && todo.task_type === "hours"
-      ).length
-    if(remaining !== 0){
-   return remaining }else{
-    return 0;}
+      ).length;
+    if (remaining !== 0) {
+      return remaining;
+    } else {
+      return 0;
+    }
   };
 
-
-
   const hoursProgress = () => {
-    console.log('remianin', hoursTasksLeft())
-    console.log('goal', goal.hours_tasks)
-    let prog = 0.6*(1- hoursTasksLeft() / goal.hours_tasks)+0.25
-    console.log('prog',prog)
-    if(isNaN(prog)){
-    return 0
+    console.log("remianin", hoursTasksLeft());
+    console.log("goal", goal.hours_tasks);
+    let prog = 0.6 * (1 - hoursTasksLeft() / goal.hours_tasks) + 0.25;
+    console.log("prog", prog);
+    if (isNaN(prog)) {
+      return 0;
     }
-    return prog
-  }
-
+    return prog;
+  };
 
   const daysTasksLeft = () => {
     return (
@@ -119,16 +121,15 @@ const minutesProgress = () => {
     );
   };
   const daysProgress = () => {
-    console.log('remianin', daysTasksLeft())
-    console.log('goal', goal.days_tasks)
-    let prog = 0.6*(1- daysTasksLeft() / goal.days_tasks)+0.25
-    console.log('prog',prog)
-    if(isNaN(prog)){
-    return 0
+    console.log("remianin", daysTasksLeft());
+    console.log("goal", goal.days_tasks);
+    let prog = 0.6 * (1 - daysTasksLeft() / goal.days_tasks) + 0.25;
+    console.log("prog", prog);
+    if (isNaN(prog)) {
+      return 0;
     }
-    return prog
-  }
-
+    return prog;
+  };
 
   const capitalizeFirstLetter = (string) => {
     if (!string) return ""; // Handle null or undefined case
@@ -142,37 +143,33 @@ const minutesProgress = () => {
         <Text style={styles.welcomeTextHeader}>
           Select a jar to get started!
         </Text>
-
       </View>
-
 
       <View style={styles.jarsContainer}>
         <View style={styles.jarContainer}>
           <Pressable
             onPress={() => {
-            {/*
+              {
+                /*
                if (checkTodosExist("minutes") === null) return;
                           openJarModal("minutes");
-            */}
+            */
+              }
               if (checkTodosExist("minutes") === null) {
-
                 return;
               }
-              console.log(minutesProgress())
+              console.log(minutesProgress());
               openJarModal("minutes");
             }}
             style={({ pressed }) => [
               { opacity: pressed || selectedJar === "minutes" ? 0.6 : 1 },
             ]}
           >
-              <MinutesJar progress={minutesProgress()} />
-              <JarOverlay style={styles.overlayIcon} />
- <JarOverlay style={styles.overlayIcon} />
-            <Text
-            styles = {{
-            }}
-            >Minutes</Text>
- <JarOverlay style={styles.overlayIcon} />
+            <MinutesJar progress={minutesProgress()} />
+            <JarOverlay style={styles.overlayIcon} />
+            <JarOverlay style={styles.overlayIcon} />
+            <Text styles={{}}>Minutes</Text>
+            <JarOverlay style={styles.overlayIcon} />
           </Pressable>
         </View>
 
@@ -188,17 +185,14 @@ const minutesProgress = () => {
               { opacity: pressed || selectedJar === "hours" ? 0.6 : 1 },
             ]}
           >
-            <MinutesJar
-            progress={hoursProgress()}
-            />
-             <Text style={styles.jarText}>Hours</Text>
-              <JarOverlay style={styles.overlayIcon} />
-               <JarOverlay style={styles.overlayIcon} />
-                <JarOverlay style={styles.overlayIcon} />
-                {/*...3 layers to counteract touchable opacity...*/}
+            <HoursJar progress={hoursProgress()} />
+            <Text style={styles.jarText}>Hours</Text>
+            <JarOverlay style={styles.overlayIcon} />
+            <JarOverlay style={styles.overlayIcon} />
+            <JarOverlay style={styles.overlayIcon} />
+            {/*...3 layers to counteract touchable opacity...*/}
           </Pressable>
         </View>
-
 
         <View style={styles.jarContainer}>
           <Pressable
@@ -212,17 +206,14 @@ const minutesProgress = () => {
               { opacity: pressed || selectedJar === "days" ? 0.6 : 1 },
             ]}
           >
-
-                      <MinutesJar
-                        progress={daysProgress()}
-                      />
-       {/*  <DaysJar
+            <DaysJar progress={daysProgress()} />
+            {/*  <DaysJar
             progress={daysProgress()}
             />  */}
-                    <JarOverlay style={styles.overlayIcon} />
-                             <JarOverlay style={styles.overlayIcon} />
-                                <JarOverlay style={styles.overlayIcon} />
-             <Text style={styles.jarText}>Days</Text>
+            <JarOverlay style={styles.overlayIcon} />
+            <JarOverlay style={styles.overlayIcon} />
+            <JarOverlay style={styles.overlayIcon} />
+            <Text style={styles.jarText}>Days</Text>
           </Pressable>
         </View>
       </View>
@@ -381,15 +372,15 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   jarOverlay: {
-  position: "absolute",
-  bottom: 20,
-  left: 20,
+    position: "absolute",
+    bottom: 20,
+    left: 20,
   },
-    overlayIcon: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-    },
+  overlayIcon: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+  },
 
   addButton: {
     flexDirection: "row",
