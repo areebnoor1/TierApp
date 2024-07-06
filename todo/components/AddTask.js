@@ -45,7 +45,7 @@ export default function AddTask({ setModalVisible, setTodos, inputTaskType }) {
   };
 
   const addTodoWrapper = async () => {
-    console.log('task type', taskType)
+    //console.log('task type', taskType)
     if (taskType == "") {
       Alert.alert("", "Please specify a task type (Minutes, Hours, Days).", [
         { text: "OK", onPress: () => console.log("OK Pressed") },

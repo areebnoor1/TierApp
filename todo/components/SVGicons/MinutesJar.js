@@ -25,7 +25,7 @@ const SvgComponent = (props) => (
 
 
 
-<View>
+
   <View styles={{
     
   }}>
@@ -42,7 +42,7 @@ const SvgComponent = (props) => (
            // borderRadius: 30,
           //  position: 'relative',
            //backgroundColor: 'rgba(0, 255, 0, 0.1)' ,
-         // opacity: 0.,
+          opacity: 0.5,
             marginTop: 35,
             
              //flex: 1,
@@ -52,21 +52,16 @@ const SvgComponent = (props) => (
         ></LottieView>
 </View>
 
-      {<Text
+<Text
         fill="#FFF"
         fontFamily="AppleSDGothicNeo-Regular, Apple SD Gothic Neo"
-        fontSize={21}
+        fontSize={18}
         textAnchor="middle"
-        style={{
-          //flex: 1,
-          position: 'absolute'
-        }}
       >
-        <TSpan x="45" y="170.335">
+        <TSpan x="45" y="80.335">
           {"Minutes"}
         </TSpan>
-      </Text>}
-      </View>
+      </Text>
     </G>
   </Svg>
 );

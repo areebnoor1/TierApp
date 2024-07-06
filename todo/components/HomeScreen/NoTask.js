@@ -79,10 +79,10 @@ export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskTy
   };
 
   const minutesProgress = () => {
-    console.log('remianin', minutesTasksLeft())
-    console.log('goal', goal.minutes_tasks)
+   // console.log('remianin', minutesTasksLeft())
+   //console.log('goal', goal.minutes_tasks)
     let prog = 0.6*(1- minutesTasksLeft() / goal.minutes_tasks)+0.25
-    console.log('prog',prog)
+    //console.log('prog',prog)
     if(isNaN(prog)){
     return 0
     }
@@ -103,10 +103,10 @@ export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskTy
 
 
   const hoursProgress = () => {
-    console.log('remianin', hoursTasksLeft())
-    console.log('goal', goal.hours_tasks)
+   // console.log('remianin', hoursTasksLeft())
+   // console.log('goal', goal.hours_tasks)
     let prog = 0.6*(1- hoursTasksLeft() / goal.hours_tasks)+0.25
-    console.log('prog',prog)
+   // console.log('prog',prog)
     if(isNaN(prog)){
     return 0
     }
@@ -126,10 +126,10 @@ export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskTy
     );
   };
   const daysProgress = () => {
-    console.log('remianin', daysTasksLeft())
-    console.log('goal', goal.days_tasks)
+    //console.log('remianin', daysTasksLeft())
+   // console.log('goal', goal.days_tasks)
     let prog = 0.6*(1- daysTasksLeft() / goal.days_tasks)+0.25
-    console.log('prog',prog)
+    //console.log('prog',prog)
     if(isNaN(prog)){
     return 0
     }
@@ -162,7 +162,7 @@ export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskTy
 
                 return;
               }
-              console.log(minutesProgress())
+            //  console.log(minutesProgress())
               openJarModal("minutes");
             }}
             style={({ pressed }) => [
@@ -174,10 +174,7 @@ export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskTy
             />
 
 
-            <Text
-            styles = {{
-            }}
-            >Minutes</Text>
+            
 
           </Pressable>
         </View>

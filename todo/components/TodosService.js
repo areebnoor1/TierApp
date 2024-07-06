@@ -21,7 +21,7 @@ export const createTodo = async (todo) => {
     todos.push(todo);
     const jsonValue = JSON.stringify(todos);
     await AsyncStorage.setItem(TODOS_KEY, jsonValue);
-    console.log('saved the todo')
+    //console.log('saved the todo')
   } catch (e) {
     console.error('Failed to save the todo to storage', e);
   }

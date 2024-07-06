@@ -39,7 +39,7 @@ export default function TodoListCompleted(props) {
                         : styles.daysTask}
 
             >
-                {"days_made_progress" in props.todo ?
+                {!props.todo.completed && "days_made_progress" in props.todo ?
                     <MaterialCommunityIcons name='progress-check' style=
 
                         {{

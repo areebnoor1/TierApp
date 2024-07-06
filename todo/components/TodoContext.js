@@ -204,6 +204,24 @@ export const TodoProvider = ({ children }) => {
       await AsyncStorage.setItem(COMPLETED_KEY, jsonValue1);
       setCompletedThisWeek(final_completed)
 
+
+
+
+
+
+      newTodos.sort((a, b) => {
+        // Compare importance (higher importance first)
+        if (a.importance !== b.importance) {
+          return b.importance - a.importance;
+        }
+        // Compare due_date (earlier due date first)
+        const dateA = new Date(a.due_date);
+        const dateB = new Date(b.due_date);
+
+        return dateA - dateB;
+      });
+
+
       const jsonValue = JSON.stringify(newTodos);
       await AsyncStorage.setItem(TODOS_KEY, jsonValue);
       setTodos(newTodos)

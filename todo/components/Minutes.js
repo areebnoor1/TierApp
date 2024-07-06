@@ -84,7 +84,7 @@ export default function Minutes() {
         <AddTaskModal
           modalVisible={addModalVisible}
           setModalVisible={setAddModalVisible}
-          inputTaskType={'hours'}
+          inputTaskType={'minutes'}
         //  todos = {todos.filter(todo => todo.completed===false)}
         // setTodos = {setTodos}
         />

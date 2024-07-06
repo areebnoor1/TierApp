@@ -34,7 +34,12 @@ export default function TodoList(props) {
 				props.editMe()
 			}}>
 
-				<View style={styles.listContainer}>
+				<View style={[
+              styles.listContainer,
+              props.todo.importance == 2 && styles.important,
+			  props.todo.importance === 3 && styles.veryimportant,
+            ]} 
+			>
 
 
 					<Icon
@@ -98,6 +103,12 @@ export default function TodoList(props) {
 }
 
 const styles = StyleSheet.create({
+	veryimportant:{
+		borderWidth: 6
+	},
+	important:{
+		borderWidth: 4
+	},
 	listContainer: {
 		marginTop: '3%',
 		//margin

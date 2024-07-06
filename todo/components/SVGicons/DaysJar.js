@@ -41,7 +41,7 @@ const DaysJar = (props) => (
             // borderRadius: 30,
             //  position: 'relative',
             //backgroundColor: 'rgba(0, 255, 0, 0.1)' ,
-            // opacity: 0.,
+             opacity: 0.5,
             marginTop: 35,
 
             //flex: 1,
@@ -55,7 +55,7 @@ const DaysJar = (props) => (
       <Text
         fill="#FFF"
         fontFamily="AppleSDGothicNeo-Regular, Apple SD Gothic Neo"
-        fontSize={21}
+        fontSize={18}
         textAnchor="middle"
       >
         <TSpan x="45" y="80.335">
