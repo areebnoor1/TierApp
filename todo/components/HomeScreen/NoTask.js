@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import MinutesJar from "../SVGicons/MinutesJar";
+import JarOverlay from "../SVGicons/JarOverlayIcon.js";
 import HoursJar from "../SVGicons/HoursJar";
 import DaysJar from "../SVGicons/DaysJar";
 import JarIcon from "../SVGicons/WhiteJarIcon.js";
@@ -18,7 +19,6 @@ import RandomTask from "./RandomTask";
 import { TodoContext } from "../TodoContext";
 import LottieView from 'lottie-react-native';
 import { EvilIcons } from '@expo/vector-icons';
-import { EvilIcons } from "@expo/vector-icons";
 import { FontAwesome6 } from "@expo/vector-icons";
 
 export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskType }) {
@@ -67,30 +67,20 @@ export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskTy
     setNoTasksJar(null);
   };
 
-  const minutesTasksLeft = () => {
-    //og(goal);
+const minutesTasksLeft = () => {
+  let remaining = goal.minutes_tasks -
+    todos.filter(
+      (todo) => todo.completed === true && todo.task_type === "minutes"
+    ).length;
+  return Math.max(remaining, 0); // Ensure it doesn't go below 0
+};
 
-    let remaining = goal.minutes_tasks -
-      todos.filter(
-        (todo) => todo.completed === true && todo.task_type === "minutes"
-      ).length
-    if(remaining !== 0){
-   return remaining }else{
+const minutesProgress = () => {
+  const remaining = minutesTasksLeft();
+  const progress = 0.6 * (1 - remaining / goal.minutes_tasks) + 0.25;
+  return isNaN(progress) ? 0 : progress;
+};
 
-
-    return 0;}
-  };
-
-  const minutesProgress = () => {
-    console.log('remianin', minutesTasksLeft())
-    console.log('goal', goal.minutes_tasks)
-    let prog = 0.6*(1- minutesTasksLeft() / goal.minutes_tasks)+0.25
-    console.log('prog',prog)
-    if(isNaN(prog)){
-    return 0
-    }
-    return prog
-  }
 
   const hoursTasksLeft = () => {
     //og(goal);
@@ -152,7 +142,9 @@ export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskTy
         <Text style={styles.welcomeTextHeader}>
           Select a jar to get started!
         </Text>
+
       </View>
+
 
       <View style={styles.jarsContainer}>
         <View style={styles.jarContainer}>
@@ -173,10 +165,14 @@ export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskTy
               { opacity: pressed || selectedJar === "minutes" ? 0.6 : 1 },
             ]}
           >
-
-            <JarIcon  progress={minutesProgress()}
-                                 />
-                        <Text style={styles.jarText}>Minutes</Text>
+              <MinutesJar progress={minutesProgress()} />
+              <JarOverlay style={styles.overlayIcon} />
+ <JarOverlay style={styles.overlayIcon} />
+            <Text
+            styles = {{
+            }}
+            >Minutes</Text>
+ <JarOverlay style={styles.overlayIcon} />
           </Pressable>
         </View>
 
@@ -192,11 +188,17 @@ export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskTy
               { opacity: pressed || selectedJar === "hours" ? 0.6 : 1 },
             ]}
           >
-                  <JarIcon  progress={hoursProgress()}
-                                       />
-                              <Text style={styles.jarText}>Hours</Text>
+            <MinutesJar
+            progress={hoursProgress()}
+            />
+             <Text style={styles.jarText}>Hours</Text>
+              <JarOverlay style={styles.overlayIcon} />
+               <JarOverlay style={styles.overlayIcon} />
+                <JarOverlay style={styles.overlayIcon} />
+                {/*...3 layers to counteract touchable opacity...*/}
           </Pressable>
         </View>
+
 
         <View style={styles.jarContainer}>
           <Pressable
@@ -210,9 +212,16 @@ export default function NoTask({ setModalVisible, setCurrentTask, setInputTaskTy
               { opacity: pressed || selectedJar === "days" ? 0.6 : 1 },
             ]}
           >
-            <JarIcon
+
+                      <MinutesJar
+                        progress={daysProgress()}
+                      />
+       {/*  <DaysJar
             progress={daysProgress()}
-            />
+            />  */}
+                    <JarOverlay style={styles.overlayIcon} />
+                             <JarOverlay style={styles.overlayIcon} />
+                                <JarOverlay style={styles.overlayIcon} />
              <Text style={styles.jarText}>Days</Text>
           </Pressable>
         </View>
@@ -371,6 +380,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     fontWeight: "bold",
   },
+  jarOverlay: {
+  position: "absolute",
+  bottom: 20,
+  left: 20,
+  },
+    overlayIcon: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+    },
 
   addButton: {
     flexDirection: "row",
