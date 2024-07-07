@@ -183,4 +183,5 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     minHeight: '3%',
   },
+  
 });
