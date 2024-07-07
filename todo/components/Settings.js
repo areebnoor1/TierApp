@@ -1,12 +1,22 @@
 import React, { useState } from 'react';
-import { View, Text, Switch, StyleSheet, Image, TextInput } from 'react-native';
+import { View, Text, Switch, StyleSheet, Image, TextInput, Button } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { auth } from './firebase';
+import { signOut } from 'firebase/auth';
 
-const SettingsScreen = () => {
+const SettingsScreen = ({ navigation }) => {
   const [isDarkTheme, setIsDarkTheme] = useState(false);
   const [isNotificationsEnabled, setIsNotificationsEnabled] = useState(true);
 
   const themeStyles = isDarkTheme ? darkStyles : lightStyles;
+
+  const handleSignOut = () => {
+    signOut(auth).then(() => {
+      navigation.replace('Welcome'); // Replace the current screen with the Welcome screen
+    }).catch(error => {
+      console.error('Sign out error', error);
+    });
+  };
 
   return (
     <View style={[styles.container, themeStyles.container]}>
@@ -30,30 +40,12 @@ const SettingsScreen = () => {
         </View>
 
         <View style={styles.settingItem}>
-          <Icon name="color-palette-outline" size={24} style={themeStyles.icon} />
-          <Text style={[styles.settingText, themeStyles.text]}>Dark Theme</Text>
-          <Switch
-            value={isDarkTheme}
-            onValueChange={setIsDarkTheme}
-          />
-        </View>
-
-        <View style={styles.settingItem}>
           <Icon name="person-outline" size={24} style={themeStyles.icon} />
           <Text style={[styles.settingText, themeStyles.text]}>Account</Text>
         </View>
 
-        <View style={styles.accountPlaceholder}>
-          <TextInput
-            style={[styles.input, themeStyles.input]}
-            placeholder="Username"
-            placeholderTextColor={isDarkTheme ? '#ccc' : '#555'}
-          />
-          <TextInput
-            style={[styles.input, themeStyles.input]}
-            placeholder="Email"
-            placeholderTextColor={isDarkTheme ? '#ccc' : '#555'}
-          />
+        <View style={styles.signOutSection}>
+          <Button title="Sign Out" onPress={handleSignOut} />
         </View>
       </View>
     </View>
@@ -105,6 +97,9 @@ const styles = StyleSheet.create({
     padding: 8,
     marginVertical: 8,
     width: '100%',
+  },
+  signOutSection: {
+    marginTop: 16,
   },
 });
 
