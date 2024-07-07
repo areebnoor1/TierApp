@@ -65,7 +65,8 @@ export default function TabNavigator() {
         },
         tabBarLabelStyle: {
           fontSize: 15,
-          fontWeight: 'bold',
+       //   fontWeight: 'bold',
+       color: "black",
         },
 
       }}

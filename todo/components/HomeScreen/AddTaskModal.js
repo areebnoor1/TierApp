@@ -52,10 +52,9 @@ const styles = StyleSheet.create({
   modalContent: {
     width: "99%",
     height: "99%",
-    elevation: 1,
+    elevation: 5,
     //  backgroundColor: "#EBEBEB",
     borderRadius: 20,
-    backgroundColor: "white",
-    //      padding: 20,
+    backgroundColor: "#F6F6F6",
   },
 });

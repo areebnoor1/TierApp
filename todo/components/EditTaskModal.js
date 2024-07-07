@@ -31,31 +31,24 @@ export default function EditTaskModal({
 
 const styles = StyleSheet.create({
   modalView: {
-    //margin: 20,
-    //borderRadius: 20,
-    //padding: 35,
-    // alignItems: 'center',
-    //height: "100%",
     flex: 1,
-    //backgroundColor: 'transparent',
-    //backgroundColor: "rgba(0,0,0,0.7)",
     alignItems: "center",
     justifyContent: "center",
-    //  backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContainer: {
     flex: 1,
     justifyContent: "flex-end",
     alignItems: "center",
-    //backgroundColor: "rgba(0, 0, 0, 0.5)",
+    //=backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContent: {
     width: "99%",
     height: "99%",
-    elevation: 1,
+    elevation: 5,
     //  backgroundColor: "#EBEBEB",
     borderRadius: 20,
-    backgroundColor: "white",
+   // backgroundColor: "white",
+   backgroundColor: "#F6F6F6",
     //      padding: 20,
   },
 });
