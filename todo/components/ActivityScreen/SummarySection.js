@@ -28,7 +28,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
  summaryContainer: {
-  justifyContent: "flex-end",
     flex: 1,
     padding: 16,
     flexDirection: "row",
