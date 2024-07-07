@@ -65,7 +65,7 @@ const SvgComponent = (props) => (
         progress={props.progress}
         style={{
           width: 71,
-          height: 113,
+          height: 108,
           marginTop: 12,
         }}
       />
