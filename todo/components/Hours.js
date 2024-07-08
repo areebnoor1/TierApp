@@ -3,7 +3,9 @@ import * as SecureStore from "expo-secure-store";
 import { initializeApp } from "firebase/app";
 import { getDatabase } from "firebase/database";
 import { useFocusEffect } from "@react-navigation/native";
+import EditTaskModal from "./EditTaskModal";
 import { Ionicons } from "@expo/vector-icons";
+import AddTaskModal from './HomeScreen/AddTaskModal';
 
 import {
   ref,
@@ -37,6 +39,7 @@ export default function Minutes() {
   const [value, setValue] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [editingTask, setEditingTask] = useState({});
+  const [addModalVisible, setAddModalVisible] = useState(false);
 
   const { todos, addTodo, removeTodo, toggleTodoCompleted } =
     useContext(TodoContext);
@@ -44,24 +47,92 @@ export default function Minutes() {
   const handleToggleTodo = async (key) => {
     await toggleTodoCompleted(key);
   };
+  const isToday = (date) => {
+    const d = new Date(date);
+    const t = new Date();
+    const today = new Date(t.setHours(0, 0, 0, 0));
+    const comparison = new Date(d.setHours(0, 0, 0, 0));
+    return today.getTime() == comparison.getTime();
+  };
+
+  function isDateInThisWeek(date) {
+    const todayObj = new Date();
+    const todayDate = todayObj.getDate();
+    const todayDay = todayObj.getDay();
+    const firstDayOfWeek = new Date(todayObj.setDate(todayDate - todayDay));
+    const lastDayOfWeek = new Date(firstDayOfWeek);
+    lastDayOfWeek.setDate(lastDayOfWeek.getDate() + 6);
+    return date >= firstDayOfWeek && date <= lastDayOfWeek;
+  }
 
   return (
     <>
-      <TouchableOpacity style={styles.addTaskButton}>
+      <TouchableOpacity style={styles.addTaskButton} onPress={() => setAddModalVisible(true)}>
         <Ionicons name="add" size={30} color="black" />
       </TouchableOpacity>
       <View style={styles.container}>
-        <ScrollView style={styles.scroll}>
+      <ScrollView style={styles.scroll}>
+        <Text style={styles.summary}>Today</Text>
           {todos
-            .filter((todo) => todo.task_type === "hours")
+            .filter((todo) => todo.task_type === "hours" && isToday(todo.due_date))
             .map(
               (item) =>
                 !item.completed && (
                   <TodoList
                     text={item.text}
                     key={item.key}
-                    todo={item}
                     the_key={item.key}
+                    todo={item}
+                    completed={item.completed}
+                    has_due_date={item.has_due_date}
+                    due_date={item.due_date}
+                    editMe={() => {
+                      setModalVisible(true);
+                      setEditingTask(item);
+                    }}
+                    setChecked={() => {
+                      handleToggleTodo(item.key);
+                    }}
+                    deleteTodo={() => removeTodo(item.key)}
+                  />
+                )
+            )}
+            <Text style={styles.summary}>This Week</Text>
+          {todos
+            .filter((todo) => todo.task_type === "hours" && isDateInThisWeek(todo.due_date))
+            .map(
+              (item) =>
+                !item.completed && (
+                  <TodoList
+                    text={item.text}
+                    key={item.key}
+                    the_key={item.key}
+                    todo={item}
+                    completed={item.completed}
+                    has_due_date={item.has_due_date}
+                    due_date={item.due_date}
+                    editMe={() => {
+                      setModalVisible(true);
+                      setEditingTask(item);
+                    }}
+                    setChecked={() => {
+                      handleToggleTodo(item.key);
+                    }}
+                    deleteTodo={() => removeTodo(item.key)}
+                  />
+                )
+            )}
+            <Text style={styles.summary}>Other</Text>
+          {todos
+            .filter((todo) => todo.task_type === "hours" && !isToday(todo.due_date) && !isDateInThisWeek(todo.due_date))
+            .map(
+              (item) =>
+                !item.completed && (
+                  <TodoList
+                    text={item.text}
+                    key={item.key}
+                    the_key={item.key}
+                    todo={item}
                     completed={item.completed}
                     has_due_date={item.has_due_date}
                     due_date={item.due_date}
@@ -78,19 +149,17 @@ export default function Minutes() {
             )}
         </ScrollView>
 
-        <Modal
-          transparent={true}
-          visible={modalVisible}
-          style={styles.modalView}
-        >
-          <View>
-            <EditTask
-              setModalVisible={setModalVisible}
-              task={editingTask}
-              // {//deleteOldTodo={handleDeleteTodo(editingTask)}
-            />
-          </View>
-        </Modal>
+        <AddTaskModal
+          modalVisible={addModalVisible}
+          setModalVisible={setAddModalVisible}
+          inputTaskType={'hours'}
+        //  todos = {todos.filter(todo => todo.completed===false)}
+        // setTodos = {setTodos}
+        />
+
+        <EditTaskModal modalVisible={modalVisible} setModalVisible={setModalVisible} task={editingTask}
+
+        />
       </View>
     </>
   );
@@ -119,6 +188,13 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingRight: 10,
     paddingBottom: 10,
+  },
+  summary: {
+    fontFamily: "Inter",
+    color: "#A5A5A5",
+    fontSize: 24,
+    marginLeft: 10,
+    justifyContent: "flex-end",
   },
   text: {
     fontSize: 40,

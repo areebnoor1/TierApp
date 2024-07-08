@@ -1,5 +1,12 @@
 import React, { useState, useContext } from "react";
 import {
+  ALERT_TYPE,
+  Dialog,
+  AlertNotificationRoot,
+  Toast,
+} from "react-native-alert-notification";
+
+import {
   StyleSheet,
   View,
   TouchableOpacity,
@@ -42,7 +49,8 @@ export default function AddTask({ setModalVisible, setTodos, inputTaskType }) {
   };
 
   const addTodoWrapper = async () => {
-    if (taskType === "") {
+    //console.log('task type', taskType)
+    if (taskType == "") {
       Alert.alert("", "Please specify a task type (Minutes, Hours, Days).", [
         { text: "OK", onPress: () => console.log("OK Pressed") },
       ]);
@@ -58,14 +66,15 @@ export default function AddTask({ setModalVisible, setTodos, inputTaskType }) {
         task_type: taskType,
         due_date: date,
         has_due_date: showDate,
+        importance: importance,
       });
 
       setValue("");
       setModalVisible(false);
     }
   };
-return (
-    <View>
+  return (
+    <View style={styles.container}>
       <View style={styles.topBar}>
         <TouchableOpacity onPress={() => setModalVisible(false)}>
           <AntDesign name="close" size={30} />
@@ -75,338 +84,311 @@ return (
           <Text style={styles.doneButton}>Done</Text>
         </TouchableOpacity>
       </View>
-        {/******task type ***********/}
-        <View style={styles.taskType}>
-
-        <Text style={styles.header}>Task Type</Text>
-        <View style={styles.taskTypeContainer}>
-          <TouchableOpacity
-            style={[
-              styles.taskTypeSelection,
-              taskType === "minutes" && styles.selectedButton,
-            ]}
-            onPress={() => setTaskType("minutes")}
-          >
-            <Entypo
-              name="stopwatch"
-              style={[styles.icon, taskType === "minutes" && styles.activeText]}
-              size={40}
-            />
-            <Text>Minutes</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.taskTypeSelection,
-              taskType === "hours" && styles.selectedButton,
-            ]}
-            onPress={() => setTaskType("hours")}
-          >
-            <Ionicons
-              name="hourglass-outline"
-              style={[styles.icon, taskType === "hours" && styles.activeText]}
-              size={40}
-            />
-            <Text>Hours</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.taskTypeSelection,
-              taskType === "days" && styles.selectedButton,
-            ]}
-            onPress={() => setTaskType("days")}
-          >
-            <Entypo
-              name="calendar"
-              style={[styles.icon, taskType === "days" && styles.activeText]}
-              size={40}
-            />
-            <Text>Days</Text>
-          </TouchableOpacity>
-        </View>
-
-        <Text style={styles.smallText}>{getMessage()}</Text>
-      </View>
-
- <View style={styles.taskDescription}>
       <ScrollView>
-        <TextInput
-          style={styles.textInput}
-          multiline
-          numberOfLines={4}
-          placeholder="Description"
-          placeholderTextColor="#BEBEBE"
-          value={value}
-          onChangeText={setValue}
-    scrollEnabled
-          />
-      </ScrollView>
-</View>
-
-{/******Importance ***********/}
- <View style={styles.importanceSection}>
-        <View style={styles.selectionContainer}>
-          <View style={styles.selectionContainerText}>
-            <Text style={styles.optionalHeader}>Importance</Text>
+        {/****** Task Type ***********/}
+        <View style={styles.taskType}>
+          <Text style={styles.header}>Task Type</Text>
+          <View style={styles.taskTypeContainer}>
+            <TouchableOpacity
+              style={[
+                styles.taskTypeSelection,
+                taskType === "minutes" && styles.selectedButton,
+              ]}
+              onPress={() => setTaskType("minutes")}
+            >
+              <Entypo
+                name="stopwatch"
+                style={[
+                  styles.icon,
+                  taskType === "minutes" && styles.activeText,
+                ]}
+                size={40}
+              />
+              <Text>Minutes</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.taskTypeSelection,
+                taskType === "hours" && styles.selectedButton,
+              ]}
+              onPress={() => setTaskType("hours")}
+            >
+              <Ionicons
+                name="hourglass-outline"
+                style={[styles.icon, taskType === "hours" && styles.activeText]}
+                size={40}
+              />
+              <Text>Hours</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.taskTypeSelection,
+                taskType === "days" && styles.selectedButton,
+              ]}
+              onPress={() => setTaskType("days")}
+            >
+              <Entypo
+                name="calendar"
+                style={[styles.icon, taskType === "days" && styles.activeText]}
+                size={40}
+              />
+              <Text>Days</Text>
+            </TouchableOpacity>
           </View>
+          <Text style={styles.smallText}>{getMessage()}</Text>
+        </View>
 
-          <View style={styles.importanceContainers}>
-            <View style={styles.importanceContainer}>
-              <Pressable
-                style={[
-                  styles.importanceBox,
-                  importance === 1 && styles.activeOption,
-                ]}
-                onPress={() => {
-                  setImportance(1);
-                }}
-              >
-                <Text style={styles.importanceNum}>1</Text>
-              </Pressable>
-              <Text style={styles.importanceText}>Low</Text>
+        {/****** Description ***********/}
+        <View style={styles.descriptionContainer}>
+          <View style={styles.taskDescription}>
+            <TextInput
+              style={styles.textInput}
+              multiline
+              numberOfLines={4}
+              placeholder="Description"
+              placeholderTextColor="#BEBEBE"
+              value={value}
+              onChangeText={setValue}
+              scrollEnabled
+            />
+          </View>
+        </View>
+
+        {/****** Importance ***********/}
+        <View style={styles.importanceSection}>
+          <View style={styles.selectionContainer}>
+            <View style={styles.selectionContainerText}>
+              <Text style={styles.optionalHeader}>Importance</Text>
             </View>
-            <View style={styles.importanceContainer}>
-              <Pressable
-                style={[
-                  styles.importanceBox,
-                  importance === 2 && styles.activeOption,
-                ]}
-                onPress={() => {
-                  setImportance(2);
-                }}
-              >
-                <Text style={styles.importanceNum}>2</Text>
-              </Pressable>
-              <Text style={styles.importanceText}>Medium</Text>
-            </View>
-            <View style={styles.importanceContainer}>
-              <Pressable
-                style={[
-                  styles.importanceBox,
-                  importance === 3 && styles.activeOption,
-                ]}
-                onPress={() => {
-                  setImportance(3);
-                }}
-              >
-                <Text style={styles.importanceNum}>3</Text>
-              </Pressable>
-              <Text style={styles.importanceText}>High</Text>
+            <View style={styles.importanceContainers}>
+              <View style={styles.importanceContainer}>
+                <Pressable
+                  style={[
+                    styles.importanceBox,
+                    importance === 1 && styles.activeOption,
+                  ]}
+                  onPress={() => setImportance(1)}
+                >
+                  <Text
+                    style={[
+                      styles.importanceNum,
+                      importance === 1 && styles.activeText2,
+                    ]}
+                  >
+                    1
+                  </Text>
+                </Pressable>
+                <Text style={styles.importanceText}>Low</Text>
+              </View>
+              <View style={styles.importanceContainer}>
+                <Pressable
+                  style={[
+                    styles.importanceBox,
+                    importance === 2 && styles.activeOption,
+                  ]}
+                  onPress={() => setImportance(2)}
+                >
+                  <Text
+                    style={[
+                      styles.importanceNum,
+                      importance === 2 && styles.activeText2,
+                    ]}
+                  >
+                    2
+                  </Text>
+                </Pressable>
+                <Text style={styles.importanceText}>Medium</Text>
+              </View>
+              <View style={styles.importanceContainer}>
+                <Pressable
+                  style={[
+                    styles.importanceBox,
+                    importance === 3 && styles.activeOption,
+                  ]}
+                  onPress={() => setImportance(3)}
+                >
+                  <Text
+                    style={[
+                      styles.importanceNum,
+                      importance === 3 && styles.activeText2,
+                    ]}
+                  >
+                    3
+                  </Text>
+                </Pressable>
+                <Text style={styles.importanceText}>High</Text>
+              </View>
             </View>
           </View>
         </View>
-</View>
-        {/*****************/}
- <View style={styles.importanceSection}>
-        {/******Due date 2***********/}
-        <View style={styles.selectionContainer}>
-          <View style={styles.selectionContainerText}>
-            <Text style={styles.optionalHeader}>Due Date</Text>
-            {showDate && (
-              <Text style={styles.dateText}>{date.toDateString()}</Text>
-            )}
+
+        {/****** Due Date ***********/}
+        <View style={styles.importanceSection}>
+          <View style={styles.selectionContainer}>
+            <View style={styles.selectionContainerText}>
+              <Text style={styles.optionalHeader}>Due Date</Text>
+              {showDate && (
+                <Text style={styles.dateText}>{date.toDateString()}</Text>
+              )}
+            </View>
+            <Switch
+              trackColor={{ false: "#767577", true: "#81b0ff" }}
+              style={{ transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }] }}
+              onValueChange={() => {
+                setShowDate(!showDate);
+                if (!showDatePicker && !showDate) {
+                  setShowDatePicker(true);
+                }
+                setDate(showDate ? {} : new Date());
+              }}
+              value={showDate}
+            />
           </View>
-          <Switch
-            trackColor={{ false: "#767577", true: "#81b0ff" }}
-            style={{ transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }] }}
-            onValueChange={() => {
-              setShowDate(!showDate);
-              if (!showDatePicker && !showDate) {
-                setShowDatePicker(true);
-              }
-              setDate(showDate ? {} : new Date());
-            }}
-            value={showDate}
-          />
-        </View>
-        {showDatePicker && (
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={date}
-            mode={"date"}
-            is24Hour={true}
-            onChange={
-              (onChange = (event, selectedDate) => {
+          {showDatePicker && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={date}
+              mode={"date"}
+              is24Hour={true}
+              onChange={(event, selectedDate) => {
                 const currentDate = selectedDate;
                 setShowDatePicker(false);
                 setDate(currentDate);
-              })
-            }
-          />
-        )}
-        {/*****************/}
- </View>
-  {/******** Description *********/}
-
-    {/******** stretch a certain num of lines before it scrolls.... *********/}
-
-
+              }}
+            />
+          )}
+        </View>
+      </ScrollView>
     </View>
   );
 }
 const styles = StyleSheet.create({
- topBar: {
+  container: {
+    backgroundColor: "white",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+  topBar: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    // paddingVertical: 16,
-    padding: 16,
+    padding: 20,
   },
   title: {
-    fontSize: 26,
+    fontSize: 20,
     fontFamily: "Poppins",
   },
   doneButton: {
     fontSize: 18,
   },
-
   header: {
-    //paddingHorizontal: 20,
     fontSize: 18,
     marginBottom: 5,
+    fontWeight: "bold",
   },
-taskType: {
+  taskType: {
     paddingHorizontal: 20,
     justifyContent: "flex-start",
-    //marginBottom: 20
-   // backgroundColor: "yellow",
-},
- taskTypeContainer: {
+  },
+  taskTypeContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
     marginBottom: 10,
-   // borderColor: "black",
-   // borderWidth: 2,
-   backgroundColor: "#F6F6F6",
+    backgroundColor: "white",
     borderRadius: 10,
+    backgroundColor: "#F6F6F6",
   },
-
-    taskTypeSelection: {
-      alignItems: "center",
-      paddingVertical: 10,
-      borderRadius: 10,
-      width: 100, // Fixed width for each selection
-    },
-    selectedButton: {
-     // backgroundColor: "#D9D9D9",
-      // backgroundColor: "#9D6AF0",
-      // color: "#9D6AF0",
-      width: 100, // Fixed width for selected button
-          backgroundColor: '#F6F6F6',
-        //  shadowColor: '#000',
-          elevation: 4,
-          borderRadius: 14,
-    },
-    activeText: {
-      // color: "#9D6AF0",
-    },
+  taskTypeSelection: {
+    alignItems: "center",
+    paddingVertical: 10,
+    borderRadius: 10,
+    width: 100,
+  },
+  selectedButton: {
+    //backgroundColor: "black",
+    width: 100,
+    backgroundColor: "#F6F6F6",
+    //backgroundColor: 'white',
+    elevation: 4,
+    borderRadius: 14,
+    //color: "white",
+  },
   smallText: {
     fontSize: 14,
     fontStyle: "italic",
     textAlign: "center",
     color: "gray",
   },
-    taskDescription: {
-      padding: 20,
-    },
-  descriptionContainer: {
-   paddingHorizontal: 10,
-   borderWidth: 1,
-   borderColor: "gray",
-   backgroundColor: "#F6F6F6",
 
+  taskDescription: {
+    // borderWidth: 2,
+    borderRadius: 10,
+    backgroundColor: "#F6F6F6",
+  },
+  descriptionContainer: {
+    padding: 20,
   },
   textInput: {
-    fontSize: 18,
-    borderColor: "#E0E0E0",
-    borderWidth: 2,
-    borderRadius: 10,
+    textAlignVertical: "top",
+    fontSize: 16,
     padding: 10,
-    backgroundColor: "#FFFFFF",
-    maxHeight: 100,
-    textAlignVertical: "top", // Ensures placeholder is at the top left
+    maxHeight: 150,
   },
-
-importanceSection: {
-    justifyContent: "flex-end",
-   // backgroundColor: "red",
-  //  paddingHorizontal: 10,
-   // height: "68%",
-//    alignItems: "space-between",
-  //  bottom: 0,
-   //  borderColor: "black",
-   //   borderWidth: 2,
-       padding: 20,
-},
+  importanceSection: {
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: "#f4f4f4",
+    padding: 10,
+    //marginBottom: 15,
+  },
+  selectionContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 10,
+    marginHorizontal: 10,
+    // marginTop: 10,
+    // alignItems: "center",
+    // backgroundColor: "#F6F6F6",
+    borderRadius: 10,
+  },
+  selectionContainerText: {
+    flexDirection: "column",
+  },
   importanceContainers: {
     flexDirection: "row",
+    justifyContent: "space-around",
   },
   importanceContainer: {
     alignItems: "center",
+    marginHorizontal: 8,
+    borderColor: "black",
   },
-    importanceNum: {
-      color: "black",
-      fontSize: 15,
-      fontWeight: "bold",
-    },
-    importanceText: {
-      width: 70,
-      textAlign: "center",
-      color: "black",
-    },
-      activeOption: {
-        backgroundColor: "#81b0ff",
-      },
   importanceBox: {
-    padding: 15,
-    borderRadius: 12,
-    paddingHorizontal: 20,
-    //  width: 30,
-    //    height: 30,
-    backgroundColor: "#F6F6F6",
-    //   borderRadius: 15,
     justifyContent: "center",
     alignItems: "center",
-  },
-
-  dateText: {
-    fontSize: 14,
-    fontStyle: "italic",
-    alignItems: "center",
-    color: "gray",
-  },
-
-  optionalHeader: {
-    fontSize: 18,
-    //fontWeight: "bold",
-    //marginBottom: 8,
-  },
-  optionalHeader2: {
-    fontSize: 18,
-    //  fontWeight: "bold",
-    color: "blue",
-  },
-
-  selectionContainer: {
-    flexDirection: "row",
-    //   alignItems: "center",
-    justifyContent: "space-between",
-    padding: 10,
-    //paddingVertical: 15,
-    //paddingHorizontal: 20,
-    backgroundColor: "white",
+    //  borderWidth: 1,
     borderRadius: 10,
-    // marginBottom: 20,
-    borderColor: "#F6F6F6",
-
-        borderWidth: 2,
-        backgroundColor: "#F6F6F6",
+    height: 40,
+    width: 40,
+    backgroundColor: "#f4f4f4",
   },
-
-  selectionContainerText: {
-    flexDirection: "column",
-    alignItems: "flex-start",
-    // height: "100%",
-    // backgroundColor: "red",
+  activeOption: {
+    backgroundColor: "black",
+    borderColor: "transparent",
+  },
+  activeText2: {
+    color: "white",
+  },
+  importanceText: {
+    paddingVertical: 10,
+  },
+  importanceNum: {
+    fontSize: 20,
+  },
+  dateText: {
+    fontSize: 16,
+    fontStyle: "italic",
+    color: "#81b0ff",
+    fontWeight: "bold",
   },
 });
-

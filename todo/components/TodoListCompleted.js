@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useContext } from 'react';
 import {
     StyleSheet,
@@ -11,7 +10,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TodoContext } from './TodoContext';
 import { format } from "date-fns";
-//import 
+import Line from "./SVGicons/DayTaskLine";
 
 export default function TodoListCompleted(props) {
     const { todos, addTodo, removeTodo, toggleTodoCompleted } = useContext(TodoContext);
@@ -39,7 +38,7 @@ export default function TodoListCompleted(props) {
                         : styles.daysTask}
 
             >
-                {"days_made_progress" in props.todo ?
+                {!props.todo.completed && "days_made_progress" in props.todo ?
                     <MaterialCommunityIcons name='progress-check' style=
 
                         {{
@@ -53,10 +52,7 @@ export default function TodoListCompleted(props) {
                             justifyContent: 'center'
 
                         }}
-                        
-
-                        size={30} />
-
+                       size={30} />
                     :
                     <Icon
                         name={'checkmark-circle-outline'}
@@ -88,8 +84,40 @@ export default function TodoListCompleted(props) {
 
                     {"days_made_progress" in props.todo &&
                         <View style={styles.listItem}>
-                            <Text> Last day made progress: {format(props.todo.most_recent_day_made_progress, "eeee, MMMM do")} </Text>
-                            <Text> Number of progress sessions: {props.todo.days_made_progress} </Text>
+
+                        <Text style={styles.sessionTitle} >Status: In Progress</Text>
+                            <Line/>
+                    {/*     <View style={styles.sessionInfo}>
+                         <Text style={{color: "#001C66",}}>Session Info</Text>
+                          </View> */}
+
+  <View style={styles.sessionContainer}>
+              <View style={styles.totalSessions}>
+               <View style={{paddingHorizontal: 4, padding: 2, }}>
+                   <Text style={{color: "#7DA1FD",}}>Total</Text>
+                    <Text style={{color: "#7DA1FD",}}>Sessions: </Text>
+               </View>
+                   <Text style={{color: "#7DA1FD", fontWeight: "bold", fontSize: 24,}}>{props.todo.days_made_progress} </Text>
+              </View>
+
+
+   <View style={styles.sessionDate}>
+                <View style={{alignItems: "flex-start", marginRight: 20,}}>
+                      <Text style={{color: "#001C66",}}>Most</Text>
+                       <Text style={{color: "#001C66",}}>Recent: </Text>
+                  </View>
+                   <View style={{alignItems: "flex-start", }}>
+  {/*    <Text style={{alignContent: "flex-end",color: "#001C66",fontWeight: "bold", fontStyle: "italic",}}>{format(props.todo.most_recent_day_made_progress, "eeee,")} </Text>
+                        <Text style={{color: "#001C66",fontWeight: "bold", fontStyle: "italic",}}>December 25th </Text> */}
+               <Text style={{alignContent: "flex-end",color: "#001C66",fontWeight: "bold", fontStyle: "italic",}}>{format(props.todo.most_recent_day_made_progress, "eeee,")} </Text>
+                        <Text style={{color: "#001C66",fontWeight: "bold", fontStyle: "italic",}}>{format(props.todo.most_recent_day_made_progress, "MMMM do")} </Text>
+                 </View>
+    </View>
+
+{/* <Text style={{color: "#7DA1FD",}}>{format(props.todo.most_recent_day_made_progress, "eeee, MMMM do")} </Text>
+       <Text> Number of progress sessions: {props.todo.days_made_progress} </Text>  */}
+
+                            </View>
                         </View>
                     }
 
@@ -151,6 +179,54 @@ const styles = StyleSheet.create({
         //alignItems: 'center',
         minHeight: 30
     },
+    sessionTitle: {
+        fontSize: 16,
+      //  fontStyle: "italic"
+     //   fontWeight: "bold",
+    },
+    sessionInfo: {
+    borderWidth: 1,
+    borderRadius: 12,
+    borderOutline: "#001C66",
+    marginTop: 5,
+    paddingHorizontal: 5,
+    width: "40%",
+    alignItems: "center",
+    marginBottom: 5,
+    },
+sessionContainer: {
+    flexDirection: "row",
+    alignItems: "space-between",
+   // backgroundColor: "red",
+   width: "100%",
+   padding: 5,
+
+},
+totalSessions: {
+    borderRadius: 8,
+    backgroundColor: "#001C66",
+    flexDirection: "row",
+    alignItems: "flex-end",
+    padding: 4,
+    marginRight: 5,
+},
+
+sessionDate: {
+    borderRadius: 7,
+    borderWidth: 1,
+    borderColor: "#001C66",
+    flexDirection: "row",
+    alignItems: "center",
+  //  justifyContent: "flex-end",
+    width: "60%",
+
+        borderRadius: 7,
+     //   backgroundColor: "#001C66",
+        flexDirection: "row",
+        alignItems: "space-between",
+        padding: 5,
+},
+
     listContainer: {
         marginTop: '3%',
         //margin
@@ -179,5 +255,6 @@ const styles = StyleSheet.create({
     dateText: {
         marginBottom: 10,
         fontStyle: 'italic',
-    }
+    },
+
 })

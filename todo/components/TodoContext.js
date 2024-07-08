@@ -2,8 +2,11 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 import { createTodo, readTodos, deleteTodo, getTodos } from './TodosService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { loadLocalRawResource } from 'react-native-svg';
+import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
+
 
 const TODOS_KEY = 'todos';
+const COMPLETED_KEY = 'completed';
 const GOALS_KEY = 'goal';
 // Create a context for theme
 export const TodoContext = createContext(1);
@@ -11,16 +14,36 @@ export const TodoContext = createContext(1);
 // Create a provider component
 export const TodoProvider = ({ children }) => {
   const [todos, setTodos] = useState([]);
+  const [completedThisWeek, setCompletedThisWeek] = useState([]);
   const [goal, setGoal] = useState({});
+  const [currentDate, setCurrentDate] = useState(new Date());
 
   useEffect(() => {
-    //DELETE YESTERDAYS TODOS ON INITIAL COMPONENT MOUNT IF COMPLETED AND COMPLETION DATE WAS YESTER
-    //clearAsyncStorage();
+    //run on day change even if user has the app open
     getGoal()
     removeTodosCompletedBeforeToday()
-  }, []);
+    const onDayChange = () => {
+      console.log('Day changed!');
+      removeTodosCompletedBeforeToday()
+      // Add your code here to perform actions on day change
+    };
+
+    const intervalId = setInterval(() => {
+      const now = new Date();
+      if (now.getDate() !== currentDate.getDate()) {
+        onDayChange();
+        setCurrentDate(now);
+      }
+    }, 60000); // Check every minute (60000 ms)
+
+    return () => clearInterval(intervalId);
 
 
+    //DELETE YESTERDAYS TODOS ON INITIAL COMPONENT MOUNT IF COMPLETED AND COMPLETION DATE WAS YESTER
+    //clearAsyncStorage();
+
+
+  }, [currentDate]);
 
   const goalExists = () => {
     //console.log('goal', Object.keys(goal).length)
@@ -66,7 +89,7 @@ export const TodoProvider = ({ children }) => {
       // updateGoal({ streak: 1, last_day_completed: Date.now() })
       goal.streak = 1
       goal.last_day_completed = Date.now()
-     // setGoal(goal)
+      // setGoal(goal)
 
       const jsonValue = JSON.stringify(goal);
 
@@ -119,7 +142,24 @@ export const TodoProvider = ({ children }) => {
     try {
       createTodo(new_todo)
       const updatedTodos = [...todos, new_todo];
+
+
+
+      updatedTodos.sort((a, b) => {
+        // Compare importance (higher importance first)
+        if (a.importance !== b.importance) {
+          return b.importance - a.importance;
+        }
+        // Compare due_date (earlier due date first)
+        const dateA = new Date(a.due_date);
+        const dateB = new Date(b.due_date);
+
+        return dateA - dateB;
+      });
+
+
       setTodos(updatedTodos);
+
 
       //g('postadd', updatedTodos)
     } catch (error) {
@@ -137,12 +177,51 @@ export const TodoProvider = ({ children }) => {
        });
    };*/
 
+  function isDateInThisWeek(date) {
+    const todayObj = new Date();
+    const todayDate = todayObj.getDate();
+    const todayDay = todayObj.getDay();
+    const firstDayOfWeek = new Date(todayObj.setDate(todayDate - todayDay));
+    const lastDayOfWeek = new Date(firstDayOfWeek);
+    lastDayOfWeek.setDate(lastDayOfWeek.getDate() + 6);
+    return date >= firstDayOfWeek && date <= lastDayOfWeek;
+  }
 
   const removeTodosCompletedBeforeToday = async () => {
     try {
       const get_jsonValue = await AsyncStorage.getItem(TODOS_KEY);
       the_todos = get_jsonValue != null ? JSON.parse(get_jsonValue) : [];
       const newTodos = the_todos.filter(todo => !(todo.completed && beforeToday(new Date(todo.completion_date))));
+
+      const get_jsonValue2 = await AsyncStorage.getItem(COMPLETED_KEY);
+      prev_completed = get_jsonValue2 != null ? JSON.parse(get_jsonValue2) : [];
+      //drop last week's
+      new_completed = prev_completed.filter(todo => todo.completed && isDateInThisWeek(new Date(todo.completion_date)));
+      toThisWeek = the_todos.filter(todo => todo.completed && beforeToday(new Date(todo.completion_date)));
+      final_completed = new_completed.concat(toThisWeek)
+
+      const jsonValue1 = JSON.stringify(final_completed);
+      await AsyncStorage.setItem(COMPLETED_KEY, jsonValue1);
+      setCompletedThisWeek(final_completed)
+
+
+
+
+
+
+      newTodos.sort((a, b) => {
+        // Compare importance (higher importance first)
+        if (a.importance !== b.importance) {
+          return b.importance - a.importance;
+        }
+        // Compare due_date (earlier due date first)
+        const dateA = new Date(a.due_date);
+        const dateB = new Date(b.due_date);
+
+        return dateA - dateB;
+      });
+
+
       const jsonValue = JSON.stringify(newTodos);
       await AsyncStorage.setItem(TODOS_KEY, jsonValue);
       setTodos(newTodos)
@@ -206,7 +285,7 @@ export const TodoProvider = ({ children }) => {
 
 
   return (
-    <TodoContext.Provider value={{ todos, updateTodo, setTodos, addTodo, removeTodo, toggleTodoCompleted, goal, goalExists, updateGoal, setCompleted }}>
+    <TodoContext.Provider value={{ todos, completedThisWeek, updateTodo, setTodos, addTodo, removeTodo, toggleTodoCompleted, goal, goalExists, updateGoal, setCompleted }}>
       {children}
     </TodoContext.Provider>
   );

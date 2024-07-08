@@ -26,7 +26,7 @@ import {
 
 import Icon from 'react-native-vector-icons/Feather';
 import TodoList from './TodoList';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
+//import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import ToDoApp from './ToDoApp';
 import AddTask from './AddTask';
 import HomePage from './HomePage';
@@ -65,7 +65,8 @@ export default function TabNavigator() {
         },
         tabBarLabelStyle: {
           fontSize: 15,
-          fontWeight: 'bold',
+       //   fontWeight: 'bold',
+       color: "black",
         },
 
       }}
@@ -76,7 +77,7 @@ export default function TabNavigator() {
       
         <Tab.Screen name='Activity' component={Activity} options={{ tabBarIcon: () => (<MaterialIcons name='playlist-add-check' style={styles.icon} size={30} />) }} />
 
-      <Tab.Screen name='Settings' component={SettingsScreen} options={{ tabBarIcon: () => (<Feather name='settings' style={styles.icon} size={30} />) }} />
+     {/* <Tab.Screen name='Settings' component={SettingsScreen} options={{ tabBarIcon: () => (<Feather name='settings' style={styles.icon} size={30} />) }} />*/ }
 
 
     </Tab.Navigator>

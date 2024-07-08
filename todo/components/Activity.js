@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Button,
+  Pressable,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import TodoList from "./TodoList";
@@ -29,7 +30,7 @@ export default function Activity() {
   const [currentDate, setCurrentDate] = useState("");
   const [goalModalVisible, setGoalModalVisible] = useState(false); // Add state for modal visibility
   //const [goalMode, setGoalMode] = useState("set"); // Add state for goal mode
-
+  const [viewOption, setViewOption] = useState("today");
   const [initialGoals, setInitialGoals] = useState({
     minutesGoal: "3",
     hoursGoal: "1",
@@ -47,6 +48,7 @@ export default function Activity() {
     addTodo,
     removeTodo,
     toggleTodoCompleted,
+    completedThisWeek,
     goal,
     goalExists,
     updateGoal,
@@ -112,7 +114,7 @@ export default function Activity() {
   };
 
   const minutesTasksLeft = () => {
-    console.log(goal);
+    //og(goal);
     return (
       goal.minutes_tasks -
       todos.filter(
@@ -270,12 +272,55 @@ export default function Activity() {
             dueThisWeek={getTodosDueThisWeek()}
           />
 
-          {/* if streak is null or 0,  display,  set task or complete daily goal to begin streak   */}
-          <Text style={styles.summary}>Today's Progress</Text>
-          <View>
-            {todos.map((item) =>
-              item.completed ? (
-                <View key={item.key}>
+          {/* progress tabs */}
+
+          <View style={styles.progressTabs}>
+            <TouchableOpacity
+              style={[styles.tab, viewOption === "today" && styles.activeTab]}
+              onPress={() => setViewOption("today")}
+            >
+              <Text
+                style={[
+                  styles.tabText,
+                  viewOption === "today" && styles.activeTabText,
+                ]}
+              >
+                Daily Progress
+              </Text>
+              {/* Completed Today*/}
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.tab, viewOption === "week" && styles.activeTab]}
+              onPress={() => setViewOption("week")}
+            >
+              <Text
+                style={[
+                  styles.tabText,
+                  viewOption === "week" && styles.activeTabText,
+                ]}
+              >
+              Weekly Progress
+              </Text>
+              {/* Completed This Week*/}
+            </TouchableOpacity>
+          </View>
+          {viewOption === "today" ? (
+            <View>
+              {todos.map((item) =>
+                item.completed ? (
+                  <View key={item.key}>
+                    <TodoListCompleted
+                      text={item.text}
+                      key={item.key}
+                      the_key={item.key}
+                      todo={item}
+                      not_editable={true}
+                      due_date={item.due_date}
+                      todoItem={item.completed}
+                    />
+                  </View>
+                ) : "days_made_progress" in item &&
+                  isToday(item.most_recent_day_made_progress) ? (
                   <TodoListCompleted
                     text={item.text}
                     key={item.key}
@@ -285,21 +330,40 @@ export default function Activity() {
                     due_date={item.due_date}
                     todoItem={item.completed}
                   />
-                </View>
-              ) : "days_made_progress" in item &&
-                isToday(item.most_recent_day_made_progress) ? (
-                <TodoListCompleted
-                  text={item.text}
-                  key={item.key}
-                  the_key={item.key}
-                  todo={item}
-                  not_editable={true}
-                  due_date={item.due_date}
-                  todoItem={item.completed}
-                />
-              ) : null
-            )}
-          </View>
+                ) : null
+              )}
+            </View>
+          ) : (
+            <View>
+              {completedThisWeek.map((item) =>
+                item.completed ? (
+                  <View key={item.key}>
+                    <TodoListCompleted
+                      text={item.text}
+                      key={item.key}
+                      the_key={item.key}
+                      todo={item}
+                      not_editable={true}
+                      due_date={item.due_date}
+                      todoItem={item.completed}
+                    />
+                  </View>
+                ) : "days_made_progress" in item &&
+                  isToday(item.most_recent_day_made_progress) ? (
+                  <TodoListCompleted
+                    text={item.text}
+                    key={item.key}
+                    the_key={item.key}
+                    todo={item}
+                    not_editable={true}
+                    due_date={item.due_date}
+                    todoItem={item.completed}
+                  />
+                ) : null
+              )}
+            </View>
+          )}
+
           <GoalModal
             visible={goalModalVisible}
             onClose={closeGoalModal}
@@ -314,16 +378,15 @@ export default function Activity() {
   );
 }
 const styles = StyleSheet.create({
+  selected: {
+    borderRadius: 10,
+    backgroundColor: "#828282",
+  },
   container: {
     //   flex: 1,
     padding: 16,
     justifyContent: "space-between",
   },
-  /* topBar: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 10,
-  },*/
   topBar: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -341,6 +404,7 @@ const styles = StyleSheet.create({
     // width: "100%",
     //justifyContent: "flex-end",
     //position: "absolute",
+    // top: 0,
     // top: 0,
     //right: 0,
   },
@@ -360,7 +424,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "bold",
   },
-
   dailyGoalContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -379,7 +442,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
   },
-
   buttonText: {
     fontSize: 26,
     fontWeight: "bold",
@@ -404,6 +466,13 @@ const styles = StyleSheet.create({
     fontSize: 24,
     justifyContent: "flex-end",
   },
+  taskOptions: {
+    fontFamily: "Inter",
+    color: "#A5A5A5",
+    fontSize: 20,
+    flex: 1,
+    // justifyContent: "flex-end",
+  },
   minutesTask: {
     backgroundColor: "rgba(255, 38, 246, 0.75)",
     borderRadius: 5,
@@ -418,5 +487,38 @@ const styles = StyleSheet.create({
     backgroundColor: "#7DA1FD",
     borderRadius: 5,
     marginVertical: 5,
+  },
+
+  progressTabs: {
+    flexDirection: "row",
+    padding: 16,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  progressTabs: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    //marginVertical: 10,
+    paddingHorizontal: 16,
+  },
+  tab: {
+    paddingVertical: 5,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  tabText: {
+    color: "#C4C4C4",
+    fontFamily: "Inter",
+    fontSize: 16,
+  },
+  activeTab: {
+    backgroundColor: "black",
+    borderRadius: 10,
+    paddingHorizontal: 10,
+  },
+  activeTabText: {
+    color: "white",
+    fontFamily: "Inter",
+    fontSize: 16,
   },
 });

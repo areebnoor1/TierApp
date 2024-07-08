@@ -1,38 +1,54 @@
 import React from "react";
 import { StyleSheet, View, Modal } from "react-native";
 import EditTask from "./EditTask";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-export default function EditTaskModal({ modalVisible, setModalVisible, task }) {
+export default function EditTaskModal({
+  modalVisible,
+  setModalVisible,
+  task,
+}) {
   return (
-    <Modal transparent={true} animationType="slide" visible={modalVisible}>
-      <View style={styles.modalView}>
+    <>
+      <Modal
+        transparent={true}
+        animationType="slide"
+        visible={modalVisible}
+        style={styles.modalView}
+      >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <EditTask setModalVisible={setModalVisible} task={task} />
+            <EditTask
+              setModalVisible={setModalVisible}
+              task={task}
+            />
           </View>
         </View>
-      </View>
-    </Modal>
+      </Modal>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   modalView: {
     flex: 1,
-    justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
   },
   modalContainer: {
     flex: 1,
     justifyContent: "flex-end",
     alignItems: "center",
+    //=backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContent: {
-    width: "100%",
-    backgroundColor: "white",
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    padding: 20,
+    width: "99%",
+    height: "99%",
+    elevation: 5,
+    //  backgroundColor: "#EBEBEB",
+    borderRadius: 20,
+   // backgroundColor: "white",
+   backgroundColor: "#F6F6F6",
+    //      padding: 20,
   },
 });

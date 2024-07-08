@@ -76,6 +76,7 @@ const styles = StyleSheet.create({
 export default function HomePage({ navigation }) {
   const [currentTask, setCurrentTask] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
+  const [inputTaskType, setInputTaskType] = useState("");
   const [taskSelectionVisible, setTaskSelectionVisible] = useState(false);
   //const [todos, setTodos] = useState([]);
   const { todos, addTodo, removeTodo, toggleTodoCompleted } = useContext(TodoContext);
@@ -85,6 +86,7 @@ export default function HomePage({ navigation }) {
       <AddTaskModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
+        inputTaskType={inputTaskType}
       //  todos = {todos.filter(todo => todo.completed===false)}
        // setTodos = {setTodos}
       />
@@ -99,6 +101,7 @@ export default function HomePage({ navigation }) {
           setTaskSelectionVisible={setTaskSelectionVisible}
           setModalVisible={setModalVisible}
           setCurrentTask={setCurrentTask}
+          setInputTaskType={setInputTaskType}
       //    todos = {todos.filter(todo => todo.completed===false)}
         />
       ) : (

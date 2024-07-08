@@ -27,7 +27,7 @@ import {
 } from "react-native";
 import Entypo from "react-native-vector-icons/Entypo";
 import TodoList from "./TodoList";
-import EditTask from "./EditTask";
+import EditTaskModal from "./EditTaskModal";
 import AddTaskModal from './HomeScreen/AddTaskModal';
 import { TodoContext } from "./TodoContext";
 import { createTodo, readTodos, updateTodo, deleteTodo } from "./TodosService";
@@ -45,16 +45,85 @@ export default function Minutes() {
   const handleToggleTodo = async (key) => {
     await toggleTodoCompleted(key);
   };
+  const isToday = (date) => {
+    const d = new Date(date);
+    const t = new Date();
+    const today = new Date(t.setHours(0, 0, 0, 0));
+    const comparison = new Date(d.setHours(0, 0, 0, 0));
+    return today.getTime() == comparison.getTime();
+  };
+  function isDateInThisWeek(date) {
+    const todayObj = new Date();
+    const todayDate = todayObj.getDate();
+    const todayDay = todayObj.getDay();
+    const firstDayOfWeek = new Date(todayObj.setDate(todayDate - todayDay));
+    const lastDayOfWeek = new Date(firstDayOfWeek);
+    lastDayOfWeek.setDate(lastDayOfWeek.getDate() + 6);
+    return date >= firstDayOfWeek && date <= lastDayOfWeek;
+  }
+
 
   return (
     <>
       <TouchableOpacity style={styles.addTaskButton} onPress={() => setAddModalVisible(true)}>
         <Ionicons name="add" size={30} color="black" />
       </TouchableOpacity>
+
       <View style={styles.container}>
         <ScrollView style={styles.scroll}>
+        <Text style={styles.summary}>Today</Text>
           {todos
-            .filter((todo) => todo.task_type === "minutes")
+            .filter((todo) => todo.task_type === "minutes" && isToday(todo.due_date))
+            .map(
+              (item) =>
+                !item.completed && (
+                  <TodoList
+                    text={item.text}
+                    key={item.key}
+                    the_key={item.key}
+                    todo={item}
+                    completed={item.completed}
+                    has_due_date={item.has_due_date}
+                    due_date={item.due_date}
+                    editMe={() => {
+                      setModalVisible(true);
+                      setEditingTask(item);
+                    }}
+                    setChecked={() => {
+                      handleToggleTodo(item.key);
+                    }}
+                    deleteTodo={() => removeTodo(item.key)}
+                  />
+                )
+            )}
+            <Text style={styles.summary}>This Week</Text>
+          {todos
+            .filter((todo) => todo.task_type === "minutes" && isDateInThisWeek(todo.due_date))
+            .map(
+              (item) =>
+                !item.completed && (
+                  <TodoList
+                    text={item.text}
+                    key={item.key}
+                    the_key={item.key}
+                    todo={item}
+                    completed={item.completed}
+                    has_due_date={item.has_due_date}
+                    due_date={item.due_date}
+                    editMe={() => {
+                      setModalVisible(true);
+                      setEditingTask(item);
+                    }}
+                    setChecked={() => {
+                      handleToggleTodo(item.key);
+                    }}
+                    deleteTodo={() => removeTodo(item.key)}
+                  />
+                )
+            )}
+            <Text style={styles.summary}>Other</Text>
+          {todos
+            .filter((todo) => todo.task_type === "minutes" && !isToday(todo.due_date) && !isDateInThisWeek(todo.due_date))
             .map(
               (item) =>
                 !item.completed && (
@@ -79,29 +148,40 @@ export default function Minutes() {
             )}
         </ScrollView>
 
+       
         <AddTaskModal
           modalVisible={addModalVisible}
           setModalVisible={setAddModalVisible}
-          inputTaskType = {'minutes'}
+          inputTaskType={'minutes'}
         //  todos = {todos.filter(todo => todo.completed===false)}
         // setTodos = {setTodos}
         />
 
-        <Modal transparent={true} visible={modalVisible} style={styles.modalView}>
-          <View style={styles.modalContainer}>
-            <EditTask modalVisible={modalVisible} setModalVisible={setModalVisible} task={editingTask}
-            // {//deleteOldTodo={handleDeleteTodo(editingTask)}
-            />
-          </View>
-        </Modal>
+        <EditTaskModal modalVisible={modalVisible} setModalVisible={setModalVisible} task={editingTask}
+
+        />
       </View>
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  scroll: {},
-  container: {},
+  scroll: {
+    //  width: '100%',
+  },
+  container: {
+    //flex: 1,
+    // justifyContent: 'flex-start',
+    //alignItems: 'center',
+    //  backgroundColor: '#F5FCFF',
+  },
+  summary: {
+    fontFamily: "Inter",
+    color: "#A5A5A5",
+    fontSize: 24,
+    marginLeft:20,
+    justifyContent: "flex-end",
+  },
   header: {
     marginTop: "15%",
     fontSize: 20,
@@ -140,17 +220,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  modalContainer: {
-    flex: 1,
-    justifyContent: "flex-end",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    width: "100%",
-    height: "95%",
-    backgroundColor: "#EBEBEB",
-    borderRadius: 10,
-  },
-
   addTaskButton: {
     position: "absolute",
     top: 20,
