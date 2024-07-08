@@ -1,63 +1,74 @@
-import React, { useState } from 'react';
-import { View, Text, Switch, StyleSheet, Image, TextInput } from 'react-native';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
+import { View, Text, Switch, StyleSheet, Image, TextInput, Button } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { getApp, app, auth, getAuth } from "./firebase";
+import { createUserWithEmailAndPassword, setPersistence, onAuthStateChanged, signOut } from "firebase/auth";
+import { initializeStreak, incrementStreak, resetStreak, getStreak } from './streaks';
 
 const SettingsScreen = () => {
-  const [isDarkTheme, setIsDarkTheme] = useState(false);
-  const [isNotificationsEnabled, setIsNotificationsEnabled] = useState(true);
+  const [user, setUser] = React.useState(null);
+  const [streak, setStreaks] = React.useState(0);
 
-  const themeStyles = isDarkTheme ? darkStyles : lightStyles;
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      if (currentUser) {
+        getStreak(currentUser.uid)
+          .then(streak => {
+            if (streak !== null) {
+              setStreaks(streak);
+            }
+          })
+          .catch(error => {
+            console.error('Error fetching streak:', error);
+          });
+      }
+    });
 
+() => {unsubscribe()};
+
+  
+  }, [streak]);
+
+  const handleSignOut = () => {
+    signOut(auth).then(() => {
+      console.log("signed out!")
+    }).catch((error) => {
+      // An error happened.
+    });
+  }
+
+if(user !== null){
   return (
-    <View style={[styles.container, themeStyles.container]}>
-      <View style={styles.profileSection}>
-        <Image
-          source={{ uri: 'https://via.placeholder.com/100' }}
-          style={styles.profileImage}
-        />
-        <Text style={[styles.profileName, themeStyles.text]}>John Doe</Text>
-        <Text style={[styles.profileEmail, themeStyles.text]}>john.doe@example.com</Text>
-      </View>
-
+    <View style={[styles.container]}>
       <View style={styles.settingsSection}>
-        <View style={styles.settingItem}>
-          <Icon name="notifications-outline" size={24} style={themeStyles.icon} />
-          <Text style={[styles.settingText, themeStyles.text]}>Notifications</Text>
-          <Switch
-            value={isNotificationsEnabled}
-            onValueChange={setIsNotificationsEnabled}
-          />
-        </View>
 
         <View style={styles.settingItem}>
-          <Icon name="color-palette-outline" size={24} style={themeStyles.icon} />
-          <Text style={[styles.settingText, themeStyles.text]}>Dark Theme</Text>
-          <Switch
-            value={isDarkTheme}
-            onValueChange={setIsDarkTheme}
-          />
+          <Icon name="person-outline" size={24} />
+          <Text style={[styles.settingText]}>Account</Text>
         </View>
-
-        <View style={styles.settingItem}>
-          <Icon name="person-outline" size={24} style={themeStyles.icon} />
-          <Text style={[styles.settingText, themeStyles.text]}>Account</Text>
-        </View>
-
+    
+        <View style={styles.profileSection}>
+        <Text style={[styles.profileName]}>{user.displayName}</Text>
+        <Text style={[styles.profileEmail]}>{user.email}</Text>
+      </View>
         <View style={styles.accountPlaceholder}>
-          <TextInput
-            style={[styles.input, themeStyles.input]}
-            placeholder="Username"
-            placeholderTextColor={isDarkTheme ? '#ccc' : '#555'}
-          />
-          <TextInput
-            style={[styles.input, themeStyles.input]}
-            placeholder="Email"
-            placeholderTextColor={isDarkTheme ? '#ccc' : '#555'}
+          <Text>
+            Streak: {streak}
+          </Text>
+          <Button
+            title="Sign out"
+    
+            onPress={()=>handleSignOut()}
           />
         </View>
       </View>
     </View>
-  );
+  );}else{
+    return(
+      <View><Text>Reload to Login or Signup</Text></View>
+    );
+  }
 };
 
 const styles = StyleSheet.create({

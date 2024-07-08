@@ -4,6 +4,8 @@ import { getDatabase } from 'firebase/database';
 import { NavigationContainer } from '@react-navigation/native';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
+import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
 import {
   ref,
@@ -11,7 +13,7 @@ import {
   push,
   update,
   remove,
-  
+ 
 } from 'firebase/database';
 //import * as firebaseApp from 'firebase';
 
@@ -23,7 +25,8 @@ import {
   TextInput,
   Button,
   ScrollView,
-  Pressable
+  Pressable,
+  Alert
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/Feather';
@@ -38,14 +41,16 @@ import Minutes from './components/Minutes';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { getApps, initializeApp } from "firebase/app";
 import { createStackNavigator } from '@react-navigation/stack';
 import DailyGoal from './components/ActivityScreen/DailyGoal';
 import firebase from "firebase/app";
 import "firebase/auth";
 import SignUp from "./components/SignUp"
 
-import "./components/firebase";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getApp, app, auth, getAuth} from "./components/firebase";
+import {  createUserWithEmailAndPassword, setPersistence, onAuthStateChanged, onChangeLoggedInUser } from "firebase/auth";
+import { initializeStreak } from './components/streaks';
 
 export default function App() {
   
@@ -58,23 +63,53 @@ export default function App() {
   var [uid, setuid] = useState(null);
   const [email, onChangeEmail] = React.useState("");
   const [password, onChangePassword] = React.useState("");
+  
  
 
   useEffect(() => {
+    //clearAsyncStorage();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/auth.user
+        setIsLoggedIn(true);
+        const uid = user.uid;
+        setuid(uid);
+        // ...
+      } else {
+        // User is signed out
+        // ...
+      }
+    });
+    
+      setTimeout(() => {
+        unsubscribe();
+      }, 2000);
+     
+    }, []);
+  const firebaseConfig = {
+    apiKey: "AIzaSyBNYrjkuW86Gvn4CO9qMUf9YiDoTFAUYyo",
+    authDomain: "prettylib.firebaseapp.com",
+    databaseURL: "https://prettylib-default-rtdb.firebaseio.com",
+    projectId: "prettylib",
+    storageBucket: "prettylib.appspot.com",
+    messagingSenderId: "248488614748",
+    appId: "1:248488614748:web:2520b043a65333fb56ff99",
+    measurementId: "G-W2S4558058"
+  };
 
-    //SHOULD BE REPLACED WITH RETRIEVEING THE TODOS
 
-    // setTimeout( ()=>{clearAsyncStorage() }, 2000)
-  }, []);
-
-  const auth = getAuth();
   const createUser = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        onChangeLoggedInUser(user.email);
+        initializeStreak(user.uid)
+        //onChangeLoggedInUser(user.email);
       })
       .catch((error) => {
+        Alert.alert("", "Invalid username and/or password", [
+          { text: "OK" },
+        ]);
         const errorCode = error.code;
         const errorMessage = error.message;
       });
@@ -89,16 +124,6 @@ export default function App() {
     }
   };
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyBNYrjkuW86Gvn4CO9qMUf9YiDoTFAUYyo",
-    authDomain: "prettylib.firebaseapp.com",
-    databaseURL: "https://prettylib-default-rtdb.firebaseio.com",
-    projectId: "prettylib",
-    storageBucket: "prettylib.appspot.com",
-    messagingSenderId: "248488614748",
-    appId: "1:248488614748:web:2520b043a65333fb56ff99",
-    measurementId: "G-W2S4558058"
-  };
 
 
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -112,11 +137,17 @@ export default function App() {
       .then(async (userCredential) => {
         // Signed in
         const user = userCredential.user;
-        onChangeLoggedInUser(user.email);
+      // onChangeLoggedInUser(user.email);
+        setIsLoggedIn(true)
       })
       .catch((error) => {
+        Alert.alert("", "Invalid username and/or password", [
+          { text: "OK" },
+        ]);
         const errorCode = error.code;
         const errorMessage = error.message;
+        console.log(errorMessage)
+        
       });
   };
 
@@ -126,7 +157,6 @@ export default function App() {
     
     return (
       <View style={styles.container}>
-        <Text>Email</Text>
         <TextInput
           style={styles.input}
           onChangeText={onChangeEmail}
@@ -139,11 +169,13 @@ export default function App() {
           value={password}
           secureTextEntry={true}
         ></TextInput>
+
+
         <Button title="Sign Up!" onPress={() => {createUser()
-        setIsLoggedIn(true)}
+        }
         } />
         <Button title="Log in!" onPress={() => {login()
-        setIsLoggedIn(true)}
+       }
         } />
       </View>
     );
