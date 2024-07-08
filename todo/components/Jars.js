@@ -270,6 +270,38 @@ export default function Jars() {
 
           <Text style={styles.buttonText}></Text>
         </View>
+
+{/*
+<MinutesTasksDisplay />
+
+<View style={styles.minutesTaskTypeDisplay}>
+                                     <View style={styles.taskNumberContainers}>
+
+                                         <View style={styles.inJarEllipse}>
+                                           <Text style={styles.inJarNumber}>
+                                             {
+                                               todos.filter(
+                                                 (todo) =>
+                                                   todo.task_type === "minutes" &&
+                                                   todo.completed === false
+                                               ).length
+                                             }
+                                           </Text>
+                                         </View>
+                                              <View style={styles.dayEllipse}>
+                                           <Text style={styles.taskNumber}>
+                                             {getDueToday("minutes")}
+                                           </Text>
+                                         </View>
+                                         <View style={styles.dayEllipse}>
+                                           <Text style={styles.taskNumber}>
+                                             {getTodosDueThisWeek("minutes")}
+                                           </Text>
+                                         </View>
+
+                                     </View>
+                                   </View>
+*/}
         <Minutes />
       </View>
     );

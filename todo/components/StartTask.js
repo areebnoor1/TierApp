@@ -34,11 +34,12 @@ export default function StartTask({
 
   return (
     <Modal
-      animationType="slide"
+   //   animationType="fade"
       transparent={true}
       visible={taskSelectionVisible}
       onRequestClose={closeModal}
     >
+      <View style={styles.screen}>
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
           <TouchableOpacity onPress={closeModal} style={styles.closeModalIcon}>
@@ -58,22 +59,30 @@ export default function StartTask({
           </View>
         </View>
       </View>
+       </View>
     </Modal>
   );
 }
 
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
   centeredView: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
+
   modalView: {
     backgroundColor: "white",
     borderRadius: 10,
     padding: 40,
     alignItems: "center",
     width: "90%",
+    elevation: 5,
   },
   closeModalIcon: {
     position: "absolute",
