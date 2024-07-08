@@ -92,7 +92,6 @@ export default function Minutes() {
       >
         <Ionicons name="add" size={30} color="black" />
       </TouchableOpacity>
-
  <View style={{ paddingHorizontal: 16 }}>
         <View style={styles.minutesTaskTypeDisplay}>
           <View style={styles.taskNumberContainers}>
@@ -197,7 +196,7 @@ export default function Minutes() {
       </View>
 
       <View style={styles.container}>
-        <ScrollView style={styles.scroll}>
+ <ScrollView style={styles.scroll}>
           {viewOption === "all" && (
             <>
               {todos
@@ -291,7 +290,7 @@ export default function Minutes() {
                 )}
             </>
           )}
-        </ScrollView>
+  </ScrollView>
 
         <AddTaskModal
           modalVisible={addModalVisible}
@@ -307,6 +306,7 @@ export default function Minutes() {
           task={editingTask}
         />
       </View>
+
     </>
   );
 }
@@ -316,10 +316,13 @@ const styles = StyleSheet.create({
     //  width: '100%',
   },
   container: {
-    //flex: 1,
+//backgroundColor: "red",
+    alignItems: "center",
+
     // justifyContent: 'flex-start',
     //alignItems: 'center',
     //  backgroundColor: '#F5FCFF',
+   // paddingBottom:25,
   },
   summary: {
     fontFamily: "Inter",
@@ -355,17 +358,6 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     minHeight: "3%",
   },
-  modalView: {
-    //margin: 20,
-    //borderRadius: 20,
-    //padding: 35,
-    // alignItems: 'center',
-    flex: 1,
-    //backgroundColor: 'transparent',
-    backgroundColor: "rgba(0,0,0,0.7)",
-    alignItems: "center",
-    justifyContent: "center",
-  },
   addTaskButton: {
     position: "absolute",
     top: 20,
@@ -398,7 +390,6 @@ const styles = StyleSheet.create({
   },
   activeTabText: {
     color: "#fff",
-    //  fontWeight: "bold",
   },
 
   minutesTaskTypeDisplay: {
@@ -410,42 +401,22 @@ const styles = StyleSheet.create({
     //padding: 15,
     alignItems: "center",
   },
-
-  //holds the 3 circle info
   taskNumberContainers: {
     flexDirection: "row",
-    ///   alignItems: "space-between",
     justifyContent: "space-around",
     width: "100%",
     padding: 10,
   },
-  //holds individual circle, num, and text
   taskNumberContainer: {
     alignItems: "center",
   },
   taskNumber: {
     color: "black",
     fontSize: 24,
-    //fontWeight: "bold",
-  },
-
-  inJarEllipse: {
-    width: 46,
-    height: 46,
-    backgroundColor: "black",
-    borderRadius: 23,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  inJarNumber: {
-    color: "white",
-    fontSize: 24,
-    //z     fontWeight: "bold",
   },
   dayEllipse: {
     width: 46,
     height: 46,
-    //outline?: "#7DA1FD",
     backgroundColor: "#F0F2F8",
     borderRadius: 23,
     justifyContent: "center",
@@ -470,8 +441,6 @@ const styles = StyleSheet.create({
   inactiveEllipse: {
     width: 46,
     height: 46,
-    //outline?: "#7DA1FD",
-   // backgroundColor: "white",
     borderRadius: 23,
     justifyContent: "center",
     alignItems: "center",
