@@ -87,9 +87,9 @@ export default function TodoListCompleted(props) {
 
                         <Text style={styles.sessionTitle} >Status: In Progress</Text>
                             <Line/>
-                         <View style={styles.sessionInfo}>
+                    {/*     <View style={styles.sessionInfo}>
                          <Text style={{color: "#001C66",}}>Session Info</Text>
-                          </View>
+                          </View> */}
 
   <View style={styles.sessionContainer}>
               <View style={styles.totalSessions}>
@@ -181,7 +181,8 @@ const styles = StyleSheet.create({
     },
     sessionTitle: {
         fontSize: 16,
-        fontWeight: "bold",
+      //  fontStyle: "italic"
+     //   fontWeight: "bold",
     },
     sessionInfo: {
     borderWidth: 1,
@@ -198,6 +199,7 @@ sessionContainer: {
     alignItems: "space-between",
    // backgroundColor: "red",
    width: "100%",
+   padding: 5,
 
 },
 totalSessions: {
