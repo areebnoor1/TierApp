@@ -38,6 +38,7 @@ export default function Minutes() {
   const [modalVisible, setModalVisible] = useState(false);
   const [addModalVisible, setAddModalVisible] = useState(false);
   const [editingTask, setEditingTask] = useState({});
+  const [viewOption, setViewOption] = useState("all");
 
   const { todos, addTodo, removeTodo, toggleTodoCompleted } =
     useContext(TodoContext);
@@ -64,13 +65,73 @@ export default function Minutes() {
 
 
   return (
-    <>
+   <>
       <TouchableOpacity style={styles.addTaskButton} onPress={() => setAddModalVisible(true)}>
         <Ionicons name="add" size={30} color="black" />
       </TouchableOpacity>
 
+      <View style={styles.progressTabs}>
+        <TouchableOpacity
+          style={[styles.tab, viewOption === "all" && styles.activeTab]}
+          onPress={() => setViewOption("all")}
+        >
+          <Text style={[styles.tabText, viewOption === "all" && styles.activeTabText]}>
+            All Tasks
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.tab, viewOption === "today" && styles.activeTab]}
+          onPress={() => setViewOption("today")}
+        >
+          <Text style={[styles.tabText, viewOption === "today" && styles.activeTabText]}>
+            Due Today
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.tab, viewOption === "week" && styles.activeTab]}
+          onPress={() => setViewOption("week")}
+        >
+          <Text style={[styles.tabText, viewOption === "week" && styles.activeTabText]}>
+            Due This Week
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+
       <View style={styles.container}>
         <ScrollView style={styles.scroll}>
+                 {viewOption === "all" && (
+                    <>
+                      <Text style={styles.summary}>All Tasks</Text>
+                      {todos
+                        .filter((todo) => todo.task_type === "minutes")
+                        .map(
+                          (item) =>
+                            !item.completed && (
+                              <TodoList
+                                text={item.text}
+                                key={item.key}
+                                the_key={item.key}
+                                todo={item}
+                                completed={item.completed}
+                                has_due_date={item.has_due_date}
+                                due_date={item.due_date}
+                                editMe={() => {
+                                  setModalVisible(true);
+                                  setEditingTask(item);
+                                }}
+                                setChecked={() => {
+                                  handleToggleTodo(item.key);
+                                }}
+                                deleteTodo={() => removeTodo(item.key)}
+                              />
+                            )
+                        )}
+                    </>
+                  )}
+
+                    {viewOption === "today" && (
+                              <>
         <Text style={styles.summary}>Today</Text>
           {todos
             .filter((todo) => todo.task_type === "minutes" && isToday(todo.due_date))
@@ -93,9 +154,14 @@ export default function Minutes() {
                       handleToggleTodo(item.key);
                     }}
                     deleteTodo={() => removeTodo(item.key)}
-                  />
-                )
-            )}
+                 />
+                    )
+                )}
+            </>
+          )}
+
+          {viewOption === "week" && (
+            <>
             <Text style={styles.summary}>This Week</Text>
           {todos
             .filter((todo) => todo.task_type === "minutes" && isDateInThisWeek(todo.due_date))
@@ -118,37 +184,13 @@ export default function Minutes() {
                       handleToggleTodo(item.key);
                     }}
                     deleteTodo={() => removeTodo(item.key)}
-                  />
-                )
-            )}
-            <Text style={styles.summary}>Other</Text>
-          {todos
-            .filter((todo) => todo.task_type === "minutes" && !isToday(todo.due_date) && !isDateInThisWeek(todo.due_date))
-            .map(
-              (item) =>
-                !item.completed && (
-                  <TodoList
-                    text={item.text}
-                    key={item.key}
-                    the_key={item.key}
-                    todo={item}
-                    completed={item.completed}
-                    has_due_date={item.has_due_date}
-                    due_date={item.due_date}
-                    editMe={() => {
-                      setModalVisible(true);
-                      setEditingTask(item);
-                    }}
-                    setChecked={() => {
-                      handleToggleTodo(item.key);
-                    }}
-                    deleteTodo={() => removeTodo(item.key)}
-                  />
-                )
+                      />
+                  )
+                     )}
+                  </>
             )}
         </ScrollView>
 
-       
         <AddTaskModal
           modalVisible={addModalVisible}
           setModalVisible={setAddModalVisible}
@@ -157,9 +199,7 @@ export default function Minutes() {
         // setTodos = {setTodos}
         />
 
-        <EditTaskModal modalVisible={modalVisible} setModalVisible={setModalVisible} task={editingTask}
-
-        />
+        <EditTaskModal modalVisible={modalVisible} setModalVisible={setModalVisible} task={editingTask} />
       </View>
     </>
   );
@@ -224,5 +264,28 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 20,
     right: 20,
+  },
+  progressTabs: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginVertical: 10,
+    paddingHorizontal: 16,
+  },
+  tab: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+  },
+  activeTab: {
+    backgroundColor: "#6200EE",
+    backgroundColor: "rgba(255, 38, 246, 0.75)",
+  },
+  tabText: {
+    fontSize: 16,
+    color: "#000",
+  },
+  activeTabText: {
+   // color: "#fff",
+   fontWeight: "bold",
   },
 });

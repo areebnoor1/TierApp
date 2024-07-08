@@ -265,7 +265,7 @@ export default function Activity() {
           </View>
           {/* Summary Section */}
           <Text style={styles.summary}>Summary</Text>
-          {/* Replace the summary section with SummarySection */}
+
           <SummarySection
             completedToday={getCompletedToday()}
             dueToday={getDueToday()}
