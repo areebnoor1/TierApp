@@ -26,6 +26,7 @@ import {
 
 import Icon from 'react-native-vector-icons/Feather';
 import TodoList from './TodoList';
+import UserDisplay from './UserDisplay';
 //import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import ToDoApp from './ToDoApp';
 import AddTask from './AddTask';
@@ -45,6 +46,7 @@ import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
+
 
 
 export default function TabNavigator() {
@@ -76,8 +78,8 @@ export default function TabNavigator() {
       <Tab.Screen name='Jars' component={Jars} options={{ tabBarIcon: () => (<FontAwesome6 name='jar' style={styles.icon} size={30} />) }} />
       
         <Tab.Screen name='Activity' component={Activity} options={{ tabBarIcon: () => (<MaterialIcons name='playlist-add-check' style={styles.icon} size={30} />) }} />
-
-     {/* <Tab.Screen name='Settings' component={SettingsScreen} options={{ tabBarIcon: () => (<Feather name='settings' style={styles.icon} size={30} />) }} />*/ }
+       
+      <Tab.Screen name='Settings' component={SettingsScreen} options={{ tabBarIcon: () => (<Feather name='settings' style={styles.icon} size={30} />) }} />
 
 
     </Tab.Navigator>
