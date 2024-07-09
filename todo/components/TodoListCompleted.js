@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     //  justifyContent: "flex-end",
-    width: "60%",
+  //  width: "60%",
 
     borderRadius: 7,
     //   backgroundColor: "#001C66",

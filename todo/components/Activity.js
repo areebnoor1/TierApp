@@ -27,7 +27,6 @@ import { GoalProvider } from "./DailyGoalContext";
 import TodoListCompleted from "./TodoListCompleted";
 import WeekJars from "./ActivityScreen/WeekJars";
 
-
 export default function Activity() {
   const [currentDate, setCurrentDate] = useState("");
   const [goalModalVisible, setGoalModalVisible] = useState(false); // Add state for modal visibility
@@ -256,7 +255,6 @@ export default function Activity() {
             )}
           </View>
         )}
-
 
         <View style={styles.container}>
           <View style={styles.dailyGoalContainer}>
