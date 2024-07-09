@@ -25,7 +25,10 @@ import { TodoContext } from "./TodoContext";
 import { GoalContext } from "./DailyGoalContext";
 import { GoalProvider } from "./DailyGoalContext";
 import TodoListCompleted from "./TodoListCompleted";
-
+import FilledJarIcon from "./SVGicons/FilledJarIcon.js";
+import EmptyJarIcon from "./SVGicons/EmptyJarIcon.js";
+import DisabledJarIcon from "./SVGicons/DisabledJarIcon.js";
+import WeekJars from "./ActivityScreen/WeekJars";
 export default function Activity() {
   const [currentDate, setCurrentDate] = useState("");
   const [goalModalVisible, setGoalModalVisible] = useState(false); // Add state for modal visibility
@@ -227,6 +230,10 @@ export default function Activity() {
             </View>
           )}
         </View>
+
+
+        {goalExists() && <WeekJars />}
+
         <View style={styles.container}>
           <View style={styles.dailyGoalContainer}>
             <Text style={styles.summary}>Daily Goal</Text>
@@ -299,7 +306,7 @@ export default function Activity() {
                   viewOption === "week" && styles.activeTabText,
                 ]}
               >
-              Weekly Progress
+                Weekly Progress
               </Text>
               {/* Completed This Week*/}
             </TouchableOpacity>
@@ -521,4 +528,14 @@ const styles = StyleSheet.create({
     fontFamily: "Inter",
     fontSize: 16,
   },
+
+  weekDayJarsContainer: {
+    flexDirection: "row",
+  },
+  weekDayJars: {
+    alignContent: "center",
+    justifyContent: "center",
+  },
+  weekDayJarsIcon: {},
+  weekDayJarsText: {},
 });
