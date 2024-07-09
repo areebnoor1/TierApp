@@ -6,33 +6,41 @@ import DisabledJarIcon from "../SVGicons/DisabledJarIcon.js";
 
 const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
-export default function WeekJars({ remaining, streakNumber}) {
+export default function WeekJars({ remaining, streakNumber }) {
   const today = new Date().getDay();
+{/*have to sub 1 from streak if got credit for today*/}
+  if (!remaining && streakNumber > 0) {
+    streakNumber--;
+  }
 
-   if (!remaining && streakNumber > 0) {
-       streakNumber--;
-     }
-
-console.log("Streak Number" + streakNumber);
+  console.log("Streak Number" + streakNumber);
   const renderJar = (dayIndex) => {
     const day = daysOfWeek[dayIndex];
     const isToday = dayIndex === today;
     const isDisabled = dayIndex > today;
     const isCompleted = dayIndex >= today - streakNumber;
-   // const isCompleted = !hasRemainingTasks && dayIndex < today;
-console.log(remaining);
+    // const isCompleted = !hasRemainingTasks && dayIndex < today;
+    console.log(remaining);
 
-console.log(remaining);
+    console.log(remaining);
     return (
       <View key={day} style={isToday ? styles.today : styles.day}>
         <Text style={isToday ? styles.todayText : styles.dayText}>{day}</Text>
 
-        {/* Conditionally render jar icon based on whether it's today */}
+        {/* today's jar icon */}
         {isToday ? (
-          remaining ? <EmptyJarIcon /> : <FilledJarIcon />
+          remaining ? (
+            <EmptyJarIcon />
+          ) : (
+            <FilledJarIcon />
+          )
+        ) : // other days icon
+        isDisabled ? (
+          <DisabledJarIcon />
+        ) : isCompleted ? (
+          <FilledJarIcon />
         ) : (
-          // Render for other days based on isDisabled and isCompleted
-          isDisabled ? <DisabledJarIcon /> : isCompleted ? <FilledJarIcon /> : <EmptyJarIcon />
+          <EmptyJarIcon />
         )}
       </View>
     );
@@ -49,7 +57,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     justifyContent: "space-evenly",
-    alignItems: "center",
+    //alignItems: "center",
   },
   day: {
     alignItems: "center",
