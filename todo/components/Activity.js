@@ -233,8 +233,8 @@ export default function Activity() {
             </View>
           )}
         </View>
-
  {goalExists() && <WeekJars completedGoals={completedGoals} />}
+
 
         <View style={styles.container}>
           <View style={styles.dailyGoalContainer}>
@@ -400,7 +400,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     padding: 16,
-    alignItems: "center",
+    alignItems: "flex-start",
   },
   dateText: {
     fontSize: 20,
@@ -531,13 +531,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 
-  weekDayJarsContainer: {
-    flexDirection: "row",
-  },
-  weekDayJars: {
-    alignContent: "center",
-    justifyContent: "center",
-  },
-  weekDayJarsIcon: {},
-  weekDayJarsText: {},
 });

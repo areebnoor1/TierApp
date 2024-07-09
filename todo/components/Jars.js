@@ -7,6 +7,7 @@ import {
   Alert,
   Text,
   Pressable,
+  ScrollView,
 } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -277,7 +278,10 @@ export default function Jars() {
             <Ionicons name="add" size={30} color="black" />
           </TouchableOpacity>
         </View>
-        <Minutes />
+         <ScrollView style={styles.scroll}>
+            <Minutes />
+        </ScrollView>
+
         <AddTaskModal
           modalVisible={addModalVisible}
           setModalVisible={setAddModalVisible}
@@ -483,6 +487,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: 16,
     alignItems: "center",
+    backgroundColor: "white",
+
+     // paddingVertical: 8,
+      borderBottomWidth: 1,
+      borderBottomColor: "#EBEBEB",
+
   },
 
   activeText: {
@@ -491,5 +501,9 @@ const styles = StyleSheet.create({
   icon: {
     //padding: 10,
     // color: 'white',
+  },
+
+  scroll: {
+    marginBottom: 50,
   },
 });
