@@ -61,14 +61,13 @@ export default function App() {
   const [todos, setTodos] = useState([]);
   const [error, setError] = useState('');
   var [uid, setuid] = useState(null);
-  const [email, onChangeEmail] = React.useState("");
-  const [password, onChangePassword] = React.useState("");
+
   
  
 
   useEffect(() => {
-    //clearAsyncStorage();
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    
+   /* const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/auth.user
@@ -80,10 +79,10 @@ export default function App() {
         // User is signed out
         // ...
       }
-    });
+    });*/
     
       setTimeout(() => {
-        unsubscribe();
+        clearAsyncStorage();
       }, 2000);
      
     }, []);
@@ -99,21 +98,7 @@ export default function App() {
   };
 
 
-  const createUser = () => {
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        initializeStreak(user.uid)
-        //onChangeLoggedInUser(user.email);
-      })
-      .catch((error) => {
-        Alert.alert("", "Invalid username and/or password", [
-          { text: "OK" },
-        ]);
-        const errorCode = error.code;
-        const errorMessage = error.message;
-      });
-  };
+
 
   const clearAsyncStorage = async () => {
     try {
@@ -126,60 +111,15 @@ export default function App() {
 
 
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
 
 
   //Checking if firebase has been initialized
 
 
-  const login = () => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then(async (userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-      // onChangeLoggedInUser(user.email);
-        setIsLoggedIn(true)
-      })
-      .catch((error) => {
-        Alert.alert("", "Invalid username and/or password", [
-          { text: "OK" },
-        ]);
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorMessage)
-        
-      });
-  };
 
 
 
-  if (!isLoggedIn) {
-    
-    return (
-      <View style={styles.container}>
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangeEmail}
-          value={email}
-        ></TextInput>
-        <Text>Password</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangePassword}
-          value={password}
-          secureTextEntry={true}
-        ></TextInput>
-
-
-        <Button title="Sign Up!" onPress={() => {createUser()
-        }
-        } />
-        <Button title="Log in!" onPress={() => {login()
-       }
-        } />
-      </View>
-    );
-  } else {
     return (
 
       <TodoProvider>
@@ -189,7 +129,6 @@ export default function App() {
       </TodoProvider>
 
     );
-  }
 }
 
 const styles = StyleSheet.create({

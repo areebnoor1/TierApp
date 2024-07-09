@@ -3,9 +3,6 @@ import { createTodo, readTodos, deleteTodo, getTodos } from './TodosService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { loadLocalRawResource } from 'react-native-svg';
 import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
-import { onAuthStateChanged } from 'firebase/auth';
-import { getApp, app, auth, getAuth } from "./firebase";
-import { initializeStreak, setStreak, resetStreak, getStreak } from './streaks';
 
 
 const TODOS_KEY = 'todos';
@@ -14,7 +11,6 @@ const GOALS_KEY = 'goal';
 // Create a context for theme
 export const TodoContext = createContext(1);
 
-
 // Create a provider component
 export const TodoProvider = ({ children }) => {
   const [todos, setTodos] = useState([]);
@@ -22,55 +18,15 @@ export const TodoProvider = ({ children }) => {
   const [goal, setGoal] = useState({});
   const [currentDate, setCurrentDate] = useState(new Date());
 
-  const [user, setUser] = React.useState(null);
-  const [streak, setStreaks] = React.useState(0);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      if (currentUser) {
-    
-        getStreak(currentUser.uid)
-          .then(streak => {
-            if (streak !== null) {
-              setStreaks(streak);
-            }
-          })
-          .catch(error => {
-            console.error('Error fetching streak:', error);
-          });
-      }
-    });
-
-    setTimeout(() => {
-      unsubscribe();
-    }, 2000);
-  }, []);
-
-  useEffect(() => {
-    //run on day change even if user has the app open
-    getGoal()
-  }, [streak]);
-
   useEffect(() => {
     //run on day change even if user has the app open
     getGoal()
     removeTodosCompletedBeforeToday()
-
-
-
-
     const onDayChange = () => {
       console.log('Day changed!');
       removeTodosCompletedBeforeToday()
       // Add your code here to perform actions on day change
     };
-
-
-
-
-
-
 
     const intervalId = setInterval(() => {
       const now = new Date();
@@ -91,7 +47,7 @@ export const TodoProvider = ({ children }) => {
 
   const goalExists = () => {
     //console.log('goal', Object.keys(goal).length)
-    return Object.keys(goal).length <2 ? false : true
+    return Object.keys(goal).length === 0 ? false : true
   }
 
   const updateGoal = async (updatedGoal) => {
@@ -124,8 +80,6 @@ export const TodoProvider = ({ children }) => {
       //updateGoal({ streak: goal.streak + 1, last_day_completed: Date.now() })
       goal.streak = goal.streak + 1
       goal.last_day_completed = Date.now()
-      setStreak(user.uid, goal.streak)
-      
       //setGoal(goal)
       const jsonValue = JSON.stringify(goal);
 
@@ -134,7 +88,6 @@ export const TodoProvider = ({ children }) => {
     } else {
       // updateGoal({ streak: 1, last_day_completed: Date.now() })
       goal.streak = 1
-      setStreak(user.uid, goal.streak)
       goal.last_day_completed = Date.now()
       // setGoal(goal)
 
@@ -147,16 +100,7 @@ export const TodoProvider = ({ children }) => {
   const getGoal = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem(GOALS_KEY);
-      the_goal = jsonValue != null ? JSON.parse(jsonValue) : {}
-      
-      if(!('streak' in the_goal ) || the_goal.streak<streak){
-         the_goal.streak = streak
-    }else{
-      setStreak(user.uid, the_goal.streak)
-    }
-
-      setGoal(the_goal);
-
+      setGoal(jsonValue != null ? JSON.parse(jsonValue) : {});
     } catch (e) {
       console.error('Failed to fetch the todos from storage', e);
       return setGoal({});
