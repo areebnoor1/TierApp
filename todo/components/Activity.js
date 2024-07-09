@@ -25,6 +25,7 @@ import { TodoContext } from "./TodoContext";
 import { GoalContext } from "./DailyGoalContext";
 import { GoalProvider } from "./DailyGoalContext";
 import TodoListCompleted from "./TodoListCompleted";
+import WeekJars from "./ActivityScreen/WeekJars";
 
 export default function Activity() {
   const [currentDate, setCurrentDate] = useState("");
@@ -218,6 +219,8 @@ export default function Activity() {
                 ) : !hasRemainingTasks() &&
                   !isToday(goal.last_day_completed) ? (
                   <Text style={styles.streakNumber}>{goal.streak + 1}</Text>
+                ) : hasRemainingTasks() && isToday(goal.last_day_completed) ? (
+                  <Text style={styles.streakNumber}>{goal.streak - 1}</Text>
                 ) : (
                   <Text style={styles.streakNumber}>{goal.streak}</Text>
                 )}
@@ -227,6 +230,32 @@ export default function Activity() {
             </View>
           )}
         </View>
+
+        {goalExists() && (
+          <View>
+            {/* haven't finished daily goal today  */}
+            {hasRemainingTasks() && !isToday(goal.last_day_completed) ? (
+              <WeekJars
+                remaining={hasRemainingTasks()}
+                streakNumber={goal.streak}
+              />
+            ) : /* finished daily goal, but unchecked a task or added additional task, so have to
+              subtract 1 from streak */
+            hasRemainingTasks() && isToday(goal.last_day_completed) ? (
+              <WeekJars
+                remaining={hasRemainingTasks()}
+                streakNumber={goal.streak - 1}
+              />
+            ) : (
+              /* no remaining tasks-- they get credit for today*/
+              <WeekJars
+                remaining={hasRemainingTasks()}
+                streakNumber={goal.streak}
+              />
+            )}
+          </View>
+        )}
+
         <View style={styles.container}>
           <View style={styles.dailyGoalContainer}>
             <Text style={styles.summary}>Daily Goal</Text>
@@ -265,7 +294,7 @@ export default function Activity() {
           </View>
           {/* Summary Section */}
           <Text style={styles.summary}>Summary</Text>
-          {/* Replace the summary section with SummarySection */}
+
           <SummarySection
             completedToday={getCompletedToday()}
             dueToday={getDueToday()}
@@ -299,7 +328,7 @@ export default function Activity() {
                   viewOption === "week" && styles.activeTabText,
                 ]}
               >
-              Weekly Progress
+                Weekly Progress
               </Text>
               {/* Completed This Week*/}
             </TouchableOpacity>
@@ -390,7 +419,8 @@ const styles = StyleSheet.create({
   topBar: {
     flexDirection: "row",
     justifyContent: "space-between",
-    padding: 16,
+    //padding: 16,
+    paddingHorizontal: 16,
     alignItems: "center",
   },
   dateText: {

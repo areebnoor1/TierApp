@@ -28,7 +28,7 @@ import {
 import Entypo from "react-native-vector-icons/Entypo";
 import TodoList from "./TodoList";
 import EditTaskModal from "./EditTaskModal";
-import AddTaskModal from './HomeScreen/AddTaskModal';
+import AddTaskModal from "./HomeScreen/AddTaskModal";
 import { TodoContext } from "./TodoContext";
 import { createTodo, readTodos, updateTodo, deleteTodo } from "./TodosService";
 import { db } from "./firebase.js";
@@ -38,6 +38,7 @@ export default function Minutes() {
   const [modalVisible, setModalVisible] = useState(false);
   const [addModalVisible, setAddModalVisible] = useState(false);
   const [editingTask, setEditingTask] = useState({});
+  const [viewOption, setViewOption] = useState("all");
 
   const { todos, addTodo, removeTodo, toggleTodoCompleted } =
     useContext(TodoContext);
@@ -62,167 +63,341 @@ export default function Minutes() {
     return date >= firstDayOfWeek && date <= lastDayOfWeek;
   }
 
-
+  const getDueToday = (type) => {
+    const newArr = todos.filter(
+      (todo) =>
+        todo.task_type === type &&
+        todo.completed === false &&
+        todo.has_due_date === true &&
+        isToday(todo.due_date) === true
+    );
+    const amount = newArr.length;
+    return amount;
+  };
+  const getTodosDueThisWeek = (type) => {
+    const newArr = todos.filter(
+      (todo) =>
+        !todo.completed &&
+        todo.task_type === type &&
+        todo.has_due_date &&
+        isDateInThisWeek(new Date(todo.due_date))
+    );
+    return newArr.length;
+  };
   return (
-    <>
-      <TouchableOpacity style={styles.addTaskButton} onPress={() => setAddModalVisible(true)}>
-        <Ionicons name="add" size={30} color="black" />
-      </TouchableOpacity>
+    <View>
+      <View style={styles.screen}>
+        <View>
+          <View style={styles.minutesTaskTypeDisplay}>
+            <View style={styles.taskNumberContainers}>
+              <View
+                style={[
+                  styles.dayEllipse,
+                  viewOption === "all" && styles.activeEllipse,
+                  viewOption !== "all" && styles.inactiveEllipse,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.taskNumber,
+                    viewOption === "all" && styles.activeEllipseText,
+                    viewOption !== "all" && styles.inactiveEllipseText,
+                  ]}
+                >
+                  {
+                    todos.filter(
+                      (todo) =>
+                        todo.task_type === "minutes" && todo.completed === false
+                    ).length
+                  }
+                </Text>
+              </View>
 
-      <View style={styles.container}>
-        <ScrollView style={styles.scroll}>
-        <Text style={styles.summary}>Today</Text>
-          {todos
-            .filter((todo) => todo.task_type === "minutes" && isToday(todo.due_date))
-            .map(
-              (item) =>
-                !item.completed && (
-                  <TodoList
-                    text={item.text}
-                    key={item.key}
-                    the_key={item.key}
-                    todo={item}
-                    completed={item.completed}
-                    has_due_date={item.has_due_date}
-                    due_date={item.due_date}
-                    editMe={() => {
-                      setModalVisible(true);
-                      setEditingTask(item);
-                    }}
-                    setChecked={() => {
-                      handleToggleTodo(item.key);
-                    }}
-                    deleteTodo={() => removeTodo(item.key)}
-                  />
-                )
-            )}
-            <Text style={styles.summary}>This Week</Text>
-          {todos
-            .filter((todo) => todo.task_type === "minutes" && isDateInThisWeek(todo.due_date))
-            .map(
-              (item) =>
-                !item.completed && (
-                  <TodoList
-                    text={item.text}
-                    key={item.key}
-                    the_key={item.key}
-                    todo={item}
-                    completed={item.completed}
-                    has_due_date={item.has_due_date}
-                    due_date={item.due_date}
-                    editMe={() => {
-                      setModalVisible(true);
-                      setEditingTask(item);
-                    }}
-                    setChecked={() => {
-                      handleToggleTodo(item.key);
-                    }}
-                    deleteTodo={() => removeTodo(item.key)}
-                  />
-                )
-            )}
-            <Text style={styles.summary}>Other</Text>
-          {todos
-            .filter((todo) => todo.task_type === "minutes" && !isToday(todo.due_date) && !isDateInThisWeek(todo.due_date))
-            .map(
-              (item) =>
-                !item.completed && (
-                  <TodoList
-                    text={item.text}
-                    key={item.key}
-                    the_key={item.key}
-                    todo={item}
-                    completed={item.completed}
-                    has_due_date={item.has_due_date}
-                    due_date={item.due_date}
-                    editMe={() => {
-                      setModalVisible(true);
-                      setEditingTask(item);
-                    }}
-                    setChecked={() => {
-                      handleToggleTodo(item.key);
-                    }}
-                    deleteTodo={() => removeTodo(item.key)}
-                  />
-                )
-            )}
-        </ScrollView>
+              <View
+                style={[
+                  styles.dayEllipse,
+                  viewOption === "today" && styles.activeEllipse,
+                  viewOption !== "today" && styles.inactiveEllipse,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.taskNumber,
+                    viewOption === "today" && styles.activeEllipseText,
+                    viewOption !== "today" && styles.inactiveEllipseText,
+                  ]}
+                >
+                  {getDueToday("minutes")}
+                </Text>
+              </View>
 
-       
+              <View
+                style={[
+                  styles.dayEllipse,
+                  viewOption === "week" && styles.activeEllipse,
+                  viewOption !== "week" && styles.inactiveEllipse,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.taskNumber,
+                    viewOption === "week" && styles.activeEllipseText,
+                    viewOption !== "week" && styles.inactiveEllipseText,
+                  ]}
+                >
+                  {getTodosDueThisWeek("minutes")}
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+
+        <View style={styles.progressTabs}>
+          <TouchableOpacity
+            style={[styles.tab, viewOption === "all" && styles.activeTab]}
+            onPress={() => setViewOption("all")}
+          >
+            <Text
+              style={[
+                styles.tabText,
+                viewOption === "all" && styles.activeTabText,
+              ]}
+            >
+              All Tasks
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.tab, viewOption === "today" && styles.activeTab]}
+            onPress={() => setViewOption("today")}
+          >
+            <Text
+              style={[
+                styles.tabText,
+                viewOption === "today" && styles.activeTabText,
+              ]}
+            >
+              Today
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.tab, viewOption === "week" && styles.activeTab]}
+            onPress={() => setViewOption("week")}
+          >
+            <Text
+              style={[
+                styles.tabText,
+                viewOption === "week" && styles.activeTabText,
+              ]}
+            >
+              This Week
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.container}>
+          {viewOption === "all" && (
+            <>
+              {todos
+                .filter((todo) => todo.task_type === "minutes")
+                .map(
+                  (item) =>
+                    !item.completed && (
+                      <TodoList
+                        text={item.text}
+                        key={item.key}
+                        the_key={item.key}
+                        todo={item}
+                        completed={item.completed}
+                        has_due_date={item.has_due_date}
+                        due_date={item.due_date}
+                        editMe={() => {
+                          setModalVisible(true);
+                          setEditingTask(item);
+                        }}
+                        setChecked={() => {
+                          handleToggleTodo(item.key);
+                        }}
+                        deleteTodo={() => removeTodo(item.key)}
+                      />
+                    )
+                )}
+            </>
+          )}
+
+          {viewOption === "today" && (
+            <>
+              {todos
+                .filter(
+                  (todo) =>
+                    todo.task_type === "minutes" && isToday(todo.due_date)
+                )
+                .map(
+                  (item) =>
+                    !item.completed && (
+                      <TodoList
+                        text={item.text}
+                        key={item.key}
+                        the_key={item.key}
+                        todo={item}
+                        completed={item.completed}
+                        has_due_date={item.has_due_date}
+                        due_date={item.due_date}
+                        editMe={() => {
+                          setModalVisible(true);
+                          setEditingTask(item);
+                        }}
+                        setChecked={() => {
+                          handleToggleTodo(item.key);
+                        }}
+                        deleteTodo={() => removeTodo(item.key)}
+                      />
+                    )
+                )}
+            </>
+          )}
+
+          {viewOption === "week" && (
+            <>
+              {todos
+                .filter(
+                  (todo) =>
+                    todo.task_type === "minutes" &&
+                    isDateInThisWeek(todo.due_date)
+                )
+                .map(
+                  (item) =>
+                    !item.completed && (
+                      <TodoList
+                        text={item.text}
+                        key={item.key}
+                        the_key={item.key}
+                        todo={item}
+                        completed={item.completed}
+                        has_due_date={item.has_due_date}
+                        due_date={item.due_date}
+                        editMe={() => {
+                          setModalVisible(true);
+                          setEditingTask(item);
+                        }}
+                        setChecked={() => {
+                          handleToggleTodo(item.key);
+                        }}
+                        deleteTodo={() => removeTodo(item.key)}
+                      />
+                    )
+                )}
+            </>
+          )}
+        </View>
+
         <AddTaskModal
           modalVisible={addModalVisible}
           setModalVisible={setAddModalVisible}
-          inputTaskType={'minutes'}
-        //  todos = {todos.filter(todo => todo.completed===false)}
-        // setTodos = {setTodos}
+          inputTaskType={"minutes"}
+          //  todos = {todos.filter(todo => todo.completed===false)}
+          // setTodos = {setTodos}
         />
 
-        <EditTaskModal modalVisible={modalVisible} setModalVisible={setModalVisible} task={editingTask}
-
+        <EditTaskModal
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          task={editingTask}
         />
       </View>
-    </>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  scroll: {
-    //  width: '100%',
+  minutesTaskTypeDisplay: {
+    backgroundColor: "#FF5CF8",
+    borderWidth: 2,
+    borderColor: "black",
+    borderRadius: 20,
+    //marginBottom: 10,
+    //padding: 15,
+    alignItems: "center",
+  },
+  taskNumberContainers: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "100%",
+    padding: 10,
+  },
+  taskNumberContainer: {
+    alignItems: "center",
+  },
+  taskNumber: {
+    color: "black",
+    fontSize: 24,
+  },
+  dayEllipse: {
+    width: 46,
+    height: 46,
+    backgroundColor: "#F0F2F8",
+    borderRadius: 23,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  activeEllipse: {
+    width: 46,
+    height: 46,
+    backgroundColor: "black",
+    borderRadius: 23,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  activeEllipseText: {
+    color: "white",
+    fontSize: 24,
+  },
+  inactiveEllipseText: {
+    color: "black",
+    fontSize: 24,
+  },
+  inactiveEllipse: {
+    width: 46,
+    height: 46,
+    borderRadius: 23,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  screen: {
+    alignItems: "center",
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    flex: 1,
+    //  backgroundColor: "blue",
   },
   container: {
-    //flex: 1,
+    alignItems: "center",
+    flex: 1,
     // justifyContent: 'flex-start',
     //alignItems: 'center',
     //  backgroundColor: '#F5FCFF',
+    // paddingBottom:25,
+    //backgroundColor: "blue",
+    marginBottom: 20,
   },
-  summary: {
-    fontFamily: "Inter",
-    color: "#A5A5A5",
-    fontSize: 24,
-    marginLeft:20,
-    justifyContent: "flex-end",
-  },
-  header: {
-    marginTop: "15%",
-    fontSize: 20,
-    color: "red",
-    paddingBottom: 10,
-  },
-  textInputContainer: {
+  progressTabs: {
     flexDirection: "row",
-    alignItems: "baseline",
-    borderColor: "black",
-    borderBottomWidth: 1,
-    paddingRight: 10,
-    paddingBottom: 10,
+    justifyContent: "space-around",
+    marginVertical: 10,
+    //  paddingHorizontal: 16,
   },
-  text: {
-    fontSize: 40,
-    paddingTop: 70,
+  tab: {
+    paddingVertical: 5,
+    paddingHorizontal: 20,
+    borderRadius: 12,
   },
-  textInput: {
-    flex: 1,
-    height: 20,
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "black",
-    paddingLeft: 10,
-    minHeight: "3%",
+  activeTab: {
+    backgroundColor: "black",
   },
-  modalView: {
-    //margin: 20,
-    //borderRadius: 20,
-    //padding: 35,
-    // alignItems: 'center',
-    flex: 1,
-    //backgroundColor: 'transparent',
-    backgroundColor: "rgba(0,0,0,0.7)",
-    alignItems: "center",
-    justifyContent: "center",
+  tabText: {
+    fontSize: 16,
+    color: "#000",
   },
-  addTaskButton: {
-    position: "absolute",
-    top: 20,
-    right: 20,
+  activeTabText: {
+    color: "#fff",
   },
 });

@@ -10,19 +10,19 @@ import {
   Button,
   Modal,
 } from "react-native";
-import React, { useState, useEffec, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Entypo from "react-native-vector-icons/Entypo";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import ToDoApp from "./ToDoApp";
 import AddTask from "./AddTask";
 import TaskSelectionView from "./TaskSelectionView";
-import { createTodo, readTodos, updateTodo, deleteTodo } from './TodosService';
+import { createTodo, readTodos, updateTodo, deleteTodo } from "./TodosService";
 import AddTaskModal from "./HomeScreen/AddTaskModal";
 import TaskSelectionModal from "./HomeScreen/TaskSelectionModal";
 import CurrentTask from "./HomeScreen/CurrentTask";
 import NoTask from "./HomeScreen/NoTask";
-import  {TodoContext}  from './TodoContext';
+import { TodoContext } from "./TodoContext";
 
 const styles = StyleSheet.create({
   addButton: {
@@ -73,13 +73,21 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function HomePage({ navigation }) {
-  const [currentTask, setCurrentTask] = useState({});
+export default function HomePage({ navigation, route }) {
+  const [currentTask, setCurrentTask] = useState(
+    route.params?.currentTask || {}
+  );
   const [modalVisible, setModalVisible] = useState(false);
   const [inputTaskType, setInputTaskType] = useState("");
   const [taskSelectionVisible, setTaskSelectionVisible] = useState(false);
-  //const [todos, setTodos] = useState([]);
-  const { todos, addTodo, removeTodo, toggleTodoCompleted } = useContext(TodoContext);
+  const { todos, addTodo, removeTodo, toggleTodoCompleted } =
+    useContext(TodoContext);
+
+  useEffect(() => {
+    if (route.params?.currentTask) {
+      setCurrentTask(route.params.currentTask);
+    }
+  }, [route.params?.currentTask]);
 
   return (
     <View style={styles.screen}>
@@ -87,14 +95,11 @@ export default function HomePage({ navigation }) {
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         inputTaskType={inputTaskType}
-      //  todos = {todos.filter(todo => todo.completed===false)}
-       // setTodos = {setTodos}
       />
       <TaskSelectionModal
         taskSelectionVisible={taskSelectionVisible}
         setTaskSelectionVisible={setTaskSelectionVisible}
         setCurrentTask={setCurrentTask}
-      //  todos = {todos.filter(todo => todo.completed===false)}
       />
       {Object.keys(currentTask).length === 0 ? (
         <NoTask
@@ -102,7 +107,6 @@ export default function HomePage({ navigation }) {
           setModalVisible={setModalVisible}
           setCurrentTask={setCurrentTask}
           setInputTaskType={setInputTaskType}
-      //    todos = {todos.filter(todo => todo.completed===false)}
         />
       ) : (
         <CurrentTask

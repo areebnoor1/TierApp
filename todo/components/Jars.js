@@ -7,11 +7,12 @@ import {
   Alert,
   Text,
   Pressable,
+  ScrollView,
 } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Entypo from "react-native-vector-icons/Entypo";
-
+import AddTaskModal from "./HomeScreen/AddTaskModal";
 import Minutes from "./Minutes";
 import Days from "./Days";
 import Hours from "./Hours";
@@ -37,6 +38,7 @@ import { TodoContext } from "./TodoContext";
 import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry.js";
 
 export default function Jars() {
+  const [addModalVisible, setAddModalVisible] = useState(false);
   const [taskType, setTaskType] = useState("");
   //const [jar, setJar] = useState('');
   const [value, setValue] = useState("");
@@ -216,17 +218,12 @@ export default function Jars() {
                 size={24}
               />
             </View>
-            {/*  <Entypo name='calendar' style={[styles.icon, taskType === 'days' && styles.activeText]} size={40} />*/}
             <Text style={styles.label}>Days</Text>
             <Entypo name="chevron-right" style={styles.icon} size={30} />
           </TouchableOpacity>
           <View style={styles.daysTaskTypeDisplay}>
             <View style={styles.taskNumberContainers}>
               <View style={styles.taskNumberContainer}>
-                {/*            <View style={styles.dayEllipse}>
-                                <Text style={styles.taskNumber}>{todos.filter(todo => todo.task_type === 'days' && todo.completed === false).length}</Text>
-                            </View>
-                            <Text style={styles.taskText}>Tasks in jar</Text> */}
                 <View style={styles.inJarEllipse}>
                   <Text style={styles.inJarNumber}>
                     {
@@ -261,44 +258,90 @@ export default function Jars() {
   } else if (taskType === "minutes") {
     return (
       <View>
-        <View style={styles.topBar}>
-          <TouchableOpacity onPress={() => setTaskType("")}>
-            <Entypo name="chevron-left" size={30} />
+        <View style={styles.topBar2}>
+          <View style={styles.topBar}>
+            <TouchableOpacity onPress={() => setTaskType("")}>
+              <Entypo name="chevron-left" size={30} />
+            </TouchableOpacity>
+            <Text style={styles.buttonText}>Minutes Jar</Text>
+            <Text style={styles.buttonText}></Text>
+          </View>
+          <TouchableOpacity
+            style={styles.addTaskButton}
+            onPress={() => setAddModalVisible(true)}
+          >
+            <Ionicons name="add" size={30} color="black" />
           </TouchableOpacity>
-
-          <Text style={styles.buttonText}>Minutes Jar</Text>
-
-          <Text style={styles.buttonText}></Text>
         </View>
-        <Minutes />
+        <ScrollView style={styles.scroll}>
+          <Minutes />
+        </ScrollView>
+
+        <AddTaskModal
+          modalVisible={addModalVisible}
+          setModalVisible={setAddModalVisible}
+          inputTaskType={"minutes"}
+          //  todos = {todos.filter(todo => todo.completed===false)}
+          // setTodos = {setTodos}
+        />
       </View>
     );
   } else if (taskType === "hours") {
     return (
       <View>
-        <View style={styles.topBar}>
-          <TouchableOpacity onPress={() => setTaskType("")}>
-            <Entypo name="chevron-left" size={30} />
+        <View style={styles.topBar2}>
+          <View style={styles.topBar}>
+            <TouchableOpacity onPress={() => setTaskType("")}>
+              <Entypo name="chevron-left" size={30} />
+            </TouchableOpacity>
+            <Text style={styles.buttonText}>Hours Jar</Text>
+            <Text style={styles.buttonText}></Text>
+          </View>
+          <TouchableOpacity
+            style={styles.addTaskButton}
+            onPress={() => setAddModalVisible(true)}
+          >
+            <Ionicons name="add" size={30} color="black" />
           </TouchableOpacity>
-          <Text style={styles.buttonText}>Hours Jar</Text>
-          <Text style={styles.buttonText}></Text>
         </View>
-        <Hours />
+        <ScrollView style={styles.scroll}>
+          <Hours />
+        </ScrollView>
+
+        <AddTaskModal
+          modalVisible={addModalVisible}
+          setModalVisible={setAddModalVisible}
+          inputTaskType={"hours"}
+        />
       </View>
     );
   } else if (taskType === "days") {
     return (
       <View>
-        <View style={styles.topBar}>
-          <TouchableOpacity onPress={() => setTaskType("")}>
-            <Entypo name="chevron-left" size={30} />
+        <View style={styles.topBar2}>
+          <View style={styles.topBar}>
+            <TouchableOpacity onPress={() => setTaskType("")}>
+              <Entypo name="chevron-left" size={30} />
+            </TouchableOpacity>
+            <Text style={styles.buttonText}>Days Jar</Text>
+            <Text style={styles.buttonText}></Text>
+          </View>
+          <TouchableOpacity
+            style={styles.addTaskButton}
+            onPress={() => setAddModalVisible(true)}
+          >
+            <Ionicons name="add" size={30} color="black" />
           </TouchableOpacity>
-
-          <Text style={styles.buttonText}>Days Jar</Text>
-
-          <Text style={styles.buttonText}></Text>
         </View>
-        <Days />
+        <ScrollView style={styles.scroll}>
+          <Days />
+        </ScrollView>
+
+        <AddTaskModal
+          modalVisible={addModalVisible}
+          setModalVisible={setAddModalVisible}
+          inputTaskType={"days"}
+        />
       </View>
     );
   }
@@ -306,35 +349,25 @@ export default function Jars() {
 
 const styles = StyleSheet.create({
   screen: {
-    //flex: 1,
     backgroundColor: "#FFF",
     padding: 20,
-    //padding: 20,
     justifyContent: "space-between",
-  },
-  title: {
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "pink",
   },
   titleText: {
     fontSize: 30,
     fontWeight: "bold",
     color: "black",
     marginBottom: 24,
-    // color:"#A5A5A5",
   },
   iconBox: {
     borderRadius: 7,
     padding: 3,
-    //borderColor: "black",
     borderColor: "#D9D9D9",
     borderWidth: 1,
   },
   jarHeader: {
     flexDirection: "row",
     alignItems: "center",
-    //      marginLeft: 20,
   },
   label: {
     fontSize: 24,
@@ -344,12 +377,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   minutesTaskTypeDisplay: {
-    backgroundColor: "rgba(255, 38, 246, 0.75)",
+    backgroundColor: "#FF5CF8",
     borderWidth: 2,
     borderColor: "black",
     borderRadius: 20,
-    //marginBottom: 10,
-    //padding: 15,
     alignItems: "center",
   },
   hoursTaskTypeDisplay: {
@@ -357,8 +388,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "black",
     borderRadius: 20,
-    //marginBottom: 10,
-    //padding: 15,
     alignItems: "center",
   },
   daysTaskTypeDisplay: {
@@ -366,15 +395,11 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "black",
     borderRadius: 20,
-    //marginBottom: 10,
-    //padding: 15,
     alignItems: "center",
   },
-
   //holds the 3 circle info
   taskNumberContainers: {
     flexDirection: "row",
-    ///   alignItems: "space-between",
     justifyContent: "space-around",
     width: "100%",
     padding: 10,
@@ -386,7 +411,6 @@ const styles = StyleSheet.create({
   taskNumber: {
     color: "black",
     fontSize: 24,
-    //fontWeight: "bold",
   },
   taskText: {
     width: 70,
@@ -395,7 +419,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "bold",
     marginTop: 5,
-    //  fontSize: '50',
   },
   inJarEllipse: {
     width: 46,
@@ -418,57 +441,37 @@ const styles = StyleSheet.create({
     fontSize: 24,
     //z     fontWeight: "bold",
   },
-  minuteEllipse: {
-    width: 44,
-    height: 44,
-    backgroundColor: "rgba(255, 38, 246, 0.75)",
-    borderRadius: 22,
-    justifyContent: "center",
-    alignItems: "center",
-    //outline: AF1AA8
-  },
-  hourEllipse: {
-    width: 44,
-    height: 44,
-    backgroundColor: "#9D6AF0",
-    borderRadius: 22,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   dayEllipse: {
     width: 46,
     height: 46,
-    //outline?: "#7DA1FD",
     backgroundColor: "#F0F2F8",
     borderRadius: 23,
     justifyContent: "center",
     alignItems: "center",
   },
-
   buttonText: {
-    //     display: 'flex',
-    //     alignItems: 'center',
-    // gap: 6,
     fontSize: 24,
-    // marginTop: 12,
-    //  marginLeft: 8,
-    //   marginBottom: 5,
     fontWeight: "bold",
     fontFamily: "Poppins",
     textAlign: "center",
-    //color: 'white'
   },
   topBar: {
     flexDirection: "row",
-    //justifyContent: 'space-between',
-    padding: 16,
     alignItems: "flex-end",
+  },
+  topBar2: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 16,
+    alignItems: "center",
+    backgroundColor: "white",
+    borderBottomWidth: 1,
+    borderBottomColor: "#EBEBEB",
   },
   activeText: {
     color: "blue",
   },
-  icon: {
-    //padding: 10,
-    // color: 'white',
+  scroll: {
+    marginBottom: 50,
   },
 });
