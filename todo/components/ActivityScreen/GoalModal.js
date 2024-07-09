@@ -1,13 +1,11 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Modal,
   View,
   Text,
-  Button,
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import { GoalContext } from "../DailyGoalContext";
 import { AntDesign } from "@expo/vector-icons";
 
 export default function GoalModal({
@@ -20,8 +18,6 @@ export default function GoalModal({
   const [minutesGoal, setMinutesGoal] = useState("3");
   const [hoursGoal, setHoursGoal] = useState("1");
   const [daysGoal, setDaysGoal] = useState("1");
-
-  //const { goal, updateGoal } = useContext(GoalContext);
 
   useEffect(() => {
     if (initialMode === "edit" && initialGoals) {
@@ -55,160 +51,130 @@ export default function GoalModal({
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
           <TouchableOpacity onPress={onClose} style={styles.cancelButton}>
-            <Text style={styles.cancelText}>Cancel</Text>
+            <AntDesign name="close" size={24} color="black" />
           </TouchableOpacity>
-          <Text style={styles.title}>
+          <Text style={styles.goalTitle}>
             {initialMode === "set" ? "Set Daily Goal" : "Edit Daily Goal"}
           </Text>
-          <Text style={styles.goalTitle}>Tasks/Day</Text>
-
           <View style={styles.taskGoalContainer}>
-            <Text style={styles.taskText}>Minutes Tasks/Day</Text>
-            <View style={styles.taskCountContainer}>
-              <TouchableOpacity
-                onPress={() => decrementGoal(minutesGoal, setMinutesGoal)}
-                disabled={parseInt(minutesGoal) === 0}
-              >
-                <AntDesign
-                  name="minuscircle"
-                  size={44}
-                  color={parseInt(minutesGoal) === 0 ? "#ccc" : "black"}
-                />
-              </TouchableOpacity>
-              <Text style={styles.input}>{minutesGoal}</Text>
-              <TouchableOpacity
-                onPress={() => incrementGoal(minutesGoal, setMinutesGoal)}
-              >
-                <AntDesign name="pluscircle" size={44} color="black" />
-              </TouchableOpacity>
-            </View>
-
-            <Text style={styles.taskText}>Hours Tasks/Day</Text>
-            <View style={styles.taskCountContainer}>
-              <TouchableOpacity
-                onPress={() => decrementGoal(hoursGoal, setHoursGoal)}
-                disabled={parseInt(hoursGoal) === 0}
-              >
-                <AntDesign
-                  name="minuscircle"
-                  size={44}
-                  color={parseInt(hoursGoal) === 0 ? "#ccc" : "black"}
-                />
-              </TouchableOpacity>
-              <Text style={styles.input}>{hoursGoal}</Text>
-              <TouchableOpacity
-                onPress={() => incrementGoal(hoursGoal, setHoursGoal)}
-                disabled={parseInt(hoursGoal) === 24}
-              >
-                <AntDesign
-                  name="pluscircle"
-                  size={44}
-                  color={parseInt(hoursGoal) === 24 ? "#ccc" : "black"}
-                />
-              </TouchableOpacity>
-            </View>
-
-            <Text style={styles.taskText}>Days Tasks/Day</Text>
-            <View style={styles.taskCountContainer}>
-              <TouchableOpacity
-                onPress={() => decrementGoal(daysGoal, setDaysGoal)}
-                disabled={parseInt(daysGoal) === 0}
-              >
-                <AntDesign
-                  name="minuscircle"
-                  size={44}
-                  color={parseInt(daysGoal) === 0 ? "#ccc" : "black"}
-                />
-              </TouchableOpacity>
-              <Text style={styles.input}>{daysGoal}</Text>
-              <TouchableOpacity
-                onPress={() => incrementGoal(daysGoal, setDaysGoal)}
-                disabled={parseInt(daysGoal) === 24}
-              >
-                <AntDesign
-                  name="pluscircle"
-                  size={44}
-                  color={parseInt(daysGoal) === 24 ? "#ccc" : "black"}
-                />
-              </TouchableOpacity>
-            </View>
-
-            <TouchableOpacity onPress={handleSave} style={styles.button}>
-              <Text style={styles.buttonText}>Confirm</Text>
-            </TouchableOpacity>
+            {renderGoalInput(
+              "Minutes Tasks/Day",
+              minutesGoal,
+              setMinutesGoal,
+              incrementGoal,
+              decrementGoal
+            )}
+            {renderGoalInput(
+              "Hours Tasks/Day",
+              hoursGoal,
+              setHoursGoal,
+              incrementGoal,
+              decrementGoal
+            )}
+            {renderGoalInput(
+              "Days Tasks/Day",
+              daysGoal,
+              setDaysGoal,
+              incrementGoal,
+              decrementGoal
+            )}
           </View>
+          <TouchableOpacity onPress={handleSave} style={styles.button}>
+            <Text style={styles.buttonText}>Confirm</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </Modal>
   );
 }
 
+const renderGoalInput = (label, goal, setGoal, incrementGoal, decrementGoal) => (
+  <View style={styles.taskContainer}>
+    <Text style={styles.taskText}>{label}</Text>
+    <View style={styles.taskCountContainer}>
+      <TouchableOpacity
+        onPress={() => decrementGoal(goal, setGoal)}
+        disabled={parseInt(goal) === 0}
+      >
+        <AntDesign
+          name="minuscircle"
+          size={36}
+          color={parseInt(goal) === 0 ? "#ccc" : "black"}
+        />
+      </TouchableOpacity>
+      <Text style={styles.input}>{goal}</Text>
+      <TouchableOpacity onPress={() => incrementGoal(goal, setGoal)}>
+        <AntDesign name="pluscircle" size={36} color="black" />
+      </TouchableOpacity>
+    </View>
+  </View>
+);
+
 const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
-    justifyContent: "flex-end",
+    justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContent: {
-    width: "95%",
-    height: "95%",
-    backgroundColor: "#EBEBEB",
-    borderRadius: 10,
+    width: "90%",
+    backgroundColor: "white",
+    borderRadius: 20,
     padding: 20,
     alignItems: "center",
+    elevation: 5,
   },
   cancelButton: {
-    alignSelf: "flex-start",
-  },
-  cancelText: {
-    color: "black",
-  },
-  title: {
-    fontSize: 14,
-    marginBottom: 10,
+    alignSelf: "flex-end",
   },
   goalTitle: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 40,
-  },
-  taskText: {
-    fontSize: 20,
-    marginBottom: 10,
+    marginBottom: 20,
   },
   taskGoalContainer: {
+    width: "100%",
     alignItems: "center",
+    marginBottom: 20,
+  },
+  taskContainer: {
+    width: "100%",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  taskText: {
+    fontSize: 18,
+    marginBottom: 10,
   },
   taskCountContainer: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 35,
-    width: "90%",
+    width: "80%",
   },
   input: {
-    borderColor: "white",
+    borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 12,
-    backgroundColor: "white",
     padding: 10,
     textAlign: "center",
-    width: 100,
-    fontSize: 24,
+    width: 60,
+    fontSize: 18,
+    marginHorizontal: 10,
   },
   button: {
     alignItems: "center",
     justifyContent: "center",
     paddingVertical: 12,
-    paddingHorizontal: 100,
+    paddingHorizontal: 50,
     borderRadius: 16,
     backgroundColor: "black",
-    marginTop: 40,
   },
   buttonText: {
     fontSize: 16,
     fontWeight: "bold",
     color: "white",
   },
+
 });
