@@ -8,7 +8,9 @@ const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
 export default function WeekJars({ remaining, streakNumber }) {
   const today = new Date().getDay();
-{/*have to sub 1 from streak if got credit for today*/}
+  {
+    /*have to sub 1 from streak if got credit for today*/
+  }
   if (!remaining && streakNumber > 0) {
     streakNumber--;
   }
@@ -58,6 +60,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-evenly",
     //alignItems: "center",
+    paddingHorizontal: 16,
   },
   day: {
     alignItems: "center",
@@ -67,7 +70,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderColor: "black",
-    borderWidth: 2,
+    borderWidth: 1,
     borderRadius: 5,
     padding: 2,
   },
