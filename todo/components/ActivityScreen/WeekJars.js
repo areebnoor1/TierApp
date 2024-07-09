@@ -4,81 +4,61 @@ import FilledJarIcon from "../SVGicons/FilledJarIcon.js";
 import EmptyJarIcon from "../SVGicons/EmptyJarIcon.js";
 import DisabledJarIcon from "../SVGicons/DisabledJarIcon.js";
 
-export default function WeekJars({}) {
+const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+
+export default function WeekJars({ completedGoals }) {
+  const today = new Date().getDay();
+
+  const renderJar = (dayIndex) => {
+    const day = daysOfWeek[dayIndex];
+    const isToday = dayIndex === today;
+    const isCompleted = completedGoals.includes(dayIndex);
+    const isDisabled = dayIndex > today;
+
+    return (
+      <View key={day} style={isToday ? styles.today : styles.day}>
+        <Text style={isToday ? styles.todayText : styles.dayText}>{day}</Text>
+        {isDisabled ? (
+          <DisabledJarIcon />
+        ) : isCompleted ? (
+          <FilledJarIcon />
+        ) : (
+          <EmptyJarIcon />
+        )}
+      </View>
+    );
+  };
+
   return (
     <View style={styles.container}>
-      {/* export-- day of the week, and streak number. */}
-
-      <View style={styles.day}>
-        <Text>SUN</Text>
-        <EmptyJarIcon />
-        <FilledJarIcon />
-      </View>
-
-      <View style={styles.today}>
-        <Text style={{ fontWeight: "bold" }}>MON</Text>
-        <View style={{alignContent: "center"}}>
-        <EmptyJarIcon  />
-         <DisabledJarIcon />
-        </View>
-      </View>
-
-<View style={styles.day}>
-        <Text>TUE</Text>
-        <EmptyJarIcon />
-        <FilledJarIcon />
-      </View>
-
-      <View style={styles.day}>
-              <Text>WED</Text>
-              <EmptyJarIcon />
-              <FilledJarIcon />
-            </View>
-            <View style={styles.day}>
-                    <Text>THU</Text>
-                    <EmptyJarIcon />
-                    <FilledJarIcon />
-                  </View>
-              <View style={styles.day}>
-                          <Text>FRI</Text>
-                          <EmptyJarIcon />
-                          <FilledJarIcon />
-                        </View>
-                 <View style={styles.day}>
-                                <Text>SAT</Text>
-                                <EmptyJarIcon />
-                                <FilledJarIcon />
-                              </View>
-
+      {daysOfWeek.map((_, index) => renderJar(index))}
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     justifyContent: "space-evenly",
-    alignContent: "center",
-  //  backgroundColor: "blue",
-    //width: "80%",
-
+    alignItems: "center",
   },
-
   day: {
-    alignContent: "center",
+    alignItems: "center",
     justifyContent: "center",
-   // backgroundColor: "red",
-
   },
   today: {
-    alignContent: "center",
+    alignItems: "center",
     justifyContent: "center",
-    borderOutline: "black",
-    borderWidth: 1,
-  //  backgroundColor: "red",
-  padding: 2,
+    borderColor: "black",
+    borderWidth: 2,
+    borderRadius: 5,
+    padding: 2,
   },
-  jarIcon: {},
-  text: {
+  dayText: {
     fontSize: 14,
+  },
+  todayText: {
+    fontSize: 14,
+    fontWeight: "bold",
   },
 });

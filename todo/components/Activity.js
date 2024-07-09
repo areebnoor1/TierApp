@@ -29,6 +29,8 @@ import FilledJarIcon from "./SVGicons/FilledJarIcon.js";
 import EmptyJarIcon from "./SVGicons/EmptyJarIcon.js";
 import DisabledJarIcon from "./SVGicons/DisabledJarIcon.js";
 import WeekJars from "./ActivityScreen/WeekJars";
+
+
 export default function Activity() {
   const [currentDate, setCurrentDate] = useState("");
   const [goalModalVisible, setGoalModalVisible] = useState(false); // Add state for modal visibility
@@ -40,6 +42,7 @@ export default function Activity() {
     daysGoal: "1",
   }); // Add state for initial goals
 
+  const [completedGoals, setCompletedGoals] = useState([]);
   const [completedToday, setCompletedToday] = useState(0);
   const [dueToday, setDueToday] = useState(0);
   const [dueThisWeek, setDueThisWeek] = useState(0);
@@ -231,8 +234,7 @@ export default function Activity() {
           )}
         </View>
 
-
-        {goalExists() && <WeekJars />}
+ {goalExists() && <WeekJars completedGoals={completedGoals} />}
 
         <View style={styles.container}>
           <View style={styles.dailyGoalContainer}>
