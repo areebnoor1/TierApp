@@ -32,6 +32,7 @@ import WeekJars from "./ActivityScreen/WeekJars";
 
 
 export default function Activity() {
+
   const [currentDate, setCurrentDate] = useState("");
   const [goalModalVisible, setGoalModalVisible] = useState(false); // Add state for modal visibility
   //const [goalMode, setGoalMode] = useState("set"); // Add state for goal mode
@@ -42,7 +43,6 @@ export default function Activity() {
     daysGoal: "1",
   }); // Add state for initial goals
 
-  const [completedGoals, setCompletedGoals] = useState([]);
   const [completedToday, setCompletedToday] = useState(0);
   const [dueToday, setDueToday] = useState(0);
   const [dueThisWeek, setDueThisWeek] = useState(0);
@@ -148,6 +148,7 @@ export default function Activity() {
     );
   };
 
+
   const hasRemainingTasks = () => {
     // console.log('check remaining')
     if (
@@ -234,7 +235,12 @@ export default function Activity() {
           )}
         </View>
 
- {goalExists() && <WeekJars completedGoals={completedGoals} />}
+ {goalExists && <WeekJars
+                  remaining={hasRemainingTasks()}
+                    streakNumber={goal.streak}
+                     />
+                     }
+
 
         <View style={styles.container}>
           <View style={styles.dailyGoalContainer}>

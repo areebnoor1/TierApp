@@ -6,24 +6,33 @@ import DisabledJarIcon from "../SVGicons/DisabledJarIcon.js";
 
 const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
-export default function WeekJars({ completedGoals }) {
+export default function WeekJars({ remaining, streakNumber}) {
   const today = new Date().getDay();
 
+   if (!remaining && streakNumber > 0) {
+       streakNumber--;
+     }
+
+console.log("Streak Number" + streakNumber);
   const renderJar = (dayIndex) => {
     const day = daysOfWeek[dayIndex];
     const isToday = dayIndex === today;
-    const isCompleted = completedGoals.includes(dayIndex);
     const isDisabled = dayIndex > today;
+    const isCompleted = dayIndex >= today - streakNumber;
+   // const isCompleted = !hasRemainingTasks && dayIndex < today;
+console.log(remaining);
 
+console.log(remaining);
     return (
       <View key={day} style={isToday ? styles.today : styles.day}>
         <Text style={isToday ? styles.todayText : styles.dayText}>{day}</Text>
-        {isDisabled ? (
-          <DisabledJarIcon />
-        ) : isCompleted ? (
-          <FilledJarIcon />
+
+        {/* Conditionally render jar icon based on whether it's today */}
+        {isToday ? (
+          remaining ? <EmptyJarIcon /> : <FilledJarIcon />
         ) : (
-          <EmptyJarIcon />
+          // Render for other days based on isDisabled and isCompleted
+          isDisabled ? <DisabledJarIcon /> : isCompleted ? <FilledJarIcon /> : <EmptyJarIcon />
         )}
       </View>
     );
