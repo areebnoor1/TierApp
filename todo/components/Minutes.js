@@ -87,16 +87,6 @@ export default function Minutes() {
   return (
     <View>
       <View style={styles.screen}>
-        {/* <TouchableOpacity
-        style={styles.addTaskButton}
-        onPress={() => setAddModalVisible(true)}
-      >
-        <Ionicons name="add" size={30} color="black" />
-      </TouchableOpacity> 
-      
-        <View style={{ paddingHorizontal: 16 }}>
-      */}
-
         <View>
           <View style={styles.minutesTaskTypeDisplay}>
             <View style={styles.taskNumberContainers}>
@@ -205,7 +195,6 @@ export default function Minutes() {
         </View>
 
         <View style={styles.container}>
-          {/*   <ScrollView style={styles.scroll}>  */}
           {viewOption === "all" && (
             <>
               {todos
@@ -321,7 +310,7 @@ export default function Minutes() {
 
 const styles = StyleSheet.create({
   minutesTaskTypeDisplay: {
-    backgroundColor: "rgba(255, 38, 246, 0.75)",
+    backgroundColor: "#FF5CF8",
     borderWidth: 2,
     borderColor: "black",
     borderRadius: 20,
@@ -373,20 +362,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-
   screen: {
     alignItems: "center",
     paddingHorizontal: 16,
     paddingVertical: 10,
-    // justifyContent: 'flex-start',
-    //alignItems: 'center',
-    //  backgroundColor: '#F5FCFF',
-    // paddingBottom:25,
     flex: 1,
     //  backgroundColor: "blue",
   },
   container: {
-   // backgroundColor: "red",
     alignItems: "center",
     flex: 1,
     // justifyContent: 'flex-start',
@@ -395,53 +378,6 @@ const styles = StyleSheet.create({
     // paddingBottom:25,
     //backgroundColor: "blue",
     marginBottom: 20,
-  },
-  addTaskButton: {
-    position: "absolute",
-    top: 20,
-    right: 20,
-  },
-  addTaskButton: {
-    position: "absolute",
-    bottom: 20,
-    right: 20,
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: "#F8F8F8",
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: 1,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-
-  addTaskButton: {
-    // position: "absolute",
-
-    borderRadius: 30,
-    backgroundColor: "#F8F8F8",
-    justifyContent: "center",
-    alignItems: "center",
-
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    position: "absolute",
-    // bottom: 20,
-    marginTop: 20,
-    right: 20,
   },
   progressTabs: {
     flexDirection: "row",
@@ -455,13 +391,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   activeTab: {
-    backgroundColor: "#6200EE",
-    backgroundColor: "rgba(255, 38, 246, 0.75)",
-    backgroundColor: "#6200EE",
-    backgroundColor: "rgba(255, 38, 246, 0.75)",
     backgroundColor: "black",
-    //        borderRadius: 10,
-    //       paddingHorizontal: 10,
   },
   tabText: {
     fontSize: 16,

@@ -530,5 +530,4 @@ const styles = StyleSheet.create({
     fontFamily: "Inter",
     fontSize: 16,
   },
-
 });
