@@ -11,7 +11,7 @@ import {
 import React, { useState, useEffect, useContext } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Entypo from "react-native-vector-icons/Entypo";
-
+import AddTaskModal from "./HomeScreen/AddTaskModal";
 import Minutes from "./Minutes";
 import Days from "./Days";
 import Hours from "./Hours";
@@ -37,6 +37,7 @@ import { TodoContext } from "./TodoContext";
 import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry.js";
 
 export default function Jars() {
+  const [addModalVisible, setAddModalVisible] = useState(false);
   const [taskType, setTaskType] = useState("");
   //const [jar, setJar] = useState('');
   const [value, setValue] = useState("");
@@ -261,14 +262,29 @@ export default function Jars() {
   } else if (taskType === "minutes") {
     return (
       <View>
-        <View style={styles.topBar}>
-          <TouchableOpacity onPress={() => setTaskType("")}>
-            <Entypo name="chevron-left" size={30} />
+        <View style={styles.topBar2}>
+          <View style={styles.topBar}>
+            <TouchableOpacity onPress={() => setTaskType("")}>
+              <Entypo name="chevron-left" size={30} />
+            </TouchableOpacity>
+            <Text style={styles.buttonText}>Minutes Jar</Text>
+            <Text style={styles.buttonText}></Text>
+          </View>
+          <TouchableOpacity
+            style={styles.addTaskButton}
+            onPress={() => setAddModalVisible(true)}
+          >
+            <Ionicons name="add" size={30} color="black" />
           </TouchableOpacity>
-          <Text style={styles.buttonText}>Minutes Jar</Text>
-          <Text style={styles.buttonText}></Text>
         </View>
         <Minutes />
+        <AddTaskModal
+          modalVisible={addModalVisible}
+          setModalVisible={setAddModalVisible}
+          inputTaskType={"minutes"}
+          //  todos = {todos.filter(todo => todo.completed===false)}
+          // setTodos = {setTodos}
+        />
       </View>
     );
   } else if (taskType === "hours") {
@@ -459,9 +475,16 @@ const styles = StyleSheet.create({
   topBar: {
     flexDirection: "row",
     //justifyContent: 'space-between',
-    padding: 16,
+    //  padding: 16,
     alignItems: "flex-end",
   },
+  topBar2: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 16,
+    alignItems: "center",
+  },
+
   activeText: {
     color: "blue",
   },
