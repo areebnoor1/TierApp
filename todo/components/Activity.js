@@ -25,9 +25,6 @@ import { TodoContext } from "./TodoContext";
 import { GoalContext } from "./DailyGoalContext";
 import { GoalProvider } from "./DailyGoalContext";
 import TodoListCompleted from "./TodoListCompleted";
-import FilledJarIcon from "./SVGicons/FilledJarIcon.js";
-import EmptyJarIcon from "./SVGicons/EmptyJarIcon.js";
-import DisabledJarIcon from "./SVGicons/DisabledJarIcon.js";
 import WeekJars from "./ActivityScreen/WeekJars";
 
 
@@ -42,7 +39,6 @@ export default function Activity() {
     daysGoal: "1",
   }); // Add state for initial goals
 
-  const [completedGoals, setCompletedGoals] = useState([]);
   const [completedToday, setCompletedToday] = useState(0);
   const [dueToday, setDueToday] = useState(0);
   const [dueThisWeek, setDueThisWeek] = useState(0);
@@ -224,6 +220,8 @@ export default function Activity() {
                 ) : !hasRemainingTasks() &&
                   !isToday(goal.last_day_completed) ? (
                   <Text style={styles.streakNumber}>{goal.streak + 1}</Text>
+                ) : hasRemainingTasks() && isToday(goal.last_day_completed) ? (
+                  <Text style={styles.streakNumber}>{goal.streak - 1}</Text>
                 ) : (
                   <Text style={styles.streakNumber}>{goal.streak}</Text>
                 )}
@@ -233,7 +231,31 @@ export default function Activity() {
             </View>
           )}
         </View>
- {goalExists() && <WeekJars completedGoals={completedGoals} />}
+
+        {goalExists() && (
+          <View>
+            {/* haven't finished daily goal today  */}
+            {hasRemainingTasks() && !isToday(goal.last_day_completed) ? (
+              <WeekJars
+                remaining={hasRemainingTasks()}
+                streakNumber={goal.streak}
+              />
+            ) : /* finished daily goal, but unchecked a task or added additional task, so have to
+              subtract 1 from streak */
+            hasRemainingTasks() && isToday(goal.last_day_completed) ? (
+              <WeekJars
+                remaining={hasRemainingTasks()}
+                streakNumber={goal.streak - 1}
+              />
+            ) : (
+              /* no remaining tasks-- they get credit for today*/
+              <WeekJars
+                remaining={hasRemainingTasks()}
+                streakNumber={goal.streak}
+              />
+            )}
+          </View>
+        )}
 
 
         <View style={styles.container}>
@@ -399,8 +421,9 @@ const styles = StyleSheet.create({
   topBar: {
     flexDirection: "row",
     justifyContent: "space-between",
-    padding: 16,
-    alignItems: "flex-start",
+    //padding: 16,
+    paddingHorizontal: 16,
+    alignItems: "center",
   },
   dateText: {
     fontSize: 20,
