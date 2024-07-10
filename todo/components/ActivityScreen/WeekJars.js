@@ -8,11 +8,12 @@ const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
 export default function WeekJars({ remaining, streakNumber }) {
   const today = new Date().getDay();
+  console.log(remaining);
 {/*have to sub 1 from streak if got credit for today*/}
-  if (!remaining && streakNumber > 0) {
+ /* if (!remaining) {
     streakNumber--;
   }
-
+*/
   console.log("Streak Number" + streakNumber);
   const renderJar = (dayIndex) => {
     const day = daysOfWeek[dayIndex];
