@@ -80,55 +80,50 @@ export default function NoTask({
 
   const minutesProgress = () => {
     const remaining = minutesTasksLeft();
-    const progress = 0.6 * (1 - remaining / goal.minutes_tasks) + 0.25;
+    const progress =
+      goal.minutes_tasks === 0
+        ? 1
+        : 0.6 * (1 - remaining / goal.minutes_tasks) + 0.25;
     return isNaN(progress) ? 0 : progress;
   };
 
   const hoursTasksLeft = () => {
-    //og(goal);
     let remaining =
       goal.hours_tasks -
       todos.filter(
         (todo) => todo.completed === true && todo.task_type === "hours"
       ).length;
-    if (remaining !== 0) {
-      return remaining;
-    } else {
-      return 0;
-    }
+    return Math.max(remaining, 0); // Ensure it doesn't go below 0
   };
 
   const hoursProgress = () => {
-   // console.log('remianin', hoursTasksLeft())
-   // console.log('goal', goal.hours_tasks)
-    let prog = 0.6*(1- hoursTasksLeft() / goal.hours_tasks)+0.25
-   // console.log('prog',prog)
-    if(isNaN(prog)){
-    return 0
-    }
-    return prog;
+    const remaining = hoursTasksLeft();
+    const progress =
+      goal.hours_tasks === 0
+        ? 1
+        : 0.6 * (1 - remaining / goal.hours_tasks) + 0.25;
+    return isNaN(progress) ? 0 : progress;
   };
 
   const daysTasksLeft = () => {
-    return (
+    let remaining =
       goal.days_tasks -
       todos.filter(
         (todo) =>
           todo.task_type === "days" &&
           (todo.completed === true ||
             isToday(todo.most_recent_day_made_progress))
-      ).length
-    );
+      ).length;
+    return Math.max(remaining, 0); // Ensure it doesn't go below 0
   };
+
   const daysProgress = () => {
-    //console.log('remianin', daysTasksLeft())
-   // console.log('goal', goal.days_tasks)
-    let prog = 0.6*(1- daysTasksLeft() / goal.days_tasks)+0.25
-    //console.log('prog',prog)
-    if(isNaN(prog)){
-    return 0
-    }
-    return prog;
+    const remaining = daysTasksLeft();
+    const progress =
+      goal.days_tasks === 0
+        ? 1
+        : 0.6 * (1 - remaining / goal.days_tasks) + 0.25;
+    return isNaN(progress) ? 0 : progress;
   };
 
   const capitalizeFirstLetter = (string) => {
@@ -158,7 +153,7 @@ export default function NoTask({
               if (checkTodosExist("minutes") === null) {
                 return;
               }
-            //  console.log(minutesProgress())
+              //  console.log(minutesProgress())
               openJarModal("minutes");
             }}
             style={({ pressed }) => [
