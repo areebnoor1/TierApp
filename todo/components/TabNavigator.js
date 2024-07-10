@@ -30,12 +30,14 @@ export default function TabNavigator() {
       <Tab.Screen
         name="Home"
         options={{
-          tabBarIcon: ({ focused }) =>
-            focused ? (
-              <Ionicons name="home" style={styles.icon} size={30} />
-            ) : (
-              <Ionicons name="home-outline" size={30} color="black" />
-            ),
+          tabBarIcon: ({ focused }) => (
+            <Ionicons
+              name={focused ? "home" : "home-outline"}
+              style={styles.icon}
+              size={30}
+              color="black"
+            />
+          ),
           tabBarLabel: ({ focused }) => (
             <Text style={[styles.label, focused && styles.boldLabel]}>
               Home
@@ -50,9 +52,9 @@ export default function TabNavigator() {
         options={{
           tabBarIcon: ({ focused }) =>
             focused ? (
-              <ActiveJar color="black" />
+              <ActiveJar style={styles.icon} color="black" />
             ) : (
-              <InactiveJar color="black" />
+              <InactiveJar style={styles.icon} color="black" />
             ),
           tabBarLabel: ({ focused }) => (
             <Text style={[styles.label, focused && styles.boldLabel]}>
@@ -65,17 +67,22 @@ export default function TabNavigator() {
         name="Activity"
         component={Activity}
         options={{
-          tabBarIcon: () => (
-            <MaterialIcons
-              name="playlist-add-check"
-              style={styles.icon}
-              size={30}
-            />
-          ),
+           tabBarIcon: ({ focused }) =>
+           focused ? (
+           <MaterialIcons name="playlist-add-check-circle" size={40} color="black" />
+                 ) : (
+                 <MaterialIcons
+                               name="playlist-add-check"
+                               style={styles.icon}
+                               size={30}
+                               color="black"
+                             />
+                             ),
           tabBarLabel: ({ focused }) => (
             <Text style={[styles.label, focused && styles.boldLabel]}>
               Activity
             </Text>
+
           ),
         }}
       />
@@ -83,12 +90,14 @@ export default function TabNavigator() {
         name="Settings"
         component={SettingsScreen}
         options={{
-          tabBarIcon: ({ focused }) =>
-            focused ? (
-              <Ionicons name="settings" style={styles.icon} size={30} />
-            ) : (
-              <Ionicons name="settings-outline" size={30} color="black" />
-            ),
+          tabBarIcon: ({ focused }) => (
+            <Ionicons
+              name={focused ? "settings" : "settings-outline"}
+              style={styles.icon}
+              size={30}
+              color="black"
+            />
+          ),
           tabBarLabel: ({ focused }) => (
             <Text style={[styles.label, focused && styles.boldLabel]}>
               Settings
