@@ -252,6 +252,7 @@ export default function Activity() {
                 remaining={hasRemainingTasks()}
                 streakNumber={goal.streak}
               />
+
             )}
           </View>
         )}

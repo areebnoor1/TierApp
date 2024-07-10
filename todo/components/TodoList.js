@@ -4,7 +4,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { TodoContext } from "./TodoContext";
 import { format } from "date-fns";
 import { Ionicons } from "@expo/vector-icons";
-import StartTask from "./StartTask"; // Import StartTask modal component
+import StartTask from "./StartTask";
 
 export default function TodoList(props) {
   const { toggleTodoCompleted } = useContext(TodoContext);
@@ -19,7 +19,8 @@ export default function TodoList(props) {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={handleTaskPress}>
+
         <View
           style={
             props.todo.task_type === "minutes"
