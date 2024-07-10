@@ -98,7 +98,7 @@ export default function Minutes() {
             )}
             <Text style={styles.summary}>This Week</Text>
           {todos
-            .filter((todo) => todo.task_type === "minutes" && isDateInThisWeek(todo.due_date))
+            .filter((todo) => todo.task_type === "minutes" && isDateInThisWeek(new Date(todo.due_date)))
             .map(
               (item) =>
                 !item.completed && (
@@ -123,7 +123,7 @@ export default function Minutes() {
             )}
             <Text style={styles.summary}>Other</Text>
           {todos
-            .filter((todo) => todo.task_type === "minutes" && !isToday(todo.due_date) && !isDateInThisWeek(todo.due_date))
+            .filter((todo) => todo.task_type === "minutes" && !isToday(todo.due_date) && !isDateInThisWeek(new Date(todo.due_date)))
             .map(
               (item) =>
                 !item.completed && (

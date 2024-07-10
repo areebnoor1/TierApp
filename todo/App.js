@@ -81,9 +81,7 @@ export default function App() {
       }
     });*/
     
-      setTimeout(() => {
-        clearAsyncStorage();
-      }, 2000);
+     // setTimeout(() => { clearAsyncStorage();  }, 2000);
      
     }, []);
   const firebaseConfig = {

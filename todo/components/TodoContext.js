@@ -189,18 +189,18 @@ export const TodoProvider = ({ children }) => {
 
   const removeTodosCompletedBeforeToday = async () => {
     try {
-      const get_jsonValue = await AsyncStorage.getItem(TODOS_KEY);
-      the_todos = get_jsonValue != null ? JSON.parse(get_jsonValue) : [];
-      const newTodos = the_todos.filter(todo => !(todo.completed && beforeToday(new Date(todo.completion_date))));
+      var get_jsonValue = await AsyncStorage.getItem(TODOS_KEY);
+      var the_todos = get_jsonValue != null ? JSON.parse(get_jsonValue) : [];
+      var newTodos = the_todos.filter(todo => !(todo.completed && beforeToday(new Date(todo.completion_date))));
 
-      const get_jsonValue2 = await AsyncStorage.getItem(COMPLETED_KEY);
-      prev_completed = get_jsonValue2 != null ? JSON.parse(get_jsonValue2) : [];
+      var  get_jsonValue2 = await AsyncStorage.getItem(COMPLETED_KEY);
+      var prev_completed = get_jsonValue2 != null ? JSON.parse(get_jsonValue2) : [];
       //drop last week's
-      new_completed = prev_completed.filter(todo => todo.completed && isDateInThisWeek(new Date(todo.completion_date)));
-      toThisWeek = the_todos.filter(todo => todo.completed && beforeToday(new Date(todo.completion_date)));
-      final_completed = new_completed.concat(toThisWeek)
+      var new_completed = prev_completed.filter(todo => todo.completed && isDateInThisWeek(new Date(todo.completion_date)));
+      var toThisWeek = the_todos.filter(todo => todo.completed && beforeToday(new Date(todo.completion_date)));
+      var final_completed = new_completed.concat(toThisWeek)
 
-      const jsonValue1 = JSON.stringify(final_completed);
+      var jsonValue1 = JSON.stringify(final_completed);
       await AsyncStorage.setItem(COMPLETED_KEY, jsonValue1);
       setCompletedThisWeek(final_completed)
 
@@ -215,15 +215,16 @@ export const TodoProvider = ({ children }) => {
           return b.importance - a.importance;
         }
         // Compare due_date (earlier due date first)
-        const dateA = new Date(a.due_date);
-        const dateB = new Date(b.due_date);
+         var dateA = new Date(a.due_date);
+         var dateB = new Date(b.due_date);
 
         return dateA - dateB;
       });
 
 
-      const jsonValue = JSON.stringify(newTodos);
+      var jsonValue = JSON.stringify(newTodos);
       await AsyncStorage.setItem(TODOS_KEY, jsonValue);
+      console.log('new Todos', newTodos)
       setTodos(newTodos)
     } catch (e) {
       console.error('Failed to remove todos completed before today', e);
@@ -254,6 +255,7 @@ export const TodoProvider = ({ children }) => {
       )
       const jsonValue = JSON.stringify(new_todos);
       setTodos(new_todos)
+      console.log('edited', new_todos)
       await AsyncStorage.setItem(TODOS_KEY, jsonValue);
     } catch (e) {
       console.error('Failed to update the todo in storage', e);
