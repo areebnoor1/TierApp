@@ -65,7 +65,7 @@ export default function TabNavigator() {
         options={{
 
         tabBarIcon: ({ focused, color }) => (
-                    focused ?  <Ionicons name="home" style={styles.icon} size={30} /> : <Ionicons name="home-outline" size={30} color="black" />
+             focused ?  <Ionicons name="home" style={styles.icon} size={30} /> : <Ionicons name="home-outline" size={30} color="black" />
         ),
         }}
         component={HomePage}
@@ -74,11 +74,9 @@ export default function TabNavigator() {
         name="Jars"
         component={Jars}
         options={{
-
         tabBarIcon: ({ focused, color }) => (
           focused ? <ActiveJar color="black" /> : <InactiveJar color="black" />
         ),
-
         }}
       />
 
@@ -96,8 +94,17 @@ export default function TabNavigator() {
         }}
       />
 
-      {/* <Tab.Screen name='Settings' component={SettingsScreen} options={{ tabBarIcon: () => (<Feather name='settings' style={styles.icon} size={30} />) }} />*/}
-    </Tab.Navigator>
+      <Tab.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={{
+        tabBarIcon: ({ focused, color }) => (
+            focused ?  <Ionicons name="settings" style={styles.icon} size={30} /> : <Ionicons name="settings-outline" size={30} color="black" />
+        ),
+        }}
+      />
+   {/*    <Tab.Screen name='Settings' component={SettingsScreen} options={{ tabBarIcon: () => (<Feather name='settings' style={styles.icon} size={30} />) }} /> */}
+     </Tab.Navigator>
   );
 }
 
