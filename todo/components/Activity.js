@@ -252,6 +252,7 @@ export default function Activity() {
                 remaining={hasRemainingTasks()}
                 streakNumber={goal.streak}
               />
+
             )}
           </View>
         )}
@@ -551,14 +552,4 @@ const styles = StyleSheet.create({
     fontFamily: "Inter",
     fontSize: 16,
   },
-
-  weekDayJarsContainer: {
-    flexDirection: "row",
-  },
-  weekDayJars: {
-    alignContent: "center",
-    justifyContent: "center",
-  },
-  weekDayJarsIcon: {},
-  weekDayJarsText: {},
 });

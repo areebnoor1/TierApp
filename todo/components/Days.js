@@ -85,119 +85,116 @@ export default function Days() {
     return newArr.length;
   };
   return (
-    <>
-      <TouchableOpacity
-        style={styles.addTaskButton}
-        onPress={() => setAddModalVisible(true)}
-      >
-        <Ionicons name="add" size={30} color="black" />
-      </TouchableOpacity>
-
- <View style={{ paddingHorizontal: 16 }}>
-        <View style={styles.daysTaskTypeDisplay}>
-          <View style={styles.taskNumberContainers}>
-
-            <View
-              style={[
-                styles.dayEllipse,
-                viewOption === "all" && styles.activeEllipse,
-                viewOption !== "all" && styles.inactiveEllipse,
-              ]}
-            >
-              <Text
+    <View>
+      <View style={styles.screen}>
+        <View>
+          <View style={styles.daysTaskTypeDisplay}>
+            <View style={styles.taskNumberContainers}>
+              <View
                 style={[
-                  styles.taskNumber,
-                  viewOption === "all" && styles.activeEllipseText,
-                  viewOption !== "all" && styles.inactiveEllipseText,
+                  styles.dayEllipse,
+                  viewOption === "all" && styles.activeEllipse,
+                  viewOption !== "all" && styles.inactiveEllipse,
                 ]}
               >
-                 {todos.filter((todo) => todo.task_type === "days" && todo.completed === false).length}
-              </Text>
-            </View>
+                <Text
+                  style={[
+                    styles.taskNumber,
+                    viewOption === "all" && styles.activeEllipseText,
+                    viewOption !== "all" && styles.inactiveEllipseText,
+                  ]}
+                >
+                  {
+                    todos.filter(
+                      (todo) =>
+                        todo.task_type === "days" && todo.completed === false
+                    ).length
+                  }
+                </Text>
+              </View>
 
-            <View
-              style={[
-                styles.dayEllipse,
-                viewOption === "today" && styles.activeEllipse,
-                viewOption !== "today" && styles.inactiveEllipse,
-              ]}
-            >
-              <Text
+              <View
                 style={[
-                  styles.taskNumber,
-                  viewOption === "today" && styles.activeEllipseText,
-                  viewOption !== "today" && styles.inactiveEllipseText,
+                  styles.dayEllipse,
+                  viewOption === "today" && styles.activeEllipse,
+                  viewOption !== "today" && styles.inactiveEllipse,
                 ]}
               >
-                {getDueToday("days")}
-              </Text>
-            </View>
+                <Text
+                  style={[
+                    styles.taskNumber,
+                    viewOption === "today" && styles.activeEllipseText,
+                    viewOption !== "today" && styles.inactiveEllipseText,
+                  ]}
+                >
+                  {getDueToday("days")}
+                </Text>
+              </View>
 
-            <View
-              style={[
-                styles.dayEllipse,
-                viewOption === "week" && styles.activeEllipse,
-                viewOption !== "week" && styles.inactiveEllipse,
-              ]}
-            >
-              <Text
+              <View
                 style={[
-                  styles.taskNumber,
-                  viewOption === "week" && styles.activeEllipseText,
-                  viewOption !== "week" && styles.inactiveEllipseText,
+                  styles.dayEllipse,
+                  viewOption === "week" && styles.activeEllipse,
+                  viewOption !== "week" && styles.inactiveEllipse,
                 ]}
               >
-                {getTodosDueThisWeek("days")}
-              </Text>
+                <Text
+                  style={[
+                    styles.taskNumber,
+                    viewOption === "week" && styles.activeEllipseText,
+                    viewOption !== "week" && styles.inactiveEllipseText,
+                  ]}
+                >
+                  {getTodosDueThisWeek("days")}
+                </Text>
+              </View>
             </View>
           </View>
         </View>
-      </View>
 
-      <View style={styles.progressTabs}>
-        <TouchableOpacity
-          style={[styles.tab, viewOption === "all" && styles.activeTab]}
-          onPress={() => setViewOption("all")}
-        >
-          <Text
-            style={[
-              styles.tabText,
-              viewOption === "all" && styles.activeTabText,
-            ]}
+        <View style={styles.progressTabs}>
+          <TouchableOpacity
+            style={[styles.tab, viewOption === "all" && styles.activeTab]}
+            onPress={() => setViewOption("all")}
           >
-            All Tasks
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.tab, viewOption === "today" && styles.activeTab]}
-          onPress={() => setViewOption("today")}
-        >
-          <Text
-            style={[
-              styles.tabText,
-              viewOption === "today" && styles.activeTabText,
-            ]}
+            <Text
+              style={[
+                styles.tabText,
+                viewOption === "all" && styles.activeTabText,
+              ]}
+            >
+              All Tasks
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.tab, viewOption === "today" && styles.activeTab]}
+            onPress={() => setViewOption("today")}
           >
-            Today
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.tab, viewOption === "week" && styles.activeTab]}
-          onPress={() => setViewOption("week")}
-        >
-          <Text
-            style={[
-              styles.tabText,
-              viewOption === "week" && styles.activeTabText,
-            ]}
+            <Text
+              style={[
+                styles.tabText,
+                viewOption === "today" && styles.activeTabText,
+              ]}
+            >
+              Today
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.tab, viewOption === "week" && styles.activeTab]}
+            onPress={() => setViewOption("week")}
           >
-            This Week
-          </Text>
-        </TouchableOpacity>
-      </View>
+            <Text
+              style={[
+                styles.tabText,
+                viewOption === "week" && styles.activeTabText,
+              ]}
+            >
+              This Week
+            </Text>
+          </TouchableOpacity>
+        </View>
 
-      <View style={styles.container}>
-        <ScrollView style={styles.scroll}>
+        <View style={styles.container}>
           {viewOption === "all" && (
             <>
               {todos
@@ -231,8 +228,7 @@ export default function Days() {
             <>
               {todos
                 .filter(
-                  (todo) =>
-                    todo.task_type === "days" && isToday(todo.due_date)
+                  (todo) => todo.task_type === "days" && isToday(todo.due_date)
                 )
                 .map(
                   (item) =>
@@ -264,8 +260,7 @@ export default function Days() {
               {todos
                 .filter(
                   (todo) =>
-                    todo.task_type === "hours" &&
-                    isDateInThisWeek(todo.due_date)
+                    todo.task_type === "days" && isDateInThisWeek(todo.due_date)
                 )
                 .map(
                   (item) =>
@@ -291,93 +286,33 @@ export default function Days() {
                 )}
             </>
           )}
-        </ScrollView>
-
-        <AddTaskModal
-          modalVisible={addModalVisible}
-          setModalVisible={setAddModalVisible}
-          inputTaskType={"days"}
-          //  todos = {todos.filter(todo => todo.completed===false)}
-          // setTodos = {setTodos}
-        />
-
-        <EditTaskModal
-          modalVisible={modalVisible}
-          setModalVisible={setModalVisible}
-          task={editingTask}
-        />
+        </View>
       </View>
-    </>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  scroll: {
-    //  width: '100%',
+  screen: {
+    alignItems: "center",
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    flex: 1,
+    //  backgroundColor: "blue",
   },
   container: {
-
-  alignItems: "center",
-    // justifyContent: 'flex-start',
-    //alignItems: 'center',
-    //  backgroundColor: '#F5FCFF',
-  },
-  summary: {
-    fontFamily: "Inter",
-    color: "#A5A5A5",
-    fontSize: 24,
-    marginLeft: 20,
-    justifyContent: "flex-end",
-  },
-  header: {
-    marginTop: "15%",
-    fontSize: 20,
-    color: "red",
-    paddingBottom: 10,
-  },
-  textInputContainer: {
-    flexDirection: "row",
-    alignItems: "baseline",
-    borderColor: "black",
-    borderBottomWidth: 1,
-    paddingRight: 10,
-    paddingBottom: 10,
+    alignItems: "center",
+    flex: 1,
+    marginBottom: 20,
   },
   text: {
     fontSize: 40,
     paddingTop: 70,
   },
-  textInput: {
-    flex: 1,
-    height: 20,
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "black",
-    paddingLeft: 10,
-    minHeight: "3%",
-  },
-  modalView: {
-    //margin: 20,
-    //borderRadius: 20,
-    //padding: 35,
-    // alignItems: 'center',
-    flex: 1,
-    //backgroundColor: 'transparent',
-    backgroundColor: "rgba(0,0,0,0.7)",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  addTaskButton: {
-    position: "absolute",
-    top: 20,
-    right: 20,
-  },
   progressTabs: {
     flexDirection: "row",
     justifyContent: "space-around",
     marginVertical: 10,
-    paddingHorizontal: 16,
-
   },
   tab: {
     paddingVertical: 5,
@@ -385,13 +320,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   activeTab: {
-    backgroundColor: "#6200EE",
-    backgroundColor: "rgba(255, 38, 246, 0.75)",
-    backgroundColor: "#6200EE",
-    backgroundColor: "rgba(255, 38, 246, 0.75)",
     backgroundColor: "black",
-    //        borderRadius: 10,
-    //       paddingHorizontal: 10,
   },
   tabText: {
     fontSize: 16,
@@ -400,7 +329,6 @@ const styles = StyleSheet.create({
   activeTabText: {
     color: "#fff",
   },
-
   daysTaskTypeDisplay: {
     backgroundColor: "#7DA1FD",
     borderWidth: 2,

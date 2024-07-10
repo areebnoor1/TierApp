@@ -8,23 +8,17 @@ const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
 export default function WeekJars({ remaining, streakNumber }) {
   const today = new Date().getDay();
-  {
-    /*have to sub 1 from streak if got credit for today*/
-  }
-  if (!remaining && streakNumber > 0) {
+{/*have to sub 1 from streak if got credit for today*/}
+ /* if (!remaining) {
     streakNumber--;
   }
-
-  console.log("Streak Number" + streakNumber);
+*/
   const renderJar = (dayIndex) => {
     const day = daysOfWeek[dayIndex];
     const isToday = dayIndex === today;
     const isDisabled = dayIndex > today;
     const isCompleted = dayIndex >= today - streakNumber;
     // const isCompleted = !hasRemainingTasks && dayIndex < today;
-    console.log(remaining);
-
-    console.log(remaining);
     return (
       <View key={day} style={isToday ? styles.today : styles.day}>
         <Text style={isToday ? styles.todayText : styles.dayText}>{day}</Text>
@@ -60,7 +54,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-evenly",
     //alignItems: "center",
-    paddingHorizontal: 16,
   },
   day: {
     alignItems: "center",
@@ -70,7 +63,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderColor: "black",
-    borderWidth: 1,
+    borderWidth: 2,
     borderRadius: 5,
     padding: 2,
   },
