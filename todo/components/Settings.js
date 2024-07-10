@@ -16,6 +16,7 @@ const SettingsScreen = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   const [bestStreak, setBestStreak] = useState(false)
+  const [isSignUp, setIsSignUp] = useState(false); // state to toggle between login and sign-up
 
   const {
     todos,
@@ -46,9 +47,6 @@ const SettingsScreen = () => {
     });
     return () => unsubscribe();
   }, []);
-
-
-
 
   const login = () => {
     signInWithEmailAndPassword(auth, email, password)
@@ -90,21 +88,19 @@ const SettingsScreen = () => {
     signOut(auth).then(() => {
       console.log("signed out!")
     }).catch((error) => {
-      // An error happened.
+      console.error("Error signing out: ", error);
     });
   }
 
-  
+
 
   if (user !== null) {
     if('streak' in goal && goal.streak > bestStreak){
       setStreak(user.uid, goal.streak)
-  
     }
     return (
       <View style={[styles.container]}>
         <View style={styles.settingsSection}>
-
           <View style={styles.settingItem}>
             <Icon name="person-outline" size={24} />
             <Text style={[styles.settingText]}>Account</Text>
@@ -135,27 +131,34 @@ const SettingsScreen = () => {
   } else {
     return (
       <View style={styles.container}>
+      <Text>TASKJARS</Text>
+            <Text>Want to save your streak?</Text>
+
         <TextInput
           style={styles.input}
           onChangeText={onChangeEmail}
           value={email}
+           placeholder="Email"
         ></TextInput>
-        <Text>Password</Text>
+
         <TextInput
           style={styles.input}
           onChangeText={onChangePassword}
           value={password}
           secureTextEntry={true}
+                 placeholder="Password"
         ></TextInput>
-        <Button title="Sign Up!" onPress={() => {
-          createUser()
-
-        }
-        } />
-        <Button title="Log in!" onPress={() => {
-          login()
-        }
-        } />
+                {isSignUp ? (
+                  <>
+                    <Button title="Sign Up" onPress={createUser} />
+                    <Button title="Already have an account? Log In" onPress={() => setIsSignUp(false)} />
+                  </>
+                ) : (
+                  <>
+                    <Button title="Log In" onPress={login} />
+                    <Button title="Don't have an account? Sign Up" onPress={() => setIsSignUp(true)} />
+                  </>
+                )}
       </View>
     );
   }
