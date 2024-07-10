@@ -382,6 +382,7 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderRadius: 20,
     alignItems: "center",
+     elevation: 2,
   },
   hoursTaskTypeDisplay: {
     backgroundColor: "#9D6AF0",
@@ -389,6 +390,7 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderRadius: 20,
     alignItems: "center",
+     elevation: 2,
   },
   daysTaskTypeDisplay: {
     backgroundColor: "#7DA1FD",
@@ -396,6 +398,7 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderRadius: 20,
     alignItems: "center",
+     elevation: 2,
   },
   //holds the 3 circle info
   taskNumberContainers: {
