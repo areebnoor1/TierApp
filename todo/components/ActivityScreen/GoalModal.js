@@ -49,6 +49,7 @@ export default function GoalModal({
   return (
     <Modal visible={visible} animationType="slide" transparent={true}>
       <View style={styles.modalContainer}>
+       <View style={styles.modalContent2}>
         <View style={styles.modalContent}>
           <TouchableOpacity onPress={onClose} style={styles.cancelButton}>
             <AntDesign name="close" size={24} color="black" />
@@ -83,6 +84,7 @@ export default function GoalModal({
             <Text style={styles.buttonText}>Confirm</Text>
           </TouchableOpacity>
         </View>
+          </View>
       </View>
     </Modal>
   );
@@ -116,6 +118,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
+
   },
   modalContent: {
     width: "90%",
@@ -126,7 +129,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   cancelButton: {
-    alignSelf: "flex-end",
+    alignSelf: "flex-start",
   },
   goalTitle: {
     fontSize: 24,
@@ -137,6 +140,11 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     marginBottom: 20,
+    //    borderTopWidth: 1,
+    //    borderBottomWidth: 1,
+        borderColor: "#f4f4f4",
+        paddingVertical: 15,
+        padding: 10,
   },
   taskContainer: {
     width: "100%",
@@ -154,7 +162,7 @@ const styles = StyleSheet.create({
     width: "80%",
   },
   input: {
-    borderColor: "#ccc",
+ //   borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 12,
     padding: 10,
@@ -162,6 +170,7 @@ const styles = StyleSheet.create({
     width: 60,
     fontSize: 18,
     marginHorizontal: 10,
+    backgroundColor: "#F6F6F6",
   },
   button: {
     alignItems: "center",
@@ -176,82 +185,105 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "white",
   },
+
   modalContainer: {
-      flex: 1,
-      justifyContent: "flex-end",
-      alignItems: "center",
-    //  backgroundColor: "rgba(0, 0, 0, 0.5)",
-    },
-    modalContent: {
-      width: "95%",
-      height: "95%",
-      backgroundColor: "#EBEBEB",
-      borderRadius: 10,
-      padding: 20,
-      alignItems: "center",
+       flex: 1,
+       justifyContent: "flex-end",
+       alignItems: "center",
+     //  backgroundColor: "rgba(0, 0, 0, 0.5)",
+     },
+     modalContent: {
+//flex: 1,
+       width: "95%",
+     //  height: "95%",
+       backgroundColor: "#EBEBEB",
+       borderRadius: 0,
+       padding: 20,
+       alignItems: "center",
 
-          width: "99%",
-          height: "99%",
-          elevation: 5,
-          borderRadius: 20,
-          backgroundColor: "white",
+           width: "100%",
+           height: "80%",
 
-    },
-    cancelButton: {
-      alignSelf: "flex-start",
-    },
-    cancelText: {
-      color: "black",
-    },
-    title: {
-      fontSize: 14,
-      marginBottom: 10,
-    },
-    goalTitle: {
-      fontSize: 24,
-      fontWeight: "bold",
-      marginBottom: 40,
-    },
-    taskText: {
-      fontSize: 20,
-      marginBottom: 10,
-    },
-    taskGoalContainer: {
-      alignItems: "center",
-    },
-    taskCountContainer: {
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "space-between",
-      marginBottom: 35,
-      width: "90%",
-    },
+           borderRadius: 20,
+           backgroundColor: "white",
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
 
-    input: {
-      borderColor: "white",
-      borderWidth: 1,
-      borderRadius: 12,
-      backgroundColor: "white",
-      backgroundColor: "#F6F6F6",
-      padding: 10,
-      textAlign: "center",
-      width: 100,
-      fontSize: 24,
-    },
+     },
+          modalContent2: {
+
+            width: "95%",
+            height: "95%",
+            backgroundColor: "#EBEBEB",
+            borderRadius: 10,
+           //padding: 20,
+            alignItems: "center",
+
+                width: "99%",
+                height: "99%",
+                elevation: 5,
+                borderRadius: 20,
+                backgroundColor: "white",
+backgroundColor: "#F6F6F6",
+          },
 /*
-    button: {
-      alignItems: "center",
-      justifyContent: "center",
-      paddingVertical: 12,
-      paddingHorizontal: 100,
-      borderRadius: 16,
-      backgroundColor: "black",
-      marginTop: 40,
-    }
-*/
-    buttonText: {
-      fontSize: 16,
-      fontWeight: "bold",
-      color: "white",
-    },
+     cancelText: {
+       color: "black",
+     },
+     title: {
+       fontSize: 14,
+       marginBottom: 10,
+     },
+     goalTitle: {
+       fontSize: 24,
+       fontWeight: "bold",
+       marginBottom: 40,
+     },
+     taskText: {
+       fontSize: 20,
+       marginBottom: 10,
+     },
+     taskGoalContainer: {
+       alignItems: "center",
+           borderTopWidth: 1,
+           borderBottomWidth: 1,
+           borderColor: "#f4f4f4",
+           padding: 10,
+     },
+     taskCountContainer: {
+       flexDirection: "row",
+       alignItems: "center",
+       justifyContent: "space-between",
+       marginBottom: 35,
+       width: "90%",
+     },
+
+     input: {
+       borderColor: "white",
+       borderWidth: 1,
+       borderRadius: 12,
+       backgroundColor: "white",
+       backgroundColor: "#F6F6F6",
+       padding: 10,
+       textAlign: "center",
+       width: 100,
+       fontSize: 24,
+     },
+ /*
+     button: {
+       alignItems: "center",
+       justifyContent: "center",
+       paddingVertical: 12,
+       paddingHorizontal: 100,
+       borderRadius: 16,
+       backgroundColor: "black",
+       marginTop: 40,
+     }
+ */
+     buttonText: {
+       fontSize: 16,
+       fontWeight: "bold",
+       color: "white",
+     },
+
 });
