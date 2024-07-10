@@ -168,9 +168,12 @@ const styles = StyleSheet.create({
     padding: 10,
     textAlign: "center",
     width: 60,
-    fontSize: 18,
+    width: "40%",
+    fontSize: 20,
     marginHorizontal: 10,
-    backgroundColor: "#F6F6F6",
+   backgroundColor: "#F6F6F6",
+ // backgroundColor: "black",
+ // color: "white",
   },
   button: {
     alignItems: "center",
@@ -178,12 +181,14 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 50,
     borderRadius: 16,
+    //backgroundColor: "black",
     backgroundColor: "black",
   },
   buttonText: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "white",
+   // color: "white",
+   color: "black",
   },
 
   modalContainer: {
