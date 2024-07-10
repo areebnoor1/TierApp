@@ -357,12 +357,23 @@ const styles = StyleSheet.create({
   jarContainer: {
     backgroundColor: "white",
     padding: 15,
-    elevation: 5,
+    elevation: 2,
     textAlign: "center",
     borderRadius: 10,
     alignItems: "center", // Center horizontally
     justifyContent: "center", // Center vertically
+    borderWidth: 2,
   },
+    jarContainer: {
+      backgroundColor: "white",
+      padding: 15,
+      elevation: 5,
+      textAlign: "center",
+      borderRadius: 10,
+      alignItems: "center", // Center horizontally
+      justifyContent: "center", // Center vertically
+    //  borderWidth: 2,
+    },
 
   jarText: {
     fontWeight: "bold",

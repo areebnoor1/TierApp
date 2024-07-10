@@ -67,10 +67,6 @@ export default function RandomTask({
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
 
-
-
-
-
           <TouchableOpacity onPress={closeModal} style={styles.closeModalIcon}>
             <Ionicons name="arrow-back-circle" size={30} color="black" />
           </TouchableOpacity>
@@ -131,11 +127,12 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     width: "100%",
   },
-  itemText: {
-    fontSize: 20,
-    textAlign: "center",
-    marginBottom: 20,
-  },
+     itemText: {
+       textAlignVertical: "top",
+       fontSize: 16,
+       padding: 10,
+       maxHeight: 150,
+     },
   iconsContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
