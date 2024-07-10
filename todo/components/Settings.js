@@ -120,9 +120,6 @@ const SettingsScreen = () => {
             <Text>
               Best Streak: {goal.streak > bestStreak ? goal.streak : bestStreak}
             </Text>
-            <Text>
-              Total tasks completed:
-            </Text>
             <Button
               title="Sign out"
 

@@ -79,7 +79,7 @@ export default function TabNavigator() {
       
         <Tab.Screen name='Activity' component={Activity} options={{ tabBarIcon: () => (<MaterialIcons name='playlist-add-check' style={styles.icon} size={30} />) }} />
        
-      <Tab.Screen name='Settings' component={SettingsScreen} options={{ tabBarIcon: () => (<Feather name='settings' style={styles.icon} size={30} />) }} />
+      <Tab.Screen name='Account' component={SettingsScreen} options={{ tabBarIcon: () => (<Feather name='settings' style={styles.icon} size={30} />) }} />
 
 
     </Tab.Navigator>
