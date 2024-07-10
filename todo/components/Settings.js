@@ -1,63 +1,164 @@
-import React, { useState } from 'react';
-import { View, Text, Switch, StyleSheet, Image, TextInput } from 'react-native';
+import React, { useState, useEffect, useContext, useLayoutEffect } from 'react';
+import { View, Text, Switch, StyleSheet, Image, TextInput, Button, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { getApp, app, auth, getAuth } from "./firebase";
+import { TodoContext } from "./TodoContext";
+//import { createUserWithEmailAndPassword, setPersistence, onAuthStateChanged, signOut } from "firebase/auth";
+import { initializeStreak, incrementStreak, resetStreak, getStreak, setStreak } from './streaks';
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, setPersistence, onAuthStateChanged, signOut, onChangeLoggedInUser } from "firebase/auth";
 
 const SettingsScreen = () => {
-  const [isDarkTheme, setIsDarkTheme] = useState(false);
-  const [isNotificationsEnabled, setIsNotificationsEnabled] = useState(true);
+  const [user, setUser] = React.useState(null);
+  //const [streak, setStreaks] = React.useState(0);
+  const [email, onChangeEmail] = React.useState("");
+  const [password, onChangePassword] = React.useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
-  const themeStyles = isDarkTheme ? darkStyles : lightStyles;
+  const [bestStreak, setBestStreak] = useState(false)
 
-  return (
-    <View style={[styles.container, themeStyles.container]}>
-      <View style={styles.profileSection}>
-        <Image
-          source={{ uri: 'https://via.placeholder.com/100' }}
-          style={styles.profileImage}
-        />
-        <Text style={[styles.profileName, themeStyles.text]}>John Doe</Text>
-        <Text style={[styles.profileEmail, themeStyles.text]}>john.doe@example.com</Text>
+  const {
+    todos,
+    addTodo,
+    removeTodo,
+    toggleTodoCompleted,
+    completedThisWeek,
+    goal,
+    goalExists,
+    updateGoal,
+    setCompleted,
+  } = useContext(TodoContext);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      if (currentUser) {
+        getStreak(currentUser.uid)
+          .then(streak => {
+            if (streak !== null) {
+                setBestStreak(streak);
+            }
+          })
+          .catch(error => {
+            console.error('Error fetching streak:', error);
+          });
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
+
+
+
+  const login = () => {
+    signInWithEmailAndPassword(auth, email, password)
+      .then(async (userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        // onChangeLoggedInUser(user.email);
+        setIsLoggedIn(true)
+      })
+      .catch((error) => {
+        Alert.alert("", "Invalid username and/or password", [
+          { text: "OK" },
+        ]);
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorMessage)
+
+      });
+  };
+
+  const createUser = () => {
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        initializeStreak(user.uid).then(
+          login())
+        //onChangeLoggedInUser(user.email);
+      })
+      .catch((error) => {
+        Alert.alert("", "Invalid username and/or password", [
+          { text: "OK" },
+        ]);
+        const errorCode = error.code;
+        const errorMessage = error.message;
+      });
+  };
+
+  const handleSignOut = () => {
+    signOut(auth).then(() => {
+      console.log("signed out!")
+    }).catch((error) => {
+      // An error happened.
+    });
+  }
+
+  
+
+  if (user !== null) {
+    if('streak' in goal && goal.streak > bestStreak){
+      setStreak(user.uid, goal.streak)
+  
+    }
+    return (
+      <View style={[styles.container]}>
+        <View style={styles.settingsSection}>
+
+          <View style={styles.settingItem}>
+            <Icon name="person-outline" size={24} />
+            <Text style={[styles.settingText]}>Account</Text>
+          </View>
+
+          <View style={styles.profileSection}>
+            <Text style={[styles.profileName]}>{user.displayName}</Text>
+            <Text style={[styles.profileEmail]}>{user.email}</Text>
+          </View>
+          <View style={styles.accountPlaceholder}>
+            {console.log(goal.streak)}
+            {console.log('best', bestStreak)}
+            <Text>
+              Best Streak: {goal.streak > bestStreak ? goal.streak : bestStreak}
+            </Text>
+            <Text>
+              Total tasks completed:
+            </Text>
+            <Button
+              title="Sign out"
+
+              onPress={() => handleSignOut()}
+            />
+          </View>
+        </View>
       </View>
+    );
+  } else {
+    return (
+      <View style={styles.container}>
+        <TextInput
+          style={styles.input}
+          onChangeText={onChangeEmail}
+          value={email}
+        ></TextInput>
+        <Text>Password</Text>
+        <TextInput
+          style={styles.input}
+          onChangeText={onChangePassword}
+          value={password}
+          secureTextEntry={true}
+        ></TextInput>
+        <Button title="Sign Up!" onPress={() => {
+          createUser()
 
-      <View style={styles.settingsSection}>
-        <View style={styles.settingItem}>
-          <Icon name="notifications-outline" size={24} style={themeStyles.icon} />
-          <Text style={[styles.settingText, themeStyles.text]}>Notifications</Text>
-          <Switch
-            value={isNotificationsEnabled}
-            onValueChange={setIsNotificationsEnabled}
-          />
-        </View>
-
-        <View style={styles.settingItem}>
-          <Icon name="color-palette-outline" size={24} style={themeStyles.icon} />
-          <Text style={[styles.settingText, themeStyles.text]}>Dark Theme</Text>
-          <Switch
-            value={isDarkTheme}
-            onValueChange={setIsDarkTheme}
-          />
-        </View>
-
-        <View style={styles.settingItem}>
-          <Icon name="person-outline" size={24} style={themeStyles.icon} />
-          <Text style={[styles.settingText, themeStyles.text]}>Account</Text>
-        </View>
-
-        <View style={styles.accountPlaceholder}>
-          <TextInput
-            style={[styles.input, themeStyles.input]}
-            placeholder="Username"
-            placeholderTextColor={isDarkTheme ? '#ccc' : '#555'}
-          />
-          <TextInput
-            style={[styles.input, themeStyles.input]}
-            placeholder="Email"
-            placeholderTextColor={isDarkTheme ? '#ccc' : '#555'}
-          />
-        </View>
+        }
+        } />
+        <Button title="Log in!" onPress={() => {
+          login()
+        }
+        } />
       </View>
-    </View>
-  );
+    );
+  }
 };
 
 const styles = StyleSheet.create({
