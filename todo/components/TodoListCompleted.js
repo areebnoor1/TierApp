@@ -72,8 +72,8 @@ export default function TodoListCompleted(props) {
               justifyContent: "center",
             }}
             onPress={() => {
-              //ssetCompleted(!completed)
-              toggleTodoCompleted(props.the_key);
+            // setCompleted(!completed)
+             toggleTodoCompleted(props.the_key);
             }}
           />
         )}
@@ -85,7 +85,7 @@ export default function TodoListCompleted(props) {
         >
           <Text style={styles.listItem}>{props.text}</Text>
 
-          {"days_made_progress" in props.todo && (
+          {!props.todo.completed && "days_made_progress" in props.todo && (
             <View style={styles.listItem}>
               <Text style={styles.sessionTitle}>Status: In Progress</Text>
               <Line />
