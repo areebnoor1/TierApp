@@ -66,37 +66,11 @@ export default function App() {
  
 
   useEffect(() => {
-    
-   /* const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/auth.user
-        setIsLoggedIn(true);
-        const uid = user.uid;
-        setuid(uid);
-        // ...
-      } else {
-        // User is signed out
-        // ...
-      }
-    });*/
-    
-     // setTimeout(() => { clearAsyncStorage();  }, 2000);
-     
-    }, []);
-  const firebaseConfig = {
-    apiKey: "AIzaSyBNYrjkuW86Gvn4CO9qMUf9YiDoTFAUYyo",
-    authDomain: "prettylib.firebaseapp.com",
-    databaseURL: "https://prettylib-default-rtdb.firebaseio.com",
-    projectId: "prettylib",
-    storageBucket: "prettylib.appspot.com",
-    messagingSenderId: "248488614748",
-    appId: "1:248488614748:web:2520b043a65333fb56ff99",
-    measurementId: "G-W2S4558058"
-  };
 
+    //SHOULD BE REPLACED WITH RETRIEVEING THE TODOS
 
-
+   // setTimeout( ()=>{clearAsyncStorage() }, 2000)
+  }, []);
 
   const clearAsyncStorage = async () => {
     try {
