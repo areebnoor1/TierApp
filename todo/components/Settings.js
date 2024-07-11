@@ -73,7 +73,6 @@ const SettingsScreen = () => {
       <Text style={styles.profileEmail}>{user.email}</Text>
       <View style={styles.accountPlaceholder}>
         <Text>Best Streak: {goal.streak > bestStreak ? goal.streak : bestStreak}</Text>
-        <Text>Total tasks completed:</Text>
         <Button title="Sign out" onPress={handleSignOut} />
       </View>
     </View>
