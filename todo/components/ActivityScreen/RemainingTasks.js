@@ -71,7 +71,10 @@ export default function RemainingTasks({ remaining, minutesTasksLeft, hoursTasks
           </View>
         </>
       ) : (
+      <>
+        <AntDesign name="smile-circle" size={24} color="black" />
         <Text style={styles.finishedText}>Finished all daily tasks, great job!</Text>
+        </>
       )}
     </View>
 

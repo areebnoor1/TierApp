@@ -30,20 +30,16 @@ export const TodoProvider = ({ children }) => {
 
     const intervalId = setInterval(() => {
       const now = new Date();
-   //   if (now.getDate() !== currentDate.getDate()) {
-    if (now.getHours() !== currentDate.getHours()) {
+      if (now.getDate() !== currentDate.getDate()) {
+    //if (now.getHours() !== currentDate.getHours()) {
         onDayChange();
         setCurrentDate(now);
       }
     }, 60000); // Check every minute (60000 ms)
 
     return () => clearInterval(intervalId);
-
-
     //DELETE YESTERDAYS TODOS ON INITIAL COMPONENT MOUNT IF COMPLETED AND COMPLETION DATE WAS YESTER
     //clearAsyncStorage();
-
-
   }, [currentDate]);
 
   const goalExists = () => {
@@ -127,11 +123,14 @@ export const TodoProvider = ({ children }) => {
     return date < today;
   };
 */
+
+
 const beforeToday = (date) => {
   const today = new Date();
-  //today.setHours(0, 0, 0, 0); // Set time to midnight to compare only dates
-  return date.getHours() < today.getHours();
+  today.setHours(0, 0, 0, 0); // Set time to midnight to compare only dates
+  return date < today;
 };
+
 
   const getTodos = async () => {
     try {
