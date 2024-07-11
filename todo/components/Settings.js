@@ -1,32 +1,23 @@
-import React, { useState, useEffect, useContext, useLayoutEffect } from 'react';
-import { View, Text, Switch, StyleSheet, Image, TextInput, Button, Alert } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { getApp, app, auth, getAuth } from "./firebase";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TodoContext } from "./TodoContext";
-//import { createUserWithEmailAndPassword, setPersistence, onAuthStateChanged, signOut } from "firebase/auth";
-import { initializeStreak, incrementStreak, resetStreak, getStreak, setStreak } from './streaks';
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { createUserWithEmailAndPassword, setPersistence, onAuthStateChanged, signOut, onChangeLoggedInUser } from "firebase/auth";
+import { initializeStreak, getStreak, setStreak } from './streaks';
+
+const auth = getAuth();
 
 const SettingsScreen = () => {
-  const [user, setUser] = React.useState(null);
-  //const [streak, setStreaks] = React.useState(0);
-  const [email, onChangeEmail] = React.useState("");
-  const [password, onChangePassword] = React.useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-
-  const [bestStreak, setBestStreak] = useState(false)
+  const [user, setUser] = useState(null);
+  const [email, onChangeEmail] = useState("");
+  const [password, onChangePassword] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [bestStreak, setBestStreak] = useState(false);
+  const [debugMode, setDebugMode] = useState(false);
 
   const {
-    todos,
-    addTodo,
-    removeTodo,
-    toggleTodoCompleted,
-    completedThisWeek,
     goal,
-    goalExists,
-    updateGoal,
-    setCompleted,
   } = useContext(TodoContext);
 
   useEffect(() => {
@@ -36,7 +27,7 @@ const SettingsScreen = () => {
         getStreak(currentUser.uid)
           .then(streak => {
             if (streak !== null) {
-                setBestStreak(streak);
+              setBestStreak(streak);
             }
           })
           .catch(error => {
@@ -47,25 +38,23 @@ const SettingsScreen = () => {
     return () => unsubscribe();
   }, []);
 
-
-
+  useEffect(() => {
+    const checkDebugMode = async () => {
+      const debugModeValue = await AsyncStorage.getItem('debugMode') === 'true';
+      setDebugMode(debugModeValue);
+    };
+    checkDebugMode();
+  }, []);
 
   const login = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        // onChangeLoggedInUser(user.email);
-        setIsLoggedIn(true)
+        setIsLoggedIn(true);
       })
       .catch((error) => {
         Alert.alert("", "Invalid username and/or password", [
           { text: "OK" },
         ]);
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorMessage)
-
       });
   };
 
@@ -73,58 +62,54 @@ const SettingsScreen = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        initializeStreak(user.uid).then(
-          login())
-        //onChangeLoggedInUser(user.email);
+        initializeStreak(user.uid).then(login());
       })
       .catch((error) => {
         Alert.alert("", "Invalid username and/or password", [
           { text: "OK" },
         ]);
-        const errorCode = error.code;
-        const errorMessage = error.message;
       });
   };
 
   const handleSignOut = () => {
     signOut(auth).then(() => {
-      console.log("signed out!")
+      console.log("signed out!");
+      setIsLoggedIn(false);
     }).catch((error) => {
-      // An error happened.
+      console.error('Error signing out:', error);
     });
-  }
+  };
 
-  
+  const handleDebugToggle = async () => {
+    const newDebugMode = !debugMode;
+    setDebugMode(newDebugMode);
+    await AsyncStorage.setItem('debugMode', newDebugMode.toString());
+  };
 
   if (user !== null) {
-    if('streak' in goal && goal.streak > bestStreak){
-      setStreak(user.uid, goal.streak)
-  
+    if ('streak' in goal && goal.streak > bestStreak) {
+      setStreak(user.uid, goal.streak);
     }
     return (
-      <View style={[styles.container]}>
+      <View style={styles.container}>
         <View style={styles.settingsSection}>
-
           <View style={styles.settingItem}>
             <Icon name="person-outline" size={24} />
-            <Text style={[styles.settingText]}>Account</Text>
+            <Text style={styles.settingText}>Account</Text>
           </View>
-
           <View style={styles.profileSection}>
-            <Text style={[styles.profileName]}>{user.displayName}</Text>
-            <Text style={[styles.profileEmail]}>{user.email}</Text>
+            <Text style={styles.profileName}>{user.displayName}</Text>
+            <Text style={styles.profileEmail}>{user.email}</Text>
           </View>
           <View style={styles.accountPlaceholder}>
-            {console.log(goal.streak)}
-            {console.log('best', bestStreak)}
             <Text>
               Best Streak: {goal.streak > bestStreak ? goal.streak : bestStreak}
             </Text>
-            <Button
-              title="Sign out"
-
-              onPress={() => handleSignOut()}
-            />
+            <Button title="Sign out" onPress={handleSignOut} />
+          </View>
+          <View style={styles.debugContainer}>
+            <Button title="Toggle Debug Mode" onPress={handleDebugToggle} />
+            <Text>Debug Mode: {debugMode ? "Enabled" : "Disabled"}</Text>
           </View>
         </View>
       </View>
@@ -136,23 +121,17 @@ const SettingsScreen = () => {
           style={styles.input}
           onChangeText={onChangeEmail}
           value={email}
-        ></TextInput>
-        <Text>Password</Text>
+          placeholder="Email"
+        />
         <TextInput
           style={styles.input}
           onChangeText={onChangePassword}
           value={password}
           secureTextEntry={true}
-        ></TextInput>
-        <Button title="Sign Up!" onPress={() => {
-          createUser()
-
-        }
-        } />
-        <Button title="Log in!" onPress={() => {
-          login()
-        }
-        } />
+          placeholder="Password"
+        />
+        <Button title="Sign Up!" onPress={createUser} />
+        <Button title="Log in!" onPress={login} />
       </View>
     );
   }
@@ -166,12 +145,6 @@ const styles = StyleSheet.create({
   profileSection: {
     alignItems: 'center',
     marginBottom: 32,
-  },
-  profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: 16,
   },
   profileName: {
     fontSize: 18,
@@ -204,39 +177,9 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     width: '100%',
   },
-});
-
-const lightStyles = StyleSheet.create({
-  container: {
-    backgroundColor: '#fff',
-  },
-  text: {
-    color: '#000',
-  },
-  icon: {
-    color: '#000',
-  },
-  input: {
-    borderColor: '#ccc',
-    backgroundColor: '#fff',
-    color: '#000',
-  },
-});
-
-const darkStyles = StyleSheet.create({
-  container: {
-    backgroundColor: '#000',
-  },
-  text: {
-    color: '#fff',
-  },
-  icon: {
-    color: '#fff',
-  },
-  input: {
-    borderColor: '#555',
-    backgroundColor: '#333',
-    color: '#fff',
+  debugContainer: {
+    marginTop: 20,
+    alignItems: 'center',
   },
 });
 
