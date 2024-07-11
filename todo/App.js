@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import * as SecureStore from 'expo-secure-store';
-import { initializeApp } from 'firebase/app';
-import { getDatabase } from 'firebase/database';
-import { NavigationContainer } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
+import React, { useState, useEffect } from "react";
+import * as SecureStore from "expo-secure-store";
+import { getDatabase } from "firebase/database";
+import { NavigationContainer } from "@react-navigation/native";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { initializeAuth, getReactNativePersistence } from "firebase/auth";
+import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import {
-  ref,
-  onValue,
-  push,
-  update,
-  remove
-} from 'firebase/database';
+  ALERT_TYPE,
+  Dialog,
+  AlertNotificationRoot,
+  Toast,
+} from "react-native-alert-notification";
+import { ref, onValue, push, update, remove } from "firebase/database";
 //import * as firebaseApp from 'firebase';
 
 import {
@@ -20,59 +21,47 @@ import {
   View,
   TouchableOpacity,
   TextInput,
+  Button,
   ScrollView,
-  Pressable
-} from 'react-native';
+  Pressable,
+  Alert,
+} from "react-native";
 
-import Icon from 'react-native-vector-icons/Feather';
-import TodoList from './components/TodoList';
+import Icon from "react-native-vector-icons/Feather";
+import TodoList from "./components/TodoList";
 //import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import ToDoApp from './components/ToDoApp';
-import AddTask from './components/AddTask';
-import TabNavigator from './components/TabNavigator';
-import { TodoProvider } from './components/TodoContext';
-import LoadingScreen from './components/LoadingScreen';
-import Minutes from './components/Minutes';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Entypo from 'react-native-vector-icons/Entypo';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
-import DailyGoal from './components/ActivityScreen/DailyGoal';
+import ToDoApp from "./components/ToDoApp";
+import AddTask from "./components/AddTask";
+import TabNavigator from "./components/TabNavigator";
+import { TodoProvider } from "./components/TodoContext";
+import LoadingScreen from "./components/LoadingScreen";
+import Minutes from "./components/Minutes";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import Entypo from "react-native-vector-icons/Entypo";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { getApps, initializeApp } from "firebase/app";
+import { createStackNavigator } from "@react-navigation/stack";
+import DailyGoal from "./components/ActivityScreen/DailyGoal";
+import firebase from "firebase/app";
+import "firebase/auth";
+import SignUp from "./components/SignUp";
 
-
-
-/*GoogleSignin.configure({
-  webClientId: '248488614748-698jn115oljro87m61oo3btad1vu5fud.apps.googleusercontent.com',
-  iosClientId: '248488614748-nluheprsmq0kt501hoa8np8vb5mh1vm4.apps.googleusercontent.com',
-  androidClientId: '248488614748-qj7corr2qet7tuvv1rvkqqr8vmmctmbm.apps.googleusercontent.com',
-  scopes: ['profile', 'email'],
-});*/
-const GoogleLogin = async () => {
-  await GoogleSignin.hasPlayServices();
-  const userInfo = await GoogleSignin.signIn();
-  return userInfo;
-};
-export const Stack = createStackNavigator();
-export const HomeScreen = () => {
-  return (
-    <Stack.Navigator
-    >
-      <Stack.Screen component={HomeScreen} name="HomeScreen" options={{ title: "HomeScreen" }} />
-      <Stack.Screen component={AddTask} name="AddTask" options={{ title: "AddTask" }} />
-      <Stack.Screen name="DailyGoal" component={DailyGoal} />
-    </Stack.Navigator>
-  )
-}
+import { getApp, app, auth, getAuth } from "./components/firebase";
+import {
+  createUserWithEmailAndPassword,
+  setPersistence,
+  onAuthStateChanged,
+  onChangeLoggedInUser,
+} from "firebase/auth";
+import { initializeStreak } from "./components/streaks";
 
 export default function App() {
-
   const Tab = createBottomTabNavigator();
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
   const [todos, setTodos] = useState([]);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   var [uid, setuid] = useState(null);
-
 
   useEffect(() => {
 
@@ -80,107 +69,49 @@ export default function App() {
 
     //setTimeout( ()=>{clearAsyncStorage() }, 2000)
   }, []);
+  const firebaseConfig = {
+    apiKey: "AIzaSyBNYrjkuW86Gvn4CO9qMUf9YiDoTFAUYyo",
+    authDomain: "prettylib.firebaseapp.com",
+    databaseURL: "https://prettylib-default-rtdb.firebaseio.com",
+    projectId: "prettylib",
+    storageBucket: "prettylib.appspot.com",
+    messagingSenderId: "248488614748",
+    appId: "1:248488614748:web:2520b043a65333fb56ff99",
+    measurementId: "G-W2S4558058",
+  };
 
   const clearAsyncStorage = async () => {
     try {
       await AsyncStorage.clear();
-      console.log('AsyncStorage cleared successfully.');
+      console.log("AsyncStorage cleared successfully.");
     } catch (e) {
-      console.error('Failed to clear AsyncStorage.');
+      console.error("Failed to clear AsyncStorage.");
     }
   };
 
-  // Call the function wherever you need to clear AsyncStorage
+  //Checking if firebase has been initialized
 
-
-  const saveTokenToSecureStorage = async (token) => {
-    SecureStore.setItemAsync("token", token)
-  }
-  const checkForToken = async () => {
-    console.log('loading', loading)
-    let stored_token = await SecureStore.getItemAsync('token')
-    setToken(stored_token)
-    console.log('loading', loading)
-    setLoading(false)
-  }
-  const handleGoogleLogin = async () => {
-    try {
-      const response = await GoogleLogin();
-      const { idToken, user } = response;
-      console.log('token', idToken);
-
-      if (idToken) {
-        setToken(idToken);
-        saveTokenToSecureStorage(idToken);
-      }
-    } catch (apiError) {
-      setError(
-        apiError?.response?.data?.error?.message || 'Something went wrong'
-      );
-    } finally {
-      setLoading(false);
-      console.log("loading", loading)
-    }
-  };
-
-  // if(loading === true){
-  //   return(<LoadingScreen/>);
-  // }
-  // if (token === null) {
-  //<Pressable onPress={handleGoogleLogin}><Text style={styles.text}>Continue with Google</Text></Pressable>
-  //   return (
-  //     <View style={styles.container}>
-  //        </View>
-  //   );
-  // } else {
   return (
-    
-      <TodoProvider>
-        <NavigationContainer>
-          <TabNavigator />
-        </NavigationContainer>
-      </TodoProvider>
-    
+    <TodoProvider>
+      <NavigationContainer>
+        <TabNavigator />
+      </NavigationContainer>
+    </TodoProvider>
   );
-  // }
 }
 
 const styles = StyleSheet.create({
-  scroll: {
-    width: '100%',
-    height: '100%'
-  },
   container: {
     flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    // backgroundColor: '#F5FCFF',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
-  header: {
-    marginTop: '15%',
-    fontSize: 20,
-    color: 'red',
-    paddingBottom: 10,
-  },
-  textInputContainer: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
-    borderColor: 'black',
-    borderBottomWidth: 1,
-    paddingRight: 10,
-    paddingBottom: 10,
-  },
-  text: {
-    fontSize: 40,
-    paddingTop: 70,
-  },
-  textInput: {
-    flex: 1,
-    height: 20,
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: 'black',
-    paddingLeft: 10,
-    minHeight: '3%',
+  input: {
+    height: 40,
+    width: 200,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
   },
 });

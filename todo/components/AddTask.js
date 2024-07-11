@@ -87,7 +87,7 @@ export default function AddTask({ setModalVisible, setTodos, inputTaskType }) {
       <ScrollView>
         {/****** Task Type ***********/}
         <View style={styles.taskType}>
-          <Text style={styles.header}>Task Type</Text>
+          <Text style={{padding:10}}>Task Type</Text>
           <View style={styles.taskTypeContainer}>
             <TouchableOpacity
               style={[

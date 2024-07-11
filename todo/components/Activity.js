@@ -273,14 +273,23 @@ export default function Activity() {
           <View style={styles.container}>
             {!goalExists() ? (
               <View style={styles.remainingTasksContainer}>
-                <Text>Have not set a daily goal</Text>
-                {/*     <TouchableOpacity oonPress={() => openGoalModal("set")} style={styles.button}>
-                          <Text style={styles.buttonText}>Confirm</Text>
-                        </TouchableOpacity> */}
-                <Button
-                  onPress={() => openGoalModal("set")}
-                  title="Set daily goal"
-                />
+               <Text style={styles.noGoalText}>You haven't set a daily goal yet</Text>
+               <Text style={styles.dailyGoalHeader}>To stay motivated and track your progress: </Text>
+               <View style={styles.bulletContainer}>
+                 <Text style={styles.bulletPoint}>{'\u2022'}</Text>
+                 <Text style={styles.bulletText}>Set a daily goal to complete a certain number of tasks.</Text>
+               </View>
+               <View style={styles.bulletContainer}>
+                 <Text style={styles.bulletPoint}>{'\u2022'}</Text>
+                 <Text style={styles.bulletText}>Each day you meet your goal, you'll build your streak.</Text>
+               </View>
+               <Text style={styles.dailyGoalDescription}>
+                 Keep it going and see how many days in a row you can achieve your goals!
+               </Text>
+<TouchableOpacity onPress={() => openGoalModal("set")} style={styles.button}>
+               <Text style={styles.buttonText}>Set Daily Goal</Text>
+</TouchableOpacity>
+
               </View>
             ) : (
               <View>
@@ -474,18 +483,21 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   buttonText: {
-    fontSize: 26,
+    fontSize: 18,
     fontWeight: "bold",
     textAlign: "center",
+    color: "white",
   },
   button: {
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 12,
-    paddingHorizontal: 100,
-    borderRadius: 16,
+   // alignItems: "center",
+   // justifyContent: "center",
+  //  paddingVertical: 12,
+  padding: 6,
+  //  paddingHorizontal: 100,
+    borderRadius: 10,
     backgroundColor: "black",
-    marginTop: 40,
+ //   marginTop: 40,
+ elevation: 2,
   },
 
   scroll: {
@@ -552,4 +564,49 @@ const styles = StyleSheet.create({
     fontFamily: "Inter",
     fontSize: 16,
   },
+  dailyGoalHeader: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+
+  remainingTasksContainer: {
+      padding: 20,
+      backgroundColor: '#FFFFFF',
+      borderRadius: 15,
+      elevation: 2,
+      borderWidth: 1,
+    },
+    noGoalText: {
+      fontSize: 18,
+      fontWeight: 'bold',
+     // color: '#FF0000',
+      marginBottom: 10,
+    },
+    dailyGoalHeader: {
+      fontSize: 16,
+      fontWeight: '600',
+      color: '#333333',
+      marginBottom: 10,
+    },
+    bulletContainer: {
+      flexDirection: 'row',
+      alignItems: 'flex-start',
+      marginBottom: 5,
+    },
+    bulletPoint: {
+      fontSize: 16,
+      lineHeight: 24,
+      marginRight: 5,
+    },
+    bulletText: {
+      fontSize: 14,
+      color: '#666666',
+      flex: 1,
+    },
+    dailyGoalDescription: {
+      fontSize: 14,
+      color: '#666666',
+      marginBottom: 20,
+    },
+
 });
