@@ -12,7 +12,7 @@ import MinutesJar from "../SVGicons/MinutesJar";
 import JarOverlay from "../SVGicons/JarOverlayIcon.js";
 import HoursJar from "../SVGicons/HoursJar";
 import DaysJar from "../SVGicons/DaysJar";
-import JarIcon from "../SVGicons/WhiteJarIcon.js";
+
 import TaskSelectionModal from "./TaskSelectionModal";
 import { useIsFocused } from "@react-navigation/native";
 import RandomTask from "./RandomTask";
@@ -141,76 +141,89 @@ export default function NoTask({
       </View>
 
       <View style={styles.jarsContainer}>
-        <View style={styles.jarContainer}>
-          <Pressable
-            onPress={() => {
-              {
-                /*
-               if (checkTodosExist("minutes") === null) return;
-                          openJarModal("minutes");
-            */
-              }
-              if (checkTodosExist("minutes") === null) {
-                return;
-              }
-              //  console.log(minutesProgress())
-              openJarModal("minutes");
+        <Pressable
+          onPress={() => {
+            if (checkTodosExist("minutes") === null) {
+              return;
+            }
+            openJarModal("minutes");
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: "white",
+              //            borderWidth: 2,
+              //borderColor: "#FF5CF8",
+              padding: 15,
+              elevation: 5,
+              textAlign: "center",
+              borderRadius: 10,
+              alignItems: "center", // Center horizontally
+              justifyContent: "center",
             }}
-            style={({ pressed }) => [
-              { opacity: pressed || selectedJar === "minutes" ? 0.6 : 1 },
-            ]}
           >
             <MinutesJar progress={minutesProgress()} />
-            <JarOverlay style={styles.overlayIcon} />
-            <JarOverlay style={styles.overlayIcon} />
-            <Text styles={{}}>Minutes</Text>
-            <JarOverlay style={styles.overlayIcon} />
-          </Pressable>
-        </View>
+            <JarOverlay style={styles.overlayIcon2} />
+            <JarOverlay style={styles.overlayIcon2} />
+            <Text style={styles.jarText}>Minutes</Text>
+          </View>
+        </Pressable>
 
-        <View style={styles.jarContainer}>
-          <Pressable
-            onPress={() => {
-              if (checkTodosExist("hours") === null) {
-                return;
-              }
-              openJarModal("hours");
+        <Pressable
+          onPress={() => {
+            if (checkTodosExist("hours") === null) {
+              return;
+            }
+            openJarModal("hours");
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: "white",
+              //            borderWidth: 2,
+              //borderColor: "#FF5CF8",
+              padding: 15,
+              elevation: 5,
+              textAlign: "center",
+              borderRadius: 10,
+              alignItems: "center", // Center horizontally
+              justifyContent: "center",
             }}
-            style={({ pressed }) => [
-              { opacity: pressed || selectedJar === "hours" ? 0.6 : 1 },
-            ]}
           >
             <HoursJar progress={hoursProgress()} />
+            <JarOverlay style={styles.overlayIcon2} />
+            <JarOverlay style={styles.overlayIcon2} />
             <Text style={styles.jarText}>Hours</Text>
-            <JarOverlay style={styles.overlayIcon} />
-            <JarOverlay style={styles.overlayIcon} />
-            <JarOverlay style={styles.overlayIcon} />
-            {/*...3 layers to counteract touchable opacity...*/}
-          </Pressable>
-        </View>
+          </View>
+        </Pressable>
 
-        <View style={styles.jarContainer}>
-          <Pressable
-            onPress={() => {
-              if (checkTodosExist("days") === null) {
-                return;
-              }
-              openJarModal("days");
+        <Pressable
+          onPress={() => {
+            if (checkTodosExist("days") === null) {
+              return;
+            }
+            openJarModal("days");
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: "white",
+              //            borderWidth: 2,
+              //borderColor: "#FF5CF8",
+              padding: 15,
+              elevation: 5,
+              textAlign: "center",
+              borderRadius: 10,
+              alignItems: "center", // Center horizontally
+              justifyContent: "center",
             }}
-            style={({ pressed }) => [
-              { opacity: pressed || selectedJar === "days" ? 0.6 : 1 },
-            ]}
           >
             <DaysJar progress={daysProgress()} />
-            {/*  <DaysJar
-            progress={daysProgress()}
-            />  */}
-            <JarOverlay style={styles.overlayIcon} />
-            <JarOverlay style={styles.overlayIcon} />
-            <JarOverlay style={styles.overlayIcon} />
+            <JarOverlay style={styles.overlayIcon2} />
+            <JarOverlay style={styles.overlayIcon2} />
             <Text style={styles.jarText}>Days</Text>
-          </Pressable>
-        </View>
+          </View>
+        </Pressable>
       </View>
 
       <Modal
@@ -351,7 +364,7 @@ const styles = StyleSheet.create({
 
   jarContainer: {
     backgroundColor: "white",
-    padding: 15,
+    padding: 20,
     elevation: 2,
     textAlign: "center",
     borderRadius: 10,
@@ -359,16 +372,16 @@ const styles = StyleSheet.create({
     justifyContent: "center", // Center vertically
     borderWidth: 2,
   },
-    jarContainer: {
-      backgroundColor: "white",
-      padding: 15,
-      elevation: 5,
-      textAlign: "center",
-      borderRadius: 10,
-      alignItems: "center", // Center horizontally
-      justifyContent: "center", // Center vertically
+  jarContainer: {
+    backgroundColor: "white",
+    padding: 15,
+    elevation: 5,
+    textAlign: "center",
+    borderRadius: 10,
+    alignItems: "center", // Center horizontally
+    justifyContent: "center", // Center vertically
     //  borderWidth: 2,
-    },
+  },
 
   jarText: {
     fontWeight: "bold",
@@ -386,6 +399,11 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     left: 0,
+  },
+  overlayIcon2: {
+    position: "absolute",
+    top: 15,
+    //  left: 0,
   },
 
   addButton: {
@@ -411,12 +429,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 20,
     width: "100%",
-
-    //backgroundColor: "#6a1b9a",
-    /*paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    marginTop: 10, */
   },
   buttonText: {
     fontSize: 20,
