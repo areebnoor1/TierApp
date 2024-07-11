@@ -286,6 +286,16 @@ export default function Days() {
                 )}
             </>
           )}
+          <AddTaskModal
+            modalVisible={addModalVisible}
+            setModalVisible={setAddModalVisible}
+            inputTaskType={"days"}
+          />
+          <EditTaskModal
+            modalVisible={modalVisible}
+            setModalVisible={setModalVisible}
+            task={editingTask}
+          />
         </View>
       </View>
     </View>
