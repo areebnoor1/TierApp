@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
     padding: 16,
     flexDirection: "row",
     justifyContent: "space-between",
+
   },
   summary: {
     fontFamily: "Inter",
@@ -50,6 +51,7 @@ const styles = StyleSheet.create({
     height: 80,
     borderRadius: 10,
     backgroundColor: "black",
+
   },
   summaryBlackBoxText: {
     color: "white",

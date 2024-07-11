@@ -1,11 +1,18 @@
 import React, { useState, useEffect, useContext } from 'react';
 import {
-  View, Text, StyleSheet, TextInput, Button, Alert, TouchableOpacity,
+  View, Text, StyleSheet, TextInput, Alert, TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { auth, getStreak, setStreak, initializeStreak } from './firebase';
 import { TodoContext } from './TodoContext';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
+
+const CustomButton = ({ title, onPress, style, textStyle, icon }) => (
+  <TouchableOpacity style={[styles.button, style]} onPress={onPress}>
+    {icon && <Icon name={icon} size={20} color="#fff" style={styles.buttonIcon} />}
+    <Text style={[styles.buttonText, textStyle]}>{title}</Text>
+  </TouchableOpacity>
+);
 
 const SettingsScreen = () => {
   const [user, setUser] = useState(null);
@@ -66,26 +73,48 @@ const SettingsScreen = () => {
   };
 
   const renderProfileSection = () => (
+  <>
+        <View style={styles.screen}>
+          <Text style={styles.titleText}>Settings</Text>
     <View style={styles.profileSection}>
-      <Text style={styles.profileName}>{user.displayName}</Text>
+
+         <View style={{alignItems: "center"}}>
+               <Icon name="person-circle" size={100} color="black" />
+  <Text style={{ fontSize: 24, fontWeight: 'bold', marginTop: 8,}}>{user.displayName || "User Information"}</Text>
+             </View>
+      <View style={{justifyContent: "center",}}>
+      <Text style={{ color: 'black',fontWeight: 'bold'}}>{user.displayName || "Email:"}</Text>
       <Text style={styles.profileEmail}>{user.email}</Text>
-      <View style={styles.accountPlaceholder}>
-        <Text>Best Streak: {goal.streak > bestStreak ? goal.streak : bestStreak}</Text>
-        <Text>Total tasks completed:</Text>
-        <Button title="Sign out" onPress={handleSignOut} />
-      </View>
+
+
+       <View style={styles.summaryContainer}>
+              <View style={styles.summaryBoxBlack}>
+                      <Text style={styles.summaryBlackBoxText}>Best Streak: </Text>
+                      <Text style={styles.summaryBlackBoxNum}>{goal.streak > bestStreak ? goal.streak : bestStreak}</Text>
+                    </View>
+                    <View style={styles.summaryBoxWhite}>
+                      <Text style={styles.summaryWhiteBoxText}>Total Tasks Completed: </Text>
+                      <Text style={styles.summaryWhiteBoxNum}>{todos.length}</Text>
+                    </View>
+
+                      </View>
+       </View>
+        <CustomButton title="Sign Out" onPress={handleSignOut} style={styles.signOutButton} icon="log-out-outline" />
+  </View>
     </View>
+    </>
   );
 
   const renderAuthSection = () => (
     <View style={styles.authSection}>
       <Text style={styles.title}>TASKJARS</Text>
-      <Text>Want to save your streak?</Text>
+      <Text style={styles.subtitle}>Want to save your streak?</Text>
       <TextInput
         style={styles.input}
         onChangeText={setEmail}
         value={email}
         placeholder="Email"
+        placeholderTextColor="#aaa"
       />
       <TextInput
         style={styles.input}
@@ -93,19 +122,20 @@ const SettingsScreen = () => {
         value={password}
         secureTextEntry
         placeholder="Password"
+        placeholderTextColor="#aaa"
       />
       {isSignUp ? (
         <>
-          <Button title="Sign Up" onPress={handleSignUp} />
+          <CustomButton title="Sign Up" onPress={handleSignUp} />
           <TouchableOpacity onPress={() => setIsSignUp(false)}>
-            <Text>Already have an account? Log In</Text>
+            <Text style={styles.switchText}>Already have an account? Log In</Text>
           </TouchableOpacity>
         </>
       ) : (
         <>
-          <Button title="Log In" onPress={handleLogin} />
+          <CustomButton title="Log In" onPress={handleLogin} />
           <TouchableOpacity onPress={() => setIsSignUp(true)}>
-            <Text>Don't have an account? Sign Up</Text>
+            <Text style={styles.switchText}>Don't have an account? Sign Up</Text>
           </TouchableOpacity>
         </>
       )}
@@ -123,40 +153,150 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#fff',
+   // backgroundColor: 'red',
+  //  width: "100%",
+ //    height: "100%",
   },
   profileSection: {
     alignItems: 'center',
     marginBottom: 32,
+ //   padding: 16,
+    //width: "80%",
+   // justifyContent: "center",
+   borderWidth: 1,
+    padding: 16,
+    borderRadius: 16,
+    backgroundColor: "white",
+
   },
+
   profileName: {
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: 'bold',
+    marginTop: 8,
+    alignItems: "center",
   },
   profileEmail: {
-    fontSize: 14,
+    fontSize: 16,
     color: '#666',
+    marginBottom: 16,
   },
-  accountPlaceholder: {
+  accountDetails: {
     marginTop: 16,
     alignItems: 'center',
+  },
+  accountText: {
+    fontSize: 16,
+    marginBottom: 8,
+  },
+  signOutButton: {
+    marginTop: 16,
+    backgroundColor: 'black',
+    justifyContent: "flex-end",
   },
   authSection: {
     alignItems: 'center',
   },
   title: {
-    fontSize: 24,
+    fontSize: 32,
     fontWeight: 'bold',
     marginBottom: 16,
+    color: '#4A90E2',
+  },
+  subtitle: {
+    fontSize: 18,
+    marginBottom: 16,
+    color: '#4A90E2',
   },
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
-    borderRadius: 4,
-    padding: 8,
+    borderRadius: 8,
+    padding: 12,
     marginVertical: 8,
     width: '100%',
+    color: '#333',
   },
+  button: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#4A90E2',
+    padding: 12,
+    borderRadius: 8,
+    marginVertical: 8,
+    width: '100%',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  buttonIcon: {
+    marginRight: 8,
+  },
+  switchText: {
+    color: '#4A90E2',
+    marginTop: 16,
+  },
+   summaryContainer: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+    },
+    summaryBoxWhite: {
+      width: "60%",
+      height: 80,
+      borderRadius: 10,
+      borderColor: "black",
+      borderWidth: 1,
+    },
+    summaryBoxBlack: {
+       width: "36%",
+      height: 80,
+      borderRadius: 10,
+      backgroundColor: "black",
+
+    },
+    summaryBlackBoxText: {
+      color: "white",
+      left: 10,
+      top: 5,
+      fontSize: 16,
+    },
+    summaryWhiteBoxText: {
+      color: "black",
+      padding: 5,
+      fontSize: 16,
+    },
+    summaryWhiteBoxNum: {
+      fontFamily: "Inter",
+      fontSize: 24,
+      fontWeight: "bold",
+      color: "black",
+      position: "absolute",
+      bottom: 10,
+      left: 20,
+    },
+    summaryBlackBoxNum: {
+      fontFamily: "Inter",
+      fontSize: 24,
+      fontWeight: "bold",
+      color: "white",
+      position: "absolute",
+      bottom: 10,
+      left: 20,
+    },
+      screen: {
+      ///  backgroundColor: "#FFF",
+        padding: 10,
+        justifyContent: "space-between",
+      },
+      titleText: {
+        fontSize: 30,
+        fontWeight: "bold",
+        color: "black",
+        marginBottom: 24,
+      },
 });
 
 export default SettingsScreen;

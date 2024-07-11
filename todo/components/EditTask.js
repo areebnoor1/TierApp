@@ -86,7 +86,7 @@ export default function EditTask({ setModalVisible, setTodos, task }) {
       </View>
       <ScrollView>
         <View style={styles.taskType}>
-          <Text style={styles.header}>Task Type</Text>
+         <Text style={{padding:10}}>Task Type</Text>
           <View style={styles.taskTypeContainer}>
             <TouchableOpacity
               style={[

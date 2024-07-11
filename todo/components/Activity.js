@@ -312,7 +312,7 @@ export default function Activity() {
           />
 
           {/* progress tabs */}
-
+        <Text style={styles.summary}>Progress</Text>
           <View style={styles.progressTabs}>
             <TouchableOpacity
               style={[styles.tab, viewOption === "today" && styles.activeTab]}
@@ -432,6 +432,7 @@ const styles = StyleSheet.create({
     //padding: 16,
     paddingHorizontal: 16,
     alignItems: "center",
+    backgroundColor: "white",
   },
   dateText: {
     fontSize: 20,
@@ -473,6 +474,7 @@ const styles = StyleSheet.create({
     fontFamily: "Inter",
     color: "#A5A5A5",
     fontSize: 16,
+    marginRight: 16,
     justifyContent: "flex-end",
   },
   remainingTasksContainer: {
@@ -506,8 +508,11 @@ const styles = StyleSheet.create({
   summary: {
     fontFamily: "Inter",
     color: "#A5A5A5",
-    fontSize: 24,
+    fontSize: 20,
     justifyContent: "flex-end",
+    paddingHorizontal: 16,
+     color: "black",
+     fontWeight: "bold",
   },
   taskOptions: {
     fontFamily: "Inter",
@@ -548,16 +553,19 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 20,
     borderRadius: 5,
+
   },
   tabText: {
     color: "#C4C4C4",
     fontFamily: "Inter",
     fontSize: 16,
+
   },
   activeTab: {
     backgroundColor: "black",
-    borderRadius: 10,
+    borderRadius: 20,
     paddingHorizontal: 10,
+
   },
   activeTabText: {
     color: "white",
