@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { auth, getStreak, setStreak, initializeStreak } from './firebase';
 import { TodoContext } from './TodoContext';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
-
+import { Octicons } from '@expo/vector-icons';
 const CustomButton = ({ title, onPress, style, textStyle, icon }) => (
   <TouchableOpacity style={[styles.button, style]} onPress={onPress}>
     {icon && <Icon name={icon} size={20} color="#fff" style={styles.buttonIcon} />}
@@ -73,9 +73,14 @@ const SettingsScreen = () => {
   };
 
   const renderProfileSection = () => (
-  <>
-        <View style={styles.screen}>
+        <View >
+                <View style={styles.topBar} >
           <Text style={styles.titleText}>Settings</Text>
+          <View style={styles.signOutButton2}>
+          <Octicons name="sign-out" size={20} color="black" />
+            <Text style={styles.signOutText}>Sign Out</Text>
+           </View>
+  </View>
     <View style={styles.profileSection}>
 
          <View style={{alignItems: "center"}}>
@@ -89,26 +94,40 @@ const SettingsScreen = () => {
 
        <View style={styles.summaryContainer}>
               <View style={styles.summaryBoxBlack}>
-                      <Text style={styles.summaryBlackBoxText}>Best Streak: </Text>
-                      <Text style={styles.summaryBlackBoxNum}>{goal.streak > bestStreak ? goal.streak : bestStreak}</Text>
-                    </View>
-                    <View style={styles.summaryBoxWhite}>
-                      <Text style={styles.summaryWhiteBoxText}>Total Tasks Completed: </Text>
-                      <Text style={styles.summaryWhiteBoxNum}>{todos.length}</Text>
-                    </View>
+                                                 <Text style={styles.summaryBlackBoxText}>Best Streak: </Text>
+                                                 <Text style={styles.summaryBlackBoxNum}>{goal.streak > bestStreak ? goal.streak : bestStreak}</Text>
+                                               </View>
+                                               <View style={styles.summaryBoxWhite}>
+                                                 <Text style={styles.summaryWhiteBoxText}>Total Tasks Completed: </Text>
+                                                 <Text style={styles.summaryWhiteBoxNum}>{todos.length}</Text>
+                                               </View>
 
                       </View>
        </View>
         <CustomButton title="Sign Out" onPress={handleSignOut} style={styles.signOutButton} icon="log-out-outline" />
   </View>
     </View>
-    </>
   );
 
   const renderAuthSection = () => (
-    <View style={styles.authSection}>
+
+
+    <View style={styles.profileSection}>
+
       <Text style={styles.title}>TASKJARS</Text>
-      <Text style={styles.subtitle}>Want to save your streak?</Text>
+
+              <View style={styles.summaryContainer}>
+                     <View style={styles.summaryBoxBlack}>
+                                                        <Text style={styles.summaryBlackBoxText}>Best Streak: </Text>
+                                                        <Text style={styles.summaryBlackBoxNum}>{goal.streak > bestStreak ? goal.streak : bestStreak}</Text>
+                                                      </View>
+                                                      <View style={styles.summaryBoxWhite}>
+                                                        <Text style={styles.summaryWhiteBoxText}>Total Tasks Completed: </Text>
+                                                        <Text style={styles.summaryWhiteBoxNum}>{todos.length}</Text>
+                                                      </View>
+
+                             </View>
+      <Text style={styles.subtitle}>Want to save your streak and number of completed tasks?</Text>
       <TextInput
         style={styles.input}
         onChangeText={setEmail}
@@ -194,6 +213,22 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
     justifyContent: "flex-end",
   },
+    signOutButton2: {
+      //marginTop: 16,
+      flexDirection: "row",
+      paddingHorizontal: 8,
+padding: 5,
+      backgroundColor: 'white',
+      borderWidth: 1,
+      borderRadius: 6,
+      justifyContent: "space-around",
+    //  justifyContent: "flex-end",
+    },
+    signOutText: {
+    fontSize: 16,
+    marginLeft: 8,
+    fontWeight: "bold",
+    },
   authSection: {
     alignItems: 'center',
   },
@@ -201,12 +236,12 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: 'bold',
     marginBottom: 16,
-    color: '#4A90E2',
+    color: 'black',
   },
   subtitle: {
     fontSize: 18,
     marginBottom: 16,
-    color: '#4A90E2',
+    color: 'black',
   },
   input: {
     borderWidth: 1,
@@ -220,7 +255,7 @@ const styles = StyleSheet.create({
   button: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#4A90E2',
+    backgroundColor: "black",
     padding: 12,
     borderRadius: 8,
     marginVertical: 8,
@@ -288,15 +323,25 @@ const styles = StyleSheet.create({
     },
       screen: {
       ///  backgroundColor: "#FFF",
-        padding: 10,
+        padding: 16,
         justifyContent: "space-between",
       },
       titleText: {
         fontSize: 30,
         fontWeight: "bold",
         color: "black",
-        marginBottom: 24,
+        //marginBottom: 24,
       },
+        topBar: {
+          flexDirection: "row",
+          justifyContent: "space-between",
+          //padding: 16,
+          paddingHorizontal: 16,
+          alignItems: "flex-end",
+
+        //  backgroundColor: "white",
+          marginBottom: 24,
+        },
 });
 
 export default SettingsScreen;
