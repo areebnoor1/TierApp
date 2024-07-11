@@ -55,9 +55,6 @@ const App = () => {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           {(isFirstLaunch || debugMode) ? (
             <>
-              <Stack.Screen name="WelcomeScreen1" component={WelcomeScreen1} />
-              <Stack.Screen name="WelcomeScreen2" component={WelcomeScreen2} />
-              <Stack.Screen name="WelcomeScreen3" component={WelcomeScreen3} />
             </>
           ) : (
             <Stack.Screen name="MainApp" component={TabNavigator} />
