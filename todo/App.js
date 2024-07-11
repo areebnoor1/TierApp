@@ -34,7 +34,7 @@ const App = () => {
 
     setTimeout(() => {
       setShowTemporaryWelcome(false);
-    }, 5000); // Show welcome screen for 5 seconds
+    }, 2000); // Show welcome screen for 5 seconds
   }, []);
 
   if (loading) {
@@ -52,17 +52,7 @@ const App = () => {
   return (
     <TodoProvider>
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          {(isFirstLaunch || debugMode) ? (
-            <>
-              <Stack.Screen name="WelcomeScreen1" component={WelcomeScreen1} />
-              <Stack.Screen name="WelcomeScreen2" component={WelcomeScreen2} />
-              <Stack.Screen name="WelcomeScreen3" component={WelcomeScreen3} />
-            </>
-          ) : (
-            <Stack.Screen name="MainApp" component={TabNavigator} />
-          )}
-        </Stack.Navigator>
+        <TabNavigator/>
       </NavigationContainer>
     </TodoProvider>
   );
