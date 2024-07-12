@@ -149,19 +149,7 @@ export default function NoTask({
             openJarModal("minutes");
           }}
         >
-          <View
-            style={{
-              backgroundColor: "white",
-              //            borderWidth: 2,
-              //borderColor: "#FF5CF8",
-              padding: 15,
-              elevation: 5,
-              textAlign: "center",
-              borderRadius: 10,
-              alignItems: "center", // Center horizontally
-              justifyContent: "center",
-            }}
-          >
+          <View style={styles.jarContainer}>
             <MinutesJar progress={minutesProgress()} />
             <JarOverlay style={styles.overlayIcon2} />
             <JarOverlay style={styles.overlayIcon2} />
@@ -177,19 +165,7 @@ export default function NoTask({
             openJarModal("hours");
           }}
         >
-          <View
-            style={{
-              backgroundColor: "white",
-              //            borderWidth: 2,
-              //borderColor: "#FF5CF8",
-              padding: 15,
-              elevation: 5,
-              textAlign: "center",
-              borderRadius: 10,
-              alignItems: "center", // Center horizontally
-              justifyContent: "center",
-            }}
-          >
+          <View style={styles.jarContainer}>
             <HoursJar progress={hoursProgress()} />
             <JarOverlay style={styles.overlayIcon2} />
             <JarOverlay style={styles.overlayIcon2} />
@@ -205,19 +181,7 @@ export default function NoTask({
             openJarModal("days");
           }}
         >
-          <View
-            style={{
-              backgroundColor: "white",
-              //            borderWidth: 2,
-              //borderColor: "#FF5CF8",
-              padding: 15,
-              elevation: 5,
-              textAlign: "center",
-              borderRadius: 10,
-              alignItems: "center", // Center horizontally
-              justifyContent: "center",
-            }}
-          >
+          <View style={styles.jarContainer}>
             <DaysJar progress={daysProgress()} />
             <JarOverlay style={styles.overlayIcon2} />
             <JarOverlay style={styles.overlayIcon2} />
@@ -364,23 +328,14 @@ const styles = StyleSheet.create({
 
   jarContainer: {
     backgroundColor: "white",
-    padding: 20,
+    padding: 15,
     elevation: 2,
     textAlign: "center",
     borderRadius: 10,
     alignItems: "center", // Center horizontally
     justifyContent: "center", // Center vertically
-    borderWidth: 2,
-  },
-  jarContainer: {
-    backgroundColor: "white",
-    padding: 15,
-    elevation: 5,
-    textAlign: "center",
-    borderRadius: 10,
-    alignItems: "center", // Center horizontally
-    justifyContent: "center", // Center vertically
-    //  borderWidth: 2,
+    borderWidth: 1,
+    borderColor: "black",
   },
 
   jarText: {
@@ -415,6 +370,7 @@ const styles = StyleSheet.create({
     padding: 15,
     marginTop: 20,
     width: "100%",
+    elevation: 2,
   },
   addButtonText: {
     fontSize: 20,

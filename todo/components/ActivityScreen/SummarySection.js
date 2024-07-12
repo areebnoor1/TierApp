@@ -21,18 +21,13 @@ const SummarySection = ({ completedToday, dueToday, dueThisWeek }) => {
 };
 
 const styles = StyleSheet.create({
- summary: {
-    fontFamily: "Inter",
-    color: "#A5A5A5",
-    fontSize: 24,
-    justifyContent: "flex-end",
-  },
- summaryContainer: {
+  summaryContainer: {
     flex: 1,
-    padding: 16,
+    paddingHorizontal: 16,
     flexDirection: "row",
     justifyContent: "space-between",
-
+    marginTop: 5,
+    marginBottom: 10,
   },
   summary: {
     fontFamily: "Inter",
@@ -45,13 +40,15 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: "black",
     borderWidth: 1,
+    backgroundColor: "white",
+    elevation: 2,
   },
   summaryBoxBlack: {
     width: 100,
     height: 80,
     borderRadius: 10,
     backgroundColor: "black",
-
+    elevation: 2,
   },
   summaryBlackBoxText: {
     color: "white",

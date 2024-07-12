@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-evenly",
     //alignItems: "center",
-      backgroundColor: "white",
+     // backgroundColor: "white",
   },
   day: {
     alignItems: "center",
@@ -75,4 +75,5 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
   },
+
 });

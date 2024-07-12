@@ -10,10 +10,8 @@ import {
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import TodoList from "./TodoList";
-//import { readTodos, deleteCompletedTodos } from "./TodosService";
-//import streakIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { startOfWeek, endOfWeek, parseISO, isWithinInterval } from "date-fns";
-
+import { AntDesign } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import RemainingTasks from "./ActivityScreen/RemainingTasks";
 import GoalModal from "./ActivityScreen/GoalModal";
@@ -252,7 +250,6 @@ export default function Activity() {
                 remaining={hasRemainingTasks()}
                 streakNumber={goal.streak}
               />
-
             )}
           </View>
         )}
@@ -273,23 +270,34 @@ export default function Activity() {
           <View style={styles.container}>
             {!goalExists() ? (
               <View style={styles.remainingTasksContainer}>
-               <Text style={styles.noGoalText}>You haven't set a daily goal yet</Text>
-               <Text style={styles.dailyGoalHeader}>To stay motivated and track your progress: </Text>
-               <View style={styles.bulletContainer}>
-                 <Text style={styles.bulletPoint}>{'\u2022'}</Text>
-                 <Text style={styles.bulletText}>Set a daily goal to complete a certain number of tasks.</Text>
-               </View>
-               <View style={styles.bulletContainer}>
-                 <Text style={styles.bulletPoint}>{'\u2022'}</Text>
-                 <Text style={styles.bulletText}>Each day you meet your goal, you'll build your streak.</Text>
-               </View>
-               <Text style={styles.dailyGoalDescription}>
-                 Keep it going and see how many days in a row you can achieve your goals!
-               </Text>
-<TouchableOpacity onPress={() => openGoalModal("set")} style={styles.button}>
-               <Text style={styles.buttonText}>Set Daily Goal</Text>
-</TouchableOpacity>
-
+                <Text style={styles.noGoalText}>
+                  You haven't set a daily goal yet
+                </Text>
+                <Text style={styles.dailyGoalHeader}>
+                  To stay motivated and track your progress:{" "}
+                </Text>
+                <View style={styles.bulletContainer}>
+                  <Text style={styles.bulletPoint}>{"\u2022"}</Text>
+                  <Text style={styles.bulletText}>
+                    Set a daily goal to complete a certain number of tasks.
+                  </Text>
+                </View>
+                <View style={styles.bulletContainer}>
+                  <Text style={styles.bulletPoint}>{"\u2022"}</Text>
+                  <Text style={styles.bulletText}>
+                    Each day you meet your goal, you'll build your streak.
+                  </Text>
+                </View>
+                <Text style={styles.dailyGoalDescription}>
+                  Keep it going and see how many days in a row you can achieve
+                  your goals!
+                </Text>
+                <TouchableOpacity
+                  onPress={() => openGoalModal("set")}
+                  style={styles.button}
+                >
+                  <Text style={styles.buttonText}>Set Daily Goal</Text>
+                </TouchableOpacity>
               </View>
             ) : (
               <View>
@@ -302,6 +310,7 @@ export default function Activity() {
               </View>
             )}
           </View>
+
           {/* Summary Section */}
           <Text style={styles.summary}>Summary</Text>
 
@@ -312,7 +321,7 @@ export default function Activity() {
           />
 
           {/* progress tabs */}
-        <Text style={styles.summary}>Progress</Text>
+          <Text style={styles.summary}>Completed</Text>
           <View style={styles.progressTabs}>
             <TouchableOpacity
               style={[styles.tab, viewOption === "today" && styles.activeTab]}
@@ -324,7 +333,7 @@ export default function Activity() {
                   viewOption === "today" && styles.activeTabText,
                 ]}
               >
-                Daily Progress
+                Today
               </Text>
               {/* Completed Today*/}
             </TouchableOpacity>
@@ -338,7 +347,7 @@ export default function Activity() {
                   viewOption === "week" && styles.activeTabText,
                 ]}
               >
-                Weekly Progress
+                This Week
               </Text>
               {/* Completed This Week*/}
             </TouchableOpacity>
@@ -417,14 +426,11 @@ export default function Activity() {
   );
 }
 const styles = StyleSheet.create({
-  selected: {
-    borderRadius: 10,
-    backgroundColor: "#828282",
-  },
   container: {
-    //   flex: 1,
-    padding: 16,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
     justifyContent: "space-between",
+  //  backgroundColor: "white",
   },
   topBar: {
     flexDirection: "row",
@@ -432,7 +438,7 @@ const styles = StyleSheet.create({
     //padding: 16,
     paddingHorizontal: 16,
     alignItems: "center",
-    backgroundColor: "white",
+    // backgroundColor: "white",
   },
   dateText: {
     fontSize: 20,
@@ -477,13 +483,6 @@ const styles = StyleSheet.create({
     marginRight: 16,
     justifyContent: "flex-end",
   },
-  remainingTasksContainer: {
-    width: "100%",
-    padding: 16,
-    borderColor: "black",
-    borderWidth: 1,
-    borderRadius: 10,
-  },
   buttonText: {
     fontSize: 18,
     fontWeight: "bold",
@@ -491,15 +490,16 @@ const styles = StyleSheet.create({
     color: "white",
   },
   button: {
-   // alignItems: "center",
-   // justifyContent: "center",
-  //  paddingVertical: 12,
-  padding: 6,
-  //  paddingHorizontal: 100,
+    // alignItems: "center",
+    // justifyContent: "center",
+    //  paddingVertical: 12,
+    padding: 6,
+    //  paddingHorizontal: 100,
     borderRadius: 10,
     backgroundColor: "black",
- //   marginTop: 40,
- elevation: 2,
+    //   marginTop: 40,
+    elevation: 2,
+    borderRadius: 8,
   },
 
   scroll: {
@@ -511,15 +511,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
     justifyContent: "flex-end",
     paddingHorizontal: 16,
-     color: "black",
-     fontWeight: "bold",
-  },
-  taskOptions: {
-    fontFamily: "Inter",
-    color: "#A5A5A5",
-    fontSize: 20,
-    flex: 1,
-    // justifyContent: "flex-end",
+    color: "black",
+   // fontWeight: "bold",
+    marginTop: 5,
   },
   minutesTask: {
     backgroundColor: "rgba(255, 38, 246, 0.75)",
@@ -537,84 +531,66 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
 
-  progressTabs: {
-    flexDirection: "row",
-    padding: 16,
-    flexDirection: "row",
-    justifyContent: "space-between",
+  remainingTasksContainer: {
+    padding: 20,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 15,
+    elevation: 2,
+    borderWidth: 1,
   },
+  noGoalText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  dailyGoalHeader: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#333333",
+    marginBottom: 10,
+  },
+  bulletContainer: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    marginBottom: 5,
+  },
+  bulletPoint: {
+    fontSize: 16,
+    lineHeight: 24,
+    marginRight: 5,
+  },
+  bulletText: {
+    fontSize: 14,
+    color: "#666666",
+    flex: 1,
+  },
+  dailyGoalDescription: {
+    fontSize: 14,
+    color: "#666666",
+    marginBottom: 20,
+  },
+
   progressTabs: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    //marginVertical: 10,
-    paddingHorizontal: 16,
+    justifyContent: "space-around",
+    // marginVertical: 10,
+    //  paddingHorizontal: 16,
   },
   tab: {
     paddingVertical: 5,
     paddingHorizontal: 20,
-    borderRadius: 5,
-
-  },
-  tabText: {
-    color: "#C4C4C4",
-    fontFamily: "Inter",
-    fontSize: 16,
-
+    borderRadius: 10,
+    marginTop: 8,
   },
   activeTab: {
     backgroundColor: "black",
-    borderRadius: 20,
-    paddingHorizontal: 10,
-
+  },
+  tabText: {
+    fontSize: 16,
+    color: "#000",
+    color: "#A5A5A5",
   },
   activeTabText: {
-    color: "white",
-    fontFamily: "Inter",
-    fontSize: 16,
+    color: "#fff",
   },
-  dailyGoalHeader: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-
-  remainingTasksContainer: {
-      padding: 20,
-      backgroundColor: '#FFFFFF',
-      borderRadius: 15,
-      elevation: 2,
-      borderWidth: 1,
-    },
-    noGoalText: {
-      fontSize: 18,
-      fontWeight: 'bold',
-     // color: '#FF0000',
-      marginBottom: 10,
-    },
-    dailyGoalHeader: {
-      fontSize: 16,
-      fontWeight: '600',
-      color: '#333333',
-      marginBottom: 10,
-    },
-    bulletContainer: {
-      flexDirection: 'row',
-      alignItems: 'flex-start',
-      marginBottom: 5,
-    },
-    bulletPoint: {
-      fontSize: 16,
-      lineHeight: 24,
-      marginRight: 5,
-    },
-    bulletText: {
-      fontSize: 14,
-      color: '#666666',
-      flex: 1,
-    },
-    dailyGoalDescription: {
-      fontSize: 14,
-      color: '#666666',
-      marginBottom: 20,
-    },
-
 });
