@@ -144,12 +144,12 @@ const SettingsScreen = () => {
         <View style={styles.profileSection}>
           {isSignUp ? (
             <Text style={styles.subtitle}>
-              Want to save your streak and number of completed tasks? Create an
+              Want to save your streak and number of remaining tasks? Create an
               account!
             </Text>
           ) : (
             <Text style={styles.subtitle}>
-              Want to save your streak and number of completed tasks? Log in!
+              Want to save your streak and number of remaining tasks? Log in!
             </Text>
           )}
 
