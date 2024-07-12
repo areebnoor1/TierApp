@@ -122,9 +122,11 @@ const SettingsScreen = () => {
             </View>
             <View style={styles.summaryBoxWhite}>
               <Text style={styles.summaryWhiteBoxText}>
-                Total Tasks Completed:{" "}
+                Remaining Tasks:{" "}
               </Text>
-              <Text style={styles.summaryWhiteBoxNum}>{todos.length}</Text>
+              <Text style={styles.summaryWhiteBoxNum}>
+                {todos.filter((todo) => todo.completed === false).length}
+              </Text>
             </View>
           </View>
         </View>
@@ -138,36 +140,6 @@ const SettingsScreen = () => {
       <View>
         <View style={styles.topBar}>
           <Text style={styles.titleText}>Settings</Text>
-        </View>
-        <View style={styles.profileSection}>
-          <View style={{ alignItems: "center" }}>
-            <Text
-              style={{
-                fontSize: 24,
-                fontWeight: "bold",
-                marginTop: 8,
-                marginBottom: 8,
-              }}
-            >
-              User Information
-            </Text>
-          </View>
-          <View style={{ justifyContent: "center" }}>
-            <View style={styles.summaryContainer}>
-              <View style={styles.summaryBoxBlack}>
-                <Text style={styles.summaryBlackBoxText}>Best Streak: </Text>
-                <Text style={styles.summaryBlackBoxNum}>
-                  {goal.streak > bestStreak ? goal.streak : bestStreak}
-                </Text>
-              </View>
-              <View style={styles.summaryBoxWhite}>
-                <Text style={styles.summaryWhiteBoxText}>
-                  Total Tasks Completed:{" "}
-                </Text>
-                <Text style={styles.summaryWhiteBoxNum}>{todos.length}</Text>
-              </View>
-            </View>
-          </View>
         </View>
         <View style={styles.profileSection}>
           {isSignUp ? (
